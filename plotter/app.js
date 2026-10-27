@@ -4,6 +4,7 @@ import { t, tn, applyStatic, LANG, LANGS } from '/plotter/i18n.js?v=1';
 const $ = s => document.querySelector(s);
 // the page text comes from i18n.js; paper-size options and the language picker are filled in here
 applyStatic();
+if (LANG !== 'en') document.querySelectorAll('a[href^="/dwg-to-pdf/"], a[href^="/open-dwg-without-autocad/"], a[href^="/dxf-to-pdf/"], a[href^="/privacy/"]').forEach(a => a.setAttribute('href', '/' + LANG + a.getAttribute('href'))); // the guides exist in each language
 document.querySelectorAll('#paper option[data-size]').forEach(o => { o.textContent = t('paper.fit', { size: o.dataset.size }); });
 {
   const sel = $('#lang'), home = { en: '/', es: '/es/', fr: '/fr/', de: '/de/', zh: '/zh/' };

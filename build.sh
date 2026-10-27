@@ -28,5 +28,6 @@ lang_page zh zh-Hans "DWG 转 PDF 在线转换器 – 免费，无需上传 | DW
 { printf '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
   printf '<url><loc>https://dwgplotter.com/</loc></url>\n'
   for p in es fr de zh dwg-to-pdf open-dwg-without-autocad dxf-to-pdf privacy; do printf '<url><loc>https://dwgplotter.com/%s/</loc></url>\n' "$p"; done
+  for l in es fr de zh; do for p in dwg-to-pdf open-dwg-without-autocad dxf-to-pdf privacy; do printf '<url><loc>https://dwgplotter.com/%s/%s/</loc></url>\n' "$l" "$p"; done; done
   printf '</urlset>\n'; } > dist/sitemap.xml
 echo "built dist: $(find dist -type f | wc -l) files, $(du -sh dist | cut -f1)"

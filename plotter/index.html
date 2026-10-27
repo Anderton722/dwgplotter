@@ -11,7 +11,7 @@
 <meta property="og:description" content="Open DWG and DXF drawings without AutoCAD and save them as PDF. Nothing is uploaded.">
 <meta name="google-site-verification" content="mt3O_5iGpPJaIUBdHO94mef5YegDd2SRzanpie_H1uY" />
 <meta property="og:type" content="website">
-<link rel="stylesheet" href="/plotter/style.css?v=16">
+<link rel="stylesheet" href="/plotter/style.css?v=17">
 </head>
 <body>
 
@@ -78,7 +78,8 @@
     </div>
 
     <p id="layer-note" class="smart" hidden><span class="tag alt">Layers</span><span id="layer-text"></span><button class="link" id="layer-reset" type="button">Show all</button></p>
-    <p id="smart-note" class="smart" hidden><span class="tag">Smart plot</span><span id="smart-text"></span><button class="link" id="sel-all" type="button">Select all</button></p>
+    <p id="smart-note" class="smart" hidden><span class="tag" title="Finds each separate drawing in a busy file and leaves out stray marks">Smart plot</span><span id="smart-text"></span><button class="link" id="sel-all" type="button">Select all</button></p>
+    <p class="hint">Tick the sheets you want, then press <strong>Download</strong>. Click a picture to look closer, zoom in, or measure.</p>
     <div id="items" class="items"></div>
 
     <div class="actions">
@@ -164,6 +165,6 @@
 
 <script src="/vendor/pdf-lib.min.js"></script>
 <script src="/vendor/jszip.min.js"></script>
-<script type="module" src="/plotter/app.js?v=32"></script>
+<script type="module" src="/plotter/app.js?v=34"></script>
 </body>
 </html>

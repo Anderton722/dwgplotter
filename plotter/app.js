@@ -32,7 +32,7 @@ $('#open-other').addEventListener('click', () => { state.token++; input.value = 
 
 const MESSAGES = {
   NOT_DWG: ['That does not look like a DWG or DXF file.', 'Please choose a file that ends in .dwg or .dxf.'],
-  UNREADABLE: ['We could not read this drawing.', 'It may be damaged, or saved in a format we do not support yet.'],
+  UNREADABLE: ['We could not open this drawing.', 'The file may be damaged or password-protected. Try saving it again from your CAD program, or send us the file name and version through the GitHub link below.'],
 };
 function showError(e) {
   const box = $('#drop-error'), [title, hint] = MESSAGES[e.message] || ['Something went wrong while opening the drawing.', 'Please try again, or try a different file.'];
@@ -45,7 +45,8 @@ function showError(e) {
 // One file, or a drawing together with the drawings it links to (xrefs): the one that links to the others is the main drawing.
 async function openFiles(files) {
   const token = ++state.token; $('#drop-error').hidden = true;
-  show('loading'); $('#loading-text').textContent = files.length > 1 ? 'Reading your drawings…' : 'Reading your drawing…'; await sleep(30);
+  const mb = files.reduce((s, f) => s + f.size, 0) / 1048576; // the reader runs in this tab, so a big file can make the page pause for a few seconds: say so first
+  show('loading'); $('#loading-text').textContent = (files.length > 1 ? 'Reading your drawings…' : 'Reading your drawing…') + (mb > 3 ? ` This one is ${Math.round(mb)} MB, so it may take up to a minute. The page can pause while it works.` : ''); await sleep(60);
   try {
     if (files.some(f => !/\.(dwg|dxf)$/i.test(f.name))) throw new Error('NOT_DWG');
     const set = await openSet(await Promise.all(files.map(async f => ({ name: f.name, buf: await f.arrayBuffer() }))));
@@ -153,13 +154,16 @@ function update() {
 
 async function renderThumbs() {
   const { token, items, P } = state, colour = $('#c-col').checked;
+  let done = 0;
   for (const it of items) {
     if (token !== state.token) return;
+    if (items.length > 1) setStatus(`Preparing previews… ${++done} of ${items.length}`);
     it.thumb.classList.add('loading');
     try { const r = await drawPreview(P, it, it.canvas, { colour, hidden: [...state.hidden] }); it.aspect = parseFloat(r.extentsSize[0]) / parseFloat(r.extentsSize[1]); }
     catch (e) { console.error(e); }
     it.thumb.classList.remove('loading'); await sleep(0);
   }
+  if (token === state.token && status.textContent.startsWith('Preparing previews')) update(); // clear our progress line (update() sets the normal message)
 }
 for (const id of ['#c-bw', '#c-col']) $(id).addEventListener('change', () => { prefs.colour = $('#c-col').checked; savePrefs(); if (state.P) renderThumbs(); });
 $('#paper').addEventListener('change', () => { prefs.paper = $('#paper').value; savePrefs(); });
@@ -189,11 +193,25 @@ view.addEventListener('wheel', e => {
   e.preventDefault(); const r = view.getBoundingClientRect(), px = e.clientX - r.left, py = e.clientY - r.top, k = Math.exp(-e.deltaY * 0.0015);
   const s = Math.min(Math.max(tf.s * k, 0.05), 6), f = s / tf.s; tf = { s, x: px - (px - tf.x) * f, y: py - (py - tf.y) * f }; apply();
 }, { passive: false });
-let drag = null;
-view.addEventListener('pointerdown', e => { drag = { x: e.clientX - tf.x, y: e.clientY - tf.y, sx: e.clientX, sy: e.clientY }; view.setPointerCapture(e.pointerId); view.classList.add('drag'); });
-view.addEventListener('pointermove', e => { if (drag) { tf.x = e.clientX - drag.x; tf.y = e.clientY - drag.y; apply(); } });
+let drag = null, pinch = null; const touches = new Map(); // touches: active pointers by id, for two-finger pinch zoom
+const pinchState = () => { const [a, b] = [...touches.values()], r = view.getBoundingClientRect(); return { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, cx: (a.x + b.x) / 2 - r.left, cy: (a.y + b.y) / 2 - r.top }; };
+view.addEventListener('pointerdown', e => {
+  touches.set(e.pointerId, { x: e.clientX, y: e.clientY }); try { view.setPointerCapture(e.pointerId); } catch { /* a pointer that has already ended */ }
+  if (touches.size === 2) { drag = null; pinch = { ...pinchState(), s: tf.s, tx: tf.x, ty: tf.y }; return; }
+  drag = { x: e.clientX - tf.x, y: e.clientY - tf.y, sx: e.clientX, sy: e.clientY }; view.classList.add('drag');
+});
+view.addEventListener('pointermove', e => {
+  if (touches.has(e.pointerId)) touches.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (pinch && touches.size >= 2) { // two fingers: zoom around the point between them, and follow it as it moves
+    const n = pinchState(), s = Math.min(Math.max(pinch.s * n.d / pinch.d, 0.05), 6), f = s / pinch.s;
+    tf = { s, x: n.cx - (pinch.cx - pinch.tx) * f, y: n.cy - (pinch.cy - pinch.ty) * f }; apply(); return;
+  }
+  if (drag) { tf.x = e.clientX - drag.x; tf.y = e.clientY - drag.y; apply(); }
+});
+const endPointer = e => { touches.delete(e.pointerId); if (touches.size < 2) pinch = null; };
+view.addEventListener('pointercancel', e => { endPointer(e); drag = null; view.classList.remove('drag'); });
 view.addEventListener('pointerup', e => {
-  const click = drag && Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) < 5; drag = null; view.classList.remove('drag');
+  const click = drag && Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) < 5; drag = null; view.classList.remove('drag'); endPointer(e);
   if (click && view.classList.contains('measuring')) measureClick(e);
 });
 addEventListener('resize', () => { if (dlg.open) fit(); });

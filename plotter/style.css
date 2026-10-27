@@ -173,3 +173,5 @@ dialog.small[open] { display: block; }
 .about p, .about li { font-size: 15px; line-height: 1.6; }
 .about ul { padding-left: 20px; margin: 6px 0; }
 .about a { color: var(--accent); }
+
+.hint { margin: 2px 0 14px; font-size: 14.5px; color: var(--muted); }

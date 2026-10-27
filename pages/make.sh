@@ -13,7 +13,7 @@ page() { # slug, title, description
 <meta name="description" content="$desc">
 <link rel="canonical" href="https://dwgplotter.com/$slug/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Crect x=%271.5%27 y=%271.5%27 width=%2721%27 height=%2721%27 rx=%276.5%27 fill=%27%234f46e5%27/%3E%3Cpath d=%27M7 15.5 11 9l3 4 3-5%27 fill=%27none%27 stroke=%27%23fff%27 stroke-width=%271.9%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E">
-<link rel="stylesheet" href="/plotter/style.css?v=16">
+<link rel="stylesheet" href="/plotter/style.css?v=17">
 <link rel="stylesheet" href="/pages.css?v=1">
 </head>
 <body>

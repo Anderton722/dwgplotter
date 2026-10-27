@@ -33,6 +33,21 @@ function parse(buf, type = Dwg_File_Type.DWG) {
   finally { if (data) { try { l.dwg_free(data); } catch { lib = null; } } } // hand the reader's memory back
   return makeP(db);
 }
+// Reading happens in a background worker so a big drawing does not freeze the page; if workers are unavailable the caller falls back to parse().
+let worker, jobId = 0; const jobs = new Map();
+function readInWorker(buf) {
+  return new Promise((resolve, reject) => {
+    let w; try { w = worker ||= new Worker(new URL('./dwgworker.js', import.meta.url), { type: 'module' }); } catch { return reject({ fallback: true }); }
+    w.onmessage = ({ data }) => { const j = jobs.get(data.id); if (!j) return; jobs.delete(data.id); data.error ? j.reject({ message: data.error }) : j.resolve(data.db); };
+    w.onerror = () => { for (const j of jobs.values()) j.reject({ fallback: true }); jobs.clear(); w.terminate(); if (worker === w) worker = null; };
+    const id = ++jobId, copy = buf.slice(0); jobs.set(id, { resolve, reject });
+    try { w.postMessage({ id, buf: copy }, [copy]); } catch { jobs.delete(id); reject({ fallback: true }); }
+  });
+}
+async function readDwg(buf) {
+  try { return makeP(await readInWorker(buf)); }
+  catch (e) { if (!e || !e.fallback) throw e; await getLib(); return parse(buf, Dwg_File_Type.DWG); }
+}
 function makeP(db) {
   const blocks = {}; for (const b of db.tables.BLOCK_RECORD.entries) blocks[b.name] = b;
   const layers = {}; for (const y of db.tables.LAYER.entries) layers[y.name] = y;
@@ -573,8 +588,8 @@ export async function openDrawing(buf) {
   const isDwg = /^AC10\d\d$/.test(head); // DXF is the text (or binary) exchange format: "0 / SECTION" near the start
   const isDxf = !isDwg && (/(^|\n)\s*0\s*\r?\n\s*SECTION/.test(new TextDecoder('latin1').decode(bytes)) || new TextDecoder('latin1').decode(bytes.subarray(0, 18)) === 'AutoCAD Binary DXF');
   if (!isDwg && !isDxf) throw new Error('NOT_DWG');
-  await getLib();
-  let P; try { P = isDxf ? makeP(await dxfToDb(decodeDxf(new Uint8Array(buf)))) : parse(buf, Dwg_File_Type.DWG); } catch (e) { throw Object.assign(new Error('UNREADABLE'), { cause: e }); }
+  await loadHershey();
+  let P; try { P = isDxf ? makeP(await dxfToDb(decodeDxf(new Uint8Array(buf)))) : await readDwg(buf); } catch (e) { throw Object.assign(new Error('UNREADABLE'), { cause: e }); }
   if (!P.model) throw new Error('UNREADABLE');
   await prepare(P); P.version = isDxf ? 'DXF' : head; P.versionName = isDxf ? 'DXF' : DWG_VERSIONS[head] || head;
   // R14 and older have no "plot this layer" setting; the reader reports 0 for it, which must not mean "do not plot"

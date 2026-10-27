@@ -3,7 +3,7 @@
 set -e
 rm -rf dist && mkdir -p dist/vendor dist/fonts
 cp -r plotter dist/plotter
-cp engine.js dxf.js shx.js pdfctx.js LICENSE NOTICE.md dist/
+cp engine.js dwgworker.js dxf.js shx.js pdfctx.js LICENSE NOTICE.md dist/
 cp -r vendor/libredwg vendor/*.js vendor/*.json vendor/*.txt dist/vendor/
 printf '/  /plotter/  200\n' > dist/_redirects
 printf 'User-agent: *\nAllow: /\nSitemap: https://dwgplotter.com/sitemap.xml\n' > dist/robots.txt

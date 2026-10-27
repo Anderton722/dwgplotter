@@ -1,4 +1,4 @@
-import { openSet, attachXref, listItems, drawPreview, plotItem, mergePdfs, describeWarnings, listLayers, drawingUnits } from '/engine.js?v=25';
+import { openSet, attachXref, listItems, drawPreview, plotItem, mergePdfs, describeWarnings, listLayers, drawingUnits } from '/engine.js?v=26';
 import { t, tn, applyStatic, LANG, LANGS } from '/plotter/i18n.js?v=1';
 
 const $ = s => document.querySelector(s);

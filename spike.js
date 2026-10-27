@@ -1,4 +1,4 @@
-import * as E from './engine.js?v=23';
+import * as E from './engine.js?v=24';
 const { getLib, parse, prepare, renderItem, plotLayoutPdf, plotModelExtents, drawText, faceFor, ACI_RGB, SHX, SUPPORTED, IGNORED, layoutRecord, entityList, findAreas, listItems } = E;
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';

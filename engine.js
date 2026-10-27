@@ -1,5 +1,5 @@
 import { createModule, LibreDwg, Dwg_File_Type } from './vendor/libredwg/dist/libredwg-web.js';
-import { PdfCtx, makeBoundsCtx } from './pdfctx.js?v=59';
+import { PdfCtx, makeBoundsCtx, needsRaster } from './pdfctx.js?v=60';
 import { ShxFont } from './shx.js?v=1';
 import { dxfToDb } from './dxf.js?v=6';
 
@@ -77,6 +77,8 @@ const FACES = {
   sans: { key: 'sans', css: 'Arial', pdf: 'F1', cap: 0.716 }, sansB: { key: 'sansB', css: 'bold Arial', pdf: 'F2', cap: 0.716 }, sansI: { key: 'sansI', css: 'italic Arial', pdf: 'F3', cap: 0.716 },
   narrow: { key: 'narrow', css: 'Arial', pdf: 'F1', wScale: 0.82, cap: 0.716 }, narrowB: { key: 'narrowB', css: 'bold Arial', pdf: 'F2', wScale: 0.82, cap: 0.716 },
   serif: { key: 'serif', css: '"Times New Roman"', pdf: 'F4', cap: 0.675 }, mono: { key: 'mono', css: '"Courier New"', pdf: 'F5', cap: 0.675 },
+  // lettering the PDF fonts cannot write (CJK, Cyrillic, Arabic, ...): the visitor's own system fonts
+  intl: { key: 'intl', css: '"Segoe UI","Microsoft YaHei","PingFang SC","Hiragino Sans","Yu Gothic","Malgun Gothic","Noto Sans CJK SC","Noto Sans",Arial,sans-serif', pdf: 'F1', cap: 0.716 },
 };
 const measure = (s, size, face = FACES.sans) => {
   const [, style, family] = /^((?:bold |italic )?)(.*)$/.exec(face.css);
@@ -134,7 +136,7 @@ function drawText(ctx, o) { // strokes of lettering are not snap points
   try { return drawText0(ctx, o); } finally { if (ctx._ns !== undefined) ctx._ns--; }
 }
 function drawText0(ctx, o) {
-  const face = o.face || FACES.sans, h = o.h || 2.5, sc = h / (face.stroke ? strokeUnit(face) : 21);
+  const face = needsRaster(String(o.text)) ? FACES.intl : (o.face || FACES.sans), h = o.h || 2.5, sc = h / (face.stroke ? strokeUnit(face) : 21);
   // measured against the reference: plain Arial TEXT is sized on a 0.677 cap ratio, Arial MTEXT on 0.716
   const size = h / (face.key === 'sans' && !o.mtext ? 0.677 : (face.cap || CAP));
   // MTEXT: an inline \W<n>; sets the width factor and wins over the style's; otherwise MTEXT ignores the style factor
@@ -505,7 +507,7 @@ async function plotLayoutPdf(P, layoutName, { colour = false, fit = null, margin
   const SF = PDFLib.StandardFonts;
   for (const [res, name] of [['F1', SF.Helvetica], ['F2', SF.HelveticaBold], ['F3', SF.HelveticaOblique], ['F4', SF.TimesRoman], ['F5', SF.Courier], ['F6', SF.Symbol]])
     page.node.setFontDictionary(PDFLib.PDFName.of(res), (await doc.embedFont(name)).ref);
-  page.node.addContentStream(doc.context.register(doc.context.stream(ctx.toString())));
+  page.node.addContentStream(doc.context.register(doc.context.stream(ctx.toString()))); await embedImages(doc, page, ctx);
   return { bytes: await doc.save(), size: [pw, ph], sheet: [W, H], scale: s, ops: ctx.out.length, warnings: { ...WARN } };
 }
 
@@ -555,7 +557,7 @@ async function plotModelExtents(P, { paper = [420, 297], margin = 10, colour = f
   const doc = await PDFLib.PDFDocument.create(), page = doc.addPage([paper[0] * k, paper[1] * k]), SF = PDFLib.StandardFonts;
   for (const [res, name] of [['F1', SF.Helvetica], ['F2', SF.HelveticaBold], ['F3', SF.HelveticaOblique], ['F4', SF.TimesRoman], ['F5', SF.Courier], ['F6', SF.Symbol]])
     page.node.setFontDictionary(PDFLib.PDFName.of(res), (await doc.embedFont(name)).ref);
-  page.node.addContentStream(doc.context.register(doc.context.stream(ctx.toString())));
+  page.node.addContentStream(doc.context.register(doc.context.stream(ctx.toString()))); await embedImages(doc, page, ctx);
   return { bytes: await doc.save(), extents: [bx0, by0, bx1, by1].map(v => +v.toFixed(1)), size: [+w.toFixed(1), +h.toFixed(1)], scale: s, ratio: +(1 / s).toFixed(1), ops: ctx.out.length, warnings: { ...WARN } };
 }
 
@@ -820,3 +822,11 @@ function splinePoints(sp) {
 }
 // DXF text is UTF-8 from AutoCAD 2007 on, and a Windows code page before that
 function decodeDxf(bytes) { try { return new TextDecoder('utf-8', { fatal: true }).decode(bytes); } catch { return new TextDecoder('windows-1252').decode(bytes); } }
+// Pictures of lettering the PDF fonts cannot write (see PdfCtx._rasterText): put them in the page's resources
+async function embedImages(doc, page, ctx) {
+  for (const im of ctx.images || []) {
+    const blob = await new Promise(r => im.canvas.toBlob(r, 'image/png'));
+    const img = await doc.embedPng(new Uint8Array(await blob.arrayBuffer()));
+    page.node.setXObject(PDFLib.PDFName.of(im.name), img.ref);
+  }
+}

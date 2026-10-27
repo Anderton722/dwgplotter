@@ -28,8 +28,13 @@ export function makeBoundsCtx(measureText) { return new (class extends PdfCtx {
   toString() { return ''; }
 })(); }
 
+// Text the standard PDF fonts can write (Latin-1, the WinAnsi extras and Symbol-font Greek). Anything else (Chinese, Japanese,
+// Korean, Cyrillic, Arabic, ...) is drawn with the visitor's own system fonts and placed in the PDF as an image.
+const PDF_OK = /^[ -~ -ÿ•–—‘’“”…€™−₁₂₃ΔΦΓΘΛΠΣΩαβγδεθλμπσφωɸ]*$/;
+export const needsRaster = t => !PDF_OK.test(String(t));
+
 export class PdfCtx {
-  constructor() { this.out = ['0 g 0 G 1 J 1 j']; this.path = []; this.ctm = [1, 0, 0, 1, 0, 0]; this.stack = []; this.cur = false; this.lineWidth = 1; this.dash = []; this.font = '10px Arial'; this.fillStyle = this.strokeStyle = '#000'; }
+  constructor() { this.images = []; this.imageCache = new Map(); this.out = ['0 g 0 G 1 J 1 j']; this.path = []; this.ctm = [1, 0, 0, 1, 0, 0]; this.stack = []; this.cur = false; this.lineWidth = 1; this.dash = []; this.font = '10px Arial'; this.fillStyle = this.strokeStyle = '#000'; }
   save() { this.stack.push([this.ctm, this.lineWidth, this.dash]); this.out.push('q'); }
   restore() { [this.ctm, this.lineWidth, this.dash] = this.stack.pop(); this.out.push('Q'); }
   _cm(m) { this.ctm = compose(this.ctm, m); this.out.push(m.map(f).join(' ') + ' cm'); }
@@ -72,8 +77,24 @@ export class PdfCtx {
   fill(rule) { this.out.push(`${this._rgb(this.fillStyle)} rg`); this._paint(rule === 'evenodd' ? 'f*' : 'f'); }
   clip() { this._paint('W n'); }
   fillRect() {}
+  // Text the PDF fonts cannot write: draw it on a canvas with the system fonts (about 300 dpi) and place that picture, so the PDF looks like the screen
+  _rasterText(text, x, y, size) {
+    const R = Math.min(Math.max(Math.hypot(this.ctm[2], this.ctm[3]) * 4.2, 0.5), 60), fontPx = Math.min(Math.max(size * R, 20), 500), u = size / fontPx; // R = canvas px per user unit
+    const font = this.font.replace(/(\d+(?:\.\d+)?)px/, fontPx.toFixed(1) + 'px'), colour = this.fillStyle || '#000', key = `${font}|${colour}|${text}`;
+    let im = this.imageCache.get(key);
+    if (!im) {
+      const m = document.createElement('canvas').getContext('2d'); m.font = font;
+      const tm = m.measureText(text), asc = Math.ceil(tm.fontBoundingBoxAscent ?? fontPx * 0.95), desc = Math.ceil(tm.fontBoundingBoxDescent ?? fontPx * 0.3);
+      const c = document.createElement('canvas'); c.width = Math.min(Math.ceil(tm.width) + 4, 16000); c.height = asc + desc + 4;
+      const g = c.getContext('2d'); g.font = font; g.fillStyle = colour; g.textBaseline = 'alphabetic'; g.fillText(text, 2, asc + 2);
+      im = { name: 'Im' + this.images.length, canvas: c, asc, desc }; this.images.push(im); this.imageCache.set(key, im);
+    }
+    const w = im.canvas.width * u, h = im.canvas.height * u; // y points down in this space, so the picture is flipped back with a negative height
+    this.out.push(`q ${f(w)} 0 0 ${f(-h)} ${f(x - 2 * u)} ${f(y + (im.desc + 2) * u)} cm /${im.name} Do Q`);
+  }
   fillText(text, x, y) {
     const size = parseFloat(/(\d+(?:\.\d+)?)px/.exec(this.font)?.[1]) || 10;
+    if (needsRaster(text)) return this._rasterText(String(text), x, y, size);
     this.out.push(`${this._rgb(this.fillStyle)} rg`);
     // WinAnsi bytes (and Symbol-font letters for Greek) written as octal escapes so the stream stays pure ASCII
     const WIN = { '•': 149, '–': 150, '—': 151, '‘': 145, '’': 146, '“': 147, '”': 148, '…': 133, '€': 128, '™': 153 }; // WinAnsi 0x80-0x9f

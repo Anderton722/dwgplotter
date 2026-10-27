@@ -166,3 +166,10 @@ dialog.small[open] { display: block; }
 
 .foot { text-align: center; padding: 28px 16px 36px; font-size: 13px; color: var(--muted, #6b7280); }
 .foot a { color: inherit; text-decoration: underline; }
+
+/* text under the drop box (home page): plain explanation for visitors and search engines */
+.about { max-width: 640px; margin: 56px auto 0; text-align: left; color: var(--muted); }
+.about h2 { font-size: 18px; margin: 26px 0 6px; color: var(--ink); }
+.about p, .about li { font-size: 15px; line-height: 1.6; }
+.about ul { padding-left: 20px; margin: 6px 0; }
+.about a { color: var(--accent); }

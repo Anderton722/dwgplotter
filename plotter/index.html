@@ -6,16 +6,16 @@
 <title>DWG to PDF Converter – Free, Online, No Upload | DWG Plotter</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Crect x=%271.5%27 y=%271.5%27 width=%2721%27 height=%2721%27 rx=%276.5%27 fill=%27%234f46e5%27/%3E%3Cpath d=%27M7 15.5 11 9l3 4 3-5%27 fill=%27none%27 stroke=%27%23fff%27 stroke-width=%271.9%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E">
 <meta name="description" content="Convert DWG and DXF drawings to PDF free, in your browser. Open DWG files without AutoCAD. Layouts plot as drawn, and nothing is uploaded.">
-<link rel="canonical" href="https://dwgplotter.com/plotter/">
+<link rel="canonical" href="https://dwgplotter.com/">
 <meta property="og:title" content="DWG to PDF Converter – Free, Online, No Upload">
 <meta property="og:description" content="Open DWG and DXF drawings without AutoCAD and save them as PDF. Nothing is uploaded.">
 <meta property="og:type" content="website">
-<link rel="stylesheet" href="style.css?v=14">
+<link rel="stylesheet" href="/plotter/style.css?v=16">
 </head>
 <body>
 
 <header class="top">
-  <a class="brand" href="./">
+  <a class="brand" href="/">
     <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--accent2)"/></linearGradient></defs><rect x="1.5" y="1.5" width="21" height="21" rx="6.5" fill="url(#lg)"/><path d="M7 15.5 11 9l3 4 3-5" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
     DWG Plotter
   </a>
@@ -37,6 +37,18 @@
 
     <div id="drop-error" class="notice error" role="alert" hidden></div>
     <p class="fine">Your drawing is never uploaded. If it links to other DWG files (xrefs), drop them in together.</p>
+    <div class="about">
+      <h2>DWG to PDF, without AutoCAD</h2>
+      <p>Drop in a DWG or DXF drawing and save it as a PDF. Every layout in the file is listed, and each sheet prints as drawn, with its lineweights and linetypes. Drawings that keep everything in the model are cut into their real drawings by Smart plot.</p>
+      <h2>Your drawing stays on your computer</h2>
+      <p>The file is read and converted in your own browser. It is not uploaded to a server, so it is safe to use with client and confidential drawings. There is no sign-up and nothing to install.</p>
+      <h2>Guides</h2>
+      <ul>
+        <li><a href="/dwg-to-pdf/">How to convert DWG to PDF</a></li>
+        <li><a href="/open-dwg-without-autocad/">How to open a DWG file without AutoCAD</a></li>
+        <li><a href="/dxf-to-pdf/">DXF to PDF</a></li>
+      </ul>
+    </div>
   </section>
 
   <!-- Reading -->
@@ -149,8 +161,8 @@
   </div>
 </dialog>
 
-<script src="../vendor/pdf-lib.min.js"></script>
-<script src="../vendor/jszip.min.js"></script>
-<script type="module" src="app.js?v=31"></script>
+<script src="/vendor/pdf-lib.min.js"></script>
+<script src="/vendor/jszip.min.js"></script>
+<script type="module" src="/plotter/app.js?v=32"></script>
 </body>
 </html>

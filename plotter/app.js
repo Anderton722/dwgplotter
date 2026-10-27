@@ -1,4 +1,4 @@
-import { openSet, attachXref, listItems, drawPreview, plotItem, mergePdfs, describeWarnings, listLayers, drawingUnits } from '../engine.js?v=23';
+import { openSet, attachXref, listItems, drawPreview, plotItem, mergePdfs, describeWarnings, listLayers, drawingUnits } from '/engine.js?v=23';
 
 const $ = s => document.querySelector(s);
 const sleep = (ms = 0) => new Promise(r => setTimeout(r, ms));

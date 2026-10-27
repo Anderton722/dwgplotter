@@ -1,0 +1,13 @@
+/* Extra styling for the guide and policy pages (the base look comes from plotter/style.css) */
+.doc { max-width: 760px; padding-top: 36px; line-height: 1.65; }
+.doc h1 { font-size: clamp(30px, 5vw, 46px); margin-bottom: 14px; }
+.doc .lead { margin-bottom: 22px; }
+.doc h2 { font-size: 22px; margin: 38px 0 10px; letter-spacing: -.01em; }
+.doc h3 { font-size: 17px; margin: 22px 0 4px; }
+.doc p, .doc li { color: var(--ink); }
+.doc p + p { margin-top: 12px; }
+.doc ol, .doc ul { padding-left: 22px; margin: 10px 0; }
+.doc li { margin: 6px 0; }
+.doc a { color: var(--accent); }
+.doc .cta { display: inline-block; margin: 14px 0; padding: 12px 22px; border-radius: 14px; background: linear-gradient(100deg, var(--accent), var(--accent2)); color: var(--accent-ink); font-weight: 650; text-decoration: none; }
+.doc .cta:hover { filter: brightness(1.06); }

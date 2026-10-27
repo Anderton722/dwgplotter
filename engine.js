@@ -633,15 +633,23 @@ export async function mergePdfs(byteArrays) {
 }
 
 // Plain-language notes for the things we could not print faithfully.
-export function describeWarnings(w = {}) {
+// Notes about what could not be drawn. `tr(key, count, vars)` turns a note into the page's language; without it the notes come out in English.
+const EN_WARN = {
+  'w.ole': n => `${n} embedded picture${n > 1 ? 's/documents are' : '/document is'} not shown (marked with a dashed box)`,
+  'w.mline': () => 'Some multi-lines are drawn approximately', 'w.table': () => 'A table in this drawing could not be shown',
+  'w.vp': () => 'A view on this sheet could not be placed exactly, so its contents are shown fitted to the view (not to scale)',
+  'w.xref': (n, v) => `Linked drawing${n > 1 ? 's' : ''} not added, so not shown: ${v.names}`,
+  'w.unknown': (n, v) => `${n} ${v.type} object${n > 1 ? 's' : ''} not shown`,
+};
+export function describeWarnings(w = {}, tr = (k, n, v) => EN_WARN[k](n, v)) {
   const out = [];
-  if (w.OLE2FRAME) out.push(`${w.OLE2FRAME} embedded picture${w.OLE2FRAME > 1 ? 's/documents are' : '/document is'} not shown (marked with a dashed box)`);
-  if (w.MLINE) out.push('Some multi-lines are drawn approximately');
-  if (w.ACAD_TABLE) out.push('A table in this drawing could not be shown');
-  if (w.VIEWPORT_FIT) out.push('A view on this sheet could not be placed exactly, so its contents are shown fitted to the view (not to scale)');
+  if (w.OLE2FRAME) out.push(tr('w.ole', w.OLE2FRAME));
+  if (w.MLINE) out.push(tr('w.mline'));
+  if (w.ACAD_TABLE) out.push(tr('w.table'));
+  if (w.VIEWPORT_FIT) out.push(tr('w.vp'));
   const links = Object.keys(w).filter(k => k.startsWith('XREF:')).map(k => k.slice(5));
-  if (links.length) out.push(`Linked drawing${links.length > 1 ? 's' : ''} not added, so not shown: ${links.join(', ')}`);
-  for (const [k, v] of Object.entries(w)) if (k.startsWith('UNKNOWN:')) out.push(`${v} ${k.slice(8).toLowerCase()} object${v > 1 ? 's' : ''} not shown`);
+  if (links.length) out.push(tr('w.xref', links.length, { names: links.join(', ') }));
+  for (const [k, v] of Object.entries(w)) if (k.startsWith('UNKNOWN:')) out.push(tr('w.unknown', v, { type: k.slice(8).toLowerCase() }));
   return out;
 }
 

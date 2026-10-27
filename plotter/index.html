@@ -7,11 +7,12 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Crect x=%271.5%27 y=%271.5%27 width=%2721%27 height=%2721%27 rx=%276.5%27 fill=%27%234f46e5%27/%3E%3Cpath d=%27M7 15.5 11 9l3 4 3-5%27 fill=%27none%27 stroke=%27%23fff%27 stroke-width=%271.9%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E">
 <meta name="description" content="Convert DWG and DXF drawings to PDF free, in your browser. Open DWG files without AutoCAD. Layouts plot as drawn, and nothing is uploaded.">
 <link rel="canonical" href="https://dwgplotter.com/">
+<!--HREFLANG-->
 <meta property="og:title" content="DWG to PDF Converter – Free, Online, No Upload">
 <meta property="og:description" content="Open DWG and DXF drawings without AutoCAD and save them as PDF. Nothing is uploaded.">
 <meta name="google-site-verification" content="mt3O_5iGpPJaIUBdHO94mef5YegDd2SRzanpie_H1uY" />
 <meta property="og:type" content="website">
-<link rel="stylesheet" href="/plotter/style.css?v=17">
+<link rel="stylesheet" href="/plotter/style.css?v=19">
 </head>
 <body>
 
@@ -20,34 +21,37 @@
     <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--accent2)"/></linearGradient></defs><rect x="1.5" y="1.5" width="21" height="21" rx="6.5" fill="url(#lg)"/><path d="M7 15.5 11 9l3 4 3-5" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
     DWG Plotter
   </a>
-  <span class="private">Your drawings are never uploaded</span>
+  <span class="topright">
+    <span class="private" data-i18n="badge">Your drawings are never uploaded</span>
+    <select id="lang" class="langsel" aria-label="Language" data-i18n-attr="aria-label:language"></select>
+  </span>
 </header>
 
 <main>
 
   <!-- Choose a drawing -->
   <section id="drop-view" class="hero">
-    <h1>Convert DWG to PDF.<br><span class="grad">Free, in your browser.</span></h1>
-    <p class="lead">Open DWG and DXF drawings without AutoCAD. No software needed, nothing uploaded.</p>
+    <h1><span data-i18n="h1a">Convert DWG to PDF.</span><br><span class="grad" data-i18n="h1b">Free, in your browser.</span></h1>
+    <p class="lead" data-i18n="lead">Open DWG and DXF drawings without AutoCAD. No software needed, nothing uploaded.</p>
 
     <label class="drop" id="drop" tabindex="0">
       <input type="file" id="file" accept=".dwg,.dxf" multiple hidden>
-      <strong>Drop a DWG or DXF file here</strong>
-      <span>or click to choose one</span>
+      <strong data-i18n="drop.title">Drop a DWG or DXF file here</strong>
+      <span data-i18n="drop.sub">or click to choose one</span>
     </label>
 
     <div id="drop-error" class="notice error" role="alert" hidden></div>
-    <p class="fine">Your drawing is never uploaded. If it links to other DWG files (xrefs), drop them in together.</p>
+    <p class="fine" data-i18n="fine">Your drawing is never uploaded. If it links to other DWG files (xrefs), drop them in together.</p>
     <div class="about">
-      <h2>DWG to PDF, without AutoCAD</h2>
-      <p>Drop in a DWG or DXF drawing and save it as a PDF. Every layout in the file is listed, and each sheet prints as drawn, with its lineweights and linetypes. Drawings that keep everything in the model are cut into their real drawings by Smart plot.</p>
-      <h2>Your drawing stays on your computer</h2>
-      <p>The file is read and converted in your own browser. It is not uploaded to a server, so it is safe to use with client and confidential drawings. There is no sign-up and nothing to install.</p>
-      <h2>Guides</h2>
+      <h2 data-i18n="about.1h">DWG to PDF, without AutoCAD</h2>
+      <p data-i18n="about.1p">Drop in a DWG or DXF drawing and save it as a PDF. Every layout in the file is listed, and each sheet prints as drawn, with its lineweights and linetypes. Drawings that keep everything in the model are cut into their real drawings by Smart plot.</p>
+      <h2 data-i18n="about.2h">Your drawing stays on your computer</h2>
+      <p data-i18n="about.2p">The file is read and converted in your own browser. It is not uploaded to a server, so it is safe to use with client and confidential drawings. There is no sign-up and nothing to install.</p>
+      <h2 data-i18n="about.3h">Guides</h2>
       <ul>
-        <li><a href="/dwg-to-pdf/">How to convert DWG to PDF</a></li>
-        <li><a href="/open-dwg-without-autocad/">How to open a DWG file without AutoCAD</a></li>
-        <li><a href="/dxf-to-pdf/">DXF to PDF</a></li>
+        <li><a href="/dwg-to-pdf/" data-i18n="guide.1">How to convert DWG to PDF</a></li>
+        <li><a href="/open-dwg-without-autocad/" data-i18n="guide.2">How to open a DWG file without AutoCAD</a></li>
+        <li><a href="/dxf-to-pdf/" data-i18n="guide.3">DXF to PDF</a></li>
       </ul>
     </div>
   </section>
@@ -62,59 +66,59 @@
   <section id="work-view" hidden>
     <div class="filebar">
       <h1 id="file-name">drawing.dwg</h1>
-      <button class="link" id="open-other" type="button">Open another</button>
+      <button class="link" id="open-other" type="button" data-i18n="open.other">Open another</button>
     </div>
     <div id="file-notice" class="notice" hidden></div>
 
     <div id="xrefs" class="xrefs" hidden>
       <div class="xhead">
-        <strong>Linked drawings</strong>
+        <strong data-i18n="xref.title">Linked drawings</strong>
         <span class="muted" id="xref-help"></span>
-        <button class="link" id="xref-add" type="button">Add files</button>
+        <button class="link" id="xref-add" type="button" data-i18n="xref.add">Add files</button>
         <input type="file" id="xref-file" accept=".dwg,.dxf" multiple hidden>
       </div>
       <div id="xref-list" class="chips"></div>
       <p id="xref-msg" class="xmsg" hidden></p>
     </div>
 
-    <p id="layer-note" class="smart" hidden><span class="tag alt">Layers</span><span id="layer-text"></span><button class="link" id="layer-reset" type="button">Show all</button></p>
-    <p id="smart-note" class="smart" hidden><span class="tag" title="Finds each separate drawing in a busy file and leaves out stray marks">Smart plot</span><span id="smart-text"></span><button class="link" id="sel-all" type="button">Select all</button></p>
-    <p class="hint">Tick the sheets you want, then press <strong>Download</strong>. Click a picture to look closer, zoom in, or measure.</p>
+    <p id="layer-note" class="smart" hidden><span class="tag alt" data-i18n="layers.tag">Layers</span><span id="layer-text"></span><button class="link" id="layer-reset" type="button" data-i18n="layers.showall">Show all</button></p>
+    <p id="smart-note" class="smart" hidden><span class="tag" title="Finds each separate drawing in a busy file and leaves out stray marks" data-i18n="smart.tag" data-i18n-attr="title:smart.tip">Smart plot</span><span id="smart-text"></span><button class="link" id="sel-all" type="button" data-i18n="select.all">Select all</button></p>
+    <p class="hint" data-i18n-html="hint">Tick the sheets you want, then press <strong>Download</strong>. Click a picture to look closer, zoom in, or measure.</p>
     <div id="items" class="items"></div>
 
     <div class="actions">
-      <div class="seg" role="radiogroup" aria-label="Colour">
-        <input type="radio" name="colour" id="c-bw" value="bw" checked><label for="c-bw">Black &amp; white</label>
-        <input type="radio" name="colour" id="c-col" value="colour"><label for="c-col">Colour</label>
+      <div class="seg" role="radiogroup" aria-label="Colour" data-i18n-attr="aria-label:colour.group">
+        <input type="radio" name="colour" id="c-bw" value="bw" checked><label for="c-bw" data-i18n="bw">Black &amp; white</label>
+        <input type="radio" name="colour" id="c-col" value="colour"><label for="c-col" data-i18n="col">Colour</label>
       </div>
 
-      <div class="seg" id="out-seg" role="radiogroup" aria-label="Save as" hidden>
-        <input type="radio" name="output" id="o-one" value="one" checked><label for="o-one">Combined</label>
-        <input type="radio" name="output" id="o-many" value="many"><label for="o-many">Separate</label>
+      <div class="seg" id="out-seg" role="radiogroup" aria-label="Save as" data-i18n-attr="aria-label:saveas.group" hidden>
+        <input type="radio" name="output" id="o-one" value="one" checked><label for="o-one" data-i18n="combined">Combined</label>
+        <input type="radio" name="output" id="o-many" value="many"><label for="o-many" data-i18n="separate">Separate</label>
       </div>
 
       <details class="more">
-        <summary>More options</summary>
+        <summary data-i18n="more">More options</summary>
         <div class="pop">
-          <label class="field" for="fmt">Save as
+          <label class="field" for="fmt"><span data-i18n="fmt.label">Save as</span>
             <select id="fmt">
               <option value="pdf">PDF</option>
-              <option value="png">PNG image</option>
+              <option value="png" data-i18n="fmt.png">PNG image</option>
             </select>
           </label>
-          <label class="field" for="paper">Paper size (PDF)
+          <label class="field" for="paper"><span data-i18n="paper.label">Paper size (PDF)</span>
             <select id="paper">
-              <option value="asdrawn">As drawn</option>
-              <option value="A4">Fit to A4</option>
-              <option value="A3">Fit to A3</option>
-              <option value="A2">Fit to A2</option>
-              <option value="A1">Fit to A1</option>
+              <option value="asdrawn" data-i18n="paper.asdrawn">As drawn</option>
+              <option value="A4" data-size="A4">Fit to A4</option>
+              <option value="A3" data-size="A3">Fit to A3</option>
+              <option value="A2" data-size="A2">Fit to A2</option>
+              <option value="A1" data-size="A1">Fit to A1</option>
             </select>
           </label>
         </div>
       </details>
 
-      <button class="primary" id="download" type="button" disabled>Download PDF</button>
+      <button class="primary" id="download" type="button" disabled data-i18n="dl.pdf">Download PDF</button>
     </div>
     <p id="status" class="status" role="status" aria-live="polite"></p>
     <ul id="notes" class="notes" hidden></ul>
@@ -122,19 +126,19 @@
 
 </main>
 
-<footer class="foot">Free software (GPL v3). <a href="https://github.com/Anderton722/dwgplotter" id="source-link" rel="noopener">Source code</a> · <a href="https://github.com/Anderton722/dwgplotter/blob/main/NOTICE.md" rel="noopener">Credits</a> · <a href="/privacy/">Privacy</a> · <a href="/dwg-to-pdf/">DWG to PDF</a> · <a href="/open-dwg-without-autocad/">Open DWG without AutoCAD</a> · <a href="/dxf-to-pdf/">DXF to PDF</a></footer>
+<footer class="foot"><span data-i18n="foot.free">Free software (GPL v3).</span> <a href="https://github.com/Anderton722/dwgplotter" id="source-link" rel="noopener" data-i18n="foot.source">Source code</a> · <a href="https://github.com/Anderton722/dwgplotter/blob/main/NOTICE.md" rel="noopener" data-i18n="foot.credits">Credits</a> · <a href="/privacy/" data-i18n="foot.privacy">Privacy</a> · <a href="/dwg-to-pdf/" data-i18n="foot.g1">DWG to PDF</a> · <a href="/open-dwg-without-autocad/" data-i18n="foot.g2">Open DWG without AutoCAD</a> · <a href="/dxf-to-pdf/" data-i18n="foot.g3">DXF to PDF</a></footer>
 
 <!-- Missing linked drawings (xrefs) prompt -->
 <dialog id="xref-dialog" class="small" aria-labelledby="xd-title">
   <div class="xd">
-    <h2 id="xd-title">Some linked drawings are missing</h2>
-    <p>This drawing shows other DWG files inside it (called xrefs). They were not uploaded, so parts of the drawing may be missing from your PDF.</p>
-    <p class="xd-ask">Can you upload these files?</p>
+    <h2 id="xd-title" data-i18n="xd.title">Some linked drawings are missing</h2>
+    <p data-i18n="xd.p1">This drawing shows other DWG files inside it (called xrefs). They were not uploaded, so parts of the drawing may be missing from your PDF.</p>
+    <p class="xd-ask" data-i18n="xd.ask">Can you upload these files?</p>
     <ul id="xd-list" class="xd-list"></ul>
     <p id="xd-msg" class="xmsg" hidden></p>
     <div class="xd-actions">
-      <button class="ghost" id="xd-skip" type="button">Continue without them</button>
-      <button class="primary" id="xd-add" type="button">Upload files</button>
+      <button class="ghost" id="xd-skip" type="button" data-i18n="xd.skip">Continue without them</button>
+      <button class="primary" id="xd-add" type="button" data-i18n="xd.add">Upload files</button>
     </div>
   </div>
 </dialog>
@@ -142,22 +146,22 @@
 <!-- Large preview -->
 <dialog id="preview" aria-labelledby="pv-title">
   <div class="pv-head">
-    <h2 id="pv-title">Preview</h2>
+    <h2 id="pv-title" data-i18n="pv.title">Preview</h2>
     <div class="pv-tools">
-      <button type="button" class="tool" id="pv-layers-btn" aria-pressed="false">Layers</button>
-      <button type="button" class="tool" id="pv-measure-btn" aria-pressed="false">Measure</button>
-      <button type="button" id="pv-close" class="link">Close</button>
+      <button type="button" class="tool" id="pv-layers-btn" aria-pressed="false" data-i18n="pv.layers">Layers</button>
+      <button type="button" class="tool" id="pv-measure-btn" aria-pressed="false" data-i18n="pv.measure">Measure</button>
+      <button type="button" id="pv-close" class="link" data-i18n="pv.close">Close</button>
     </div>
   </div>
   <div class="pv-body">
-    <div class="pv-view" id="pv-view" tabindex="0" aria-label="Preview. Drag to move, scroll to zoom, double-click to reset.">
+    <div class="pv-view" id="pv-view" tabindex="0" aria-label="Preview. Drag to move, scroll to zoom, double-click to reset." data-i18n-attr="aria-label:pv.aria">
       <canvas id="pv-canvas"></canvas><canvas id="pv-over"></canvas>
       <div id="pv-readout" class="readout" hidden></div>
     </div>
-    <aside class="layers" id="pv-layers" hidden aria-label="Layers">
-      <div class="lhead"><strong>Layers</strong><span class="muted" id="l-count"></span></div>
-      <input type="search" id="l-search" placeholder="Find a layer" aria-label="Find a layer" autocomplete="off">
-      <div class="lacts"><button type="button" class="link" id="l-all">Show all</button><button type="button" class="link" id="l-none">Hide all</button></div>
+    <aside class="layers" id="pv-layers" hidden aria-label="Layers" data-i18n-attr="aria-label:layers.tag">
+      <div class="lhead"><strong data-i18n="layers.tag">Layers</strong><span class="muted" id="l-count"></span></div>
+      <input type="search" id="l-search" placeholder="Find a layer" aria-label="Find a layer" data-i18n-attr="placeholder:l.find,aria-label:l.find" autocomplete="off">
+      <div class="lacts"><button type="button" class="link" id="l-all" data-i18n="l.all">Show all</button><button type="button" class="link" id="l-none" data-i18n="l.none">Hide all</button></div>
       <ul id="l-list" class="llist"></ul>
     </aside>
   </div>
@@ -165,6 +169,6 @@
 
 <script src="/vendor/pdf-lib.min.js"></script>
 <script src="/vendor/jszip.min.js"></script>
-<script type="module" src="/plotter/app.js?v=34"></script>
+<script type="module" src="/plotter/app.js?v=35"></script>
 </body>
 </html>

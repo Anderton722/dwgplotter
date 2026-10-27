@@ -175,3 +175,8 @@ dialog.small[open] { display: block; }
 .about a { color: var(--accent); }
 
 .hint { margin: 2px 0 14px; font-size: 14.5px; color: var(--muted); }
+
+/* header: language picker next to the privacy badge */
+.topright { display: inline-flex; align-items: center; gap: 10px; }
+.langsel { font: inherit; font-size: 13.5px; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 99px; padding: 5px 10px; cursor: pointer; }
+@media (max-width: 560px) { .topright .private { display: none; } }

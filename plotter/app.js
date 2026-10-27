@@ -1,6 +1,15 @@
-import { openSet, attachXref, listItems, drawPreview, plotItem, mergePdfs, describeWarnings, listLayers, drawingUnits } from '/engine.js?v=24';
+import { openSet, attachXref, listItems, drawPreview, plotItem, mergePdfs, describeWarnings, listLayers, drawingUnits } from '/engine.js?v=25';
+import { t, tn, applyStatic, LANG, LANGS } from '/plotter/i18n.js?v=1';
 
 const $ = s => document.querySelector(s);
+// the page text comes from i18n.js; paper-size options and the language picker are filled in here
+applyStatic();
+document.querySelectorAll('#paper option[data-size]').forEach(o => { o.textContent = t('paper.fit', { size: o.dataset.size }); });
+{
+  const sel = $('#lang'), home = { en: '/', es: '/es/', fr: '/fr/', de: '/de/', zh: '/zh/' };
+  sel.replaceChildren(...Object.entries(LANGS).map(([k, name]) => Object.assign(document.createElement('option'), { value: home[k], textContent: name, selected: k === LANG })));
+  sel.addEventListener('change', () => { location.href = sel.value; });
+}
 const sleep = (ms = 0) => new Promise(r => setTimeout(r, ms));
 const views = { drop: $('#drop-view'), loading: $('#loading-view'), work: $('#work-view') };
 const show = name => Object.entries(views).forEach(([k, v]) => { v.hidden = k !== name; });
@@ -30,15 +39,12 @@ addEventListener('drop', e => {
 });
 $('#open-other').addEventListener('click', () => { state.token++; input.value = ''; show('drop'); });
 
-const MESSAGES = {
-  NOT_DWG: ['That does not look like a DWG or DXF file.', 'Please choose a file that ends in .dwg or .dxf.'],
-  UNREADABLE: ['We could not open this drawing.', 'The file may be damaged or password-protected. Try saving it again from your CAD program, or send us the file name and version through the GitHub link below.'],
-};
+const MESSAGES = { NOT_DWG: 'err.notdwg', UNREADABLE: 'err.unreadable' };
 function showError(e) {
-  const box = $('#drop-error'), [title, hint] = MESSAGES[e.message] || ['Something went wrong while opening the drawing.', 'Please try again, or try a different file.'];
-  box.replaceChildren(Object.assign(document.createElement('strong'), { textContent: title + ' ' }), hint);
+  const key = MESSAGES[e.message] || 'err.generic', box = $('#drop-error');
+  box.replaceChildren(Object.assign(document.createElement('strong'), { textContent: t(key + '.t') + ' ' }), t(key + '.h'));
   const detail = e.cause?.message || (MESSAGES[e.message] ? '' : e.message);
-  if (detail) { const d = document.createElement('details'), s = document.createElement('summary'); s.textContent = 'Details'; d.append(s, detail); box.append(d); }
+  if (detail) { const d = document.createElement('details'), s = document.createElement('summary'); s.textContent = t('details'); d.append(s, detail); box.append(d); }
   box.hidden = false;
 }
 
@@ -46,18 +52,18 @@ function showError(e) {
 async function openFiles(files) {
   const token = ++state.token; $('#drop-error').hidden = true;
   const mb = files.reduce((s, f) => s + f.size, 0) / 1048576; // the reader runs in this tab, so a big file can make the page pause for a few seconds: say so first
-  show('loading'); $('#loading-text').textContent = (files.length > 1 ? 'Reading your drawings…' : 'Reading your drawing…') + (mb > 3 ? ` This one is ${Math.round(mb)} MB, so it may take up to a minute. The page can pause while it works.` : ''); await sleep(60);
+  show('loading'); $('#loading-text').textContent = t(files.length > 1 ? 'loading.many' : 'loading.one') + (mb > 3 ? t('loading.big', { mb: Math.round(mb) }) : ''); await sleep(60);
   try {
     if (files.some(f => !/\.(dwg|dxf)$/i.test(f.name))) throw new Error('NOT_DWG');
     const set = await openSet(await Promise.all(files.map(async f => ({ name: f.name, buf: await f.arrayBuffer() }))));
-    $('#loading-text').textContent = 'Finding the sheets…'; await sleep(10);
+    $('#loading-text').textContent = t('loading.sheets'); await sleep(10);
     const items = listItems(set.P);
     if (token !== state.token) return;
     state = { P: set.P, name: set.mainName || files[0].name, items, token, hidden: new Set() };
     buildWork(); renderXrefs(ignoredMessage(set.ignored)); show('work'); renderThumbs(); promptXrefs();
   } catch (e) { console.error(e); if (token === state.token) { show('drop'); showError(e); } }
 }
-const ignoredMessage = names => (names.length ? `${names.map(n => `"${n}"`).join(', ')} ${names.length > 1 ? 'are' : 'is'} not used by this drawing, so ${names.length > 1 ? 'were' : 'was'} ignored.` : '');
+const ignoredMessage = names => (names.length ? tn('ign', names.length, { names: names.join(', ') }) : '');
 
 /* ---------- linked drawings (xrefs): only used when the matching file is supplied ---------- */
 function renderXrefs(msg = '') {
@@ -65,17 +71,17 @@ function renderXrefs(msg = '') {
   const list = [...P.xrefs].sort((a, b) => !!a.file - !!b.file || b.uses - a.uses), missing = list.filter(x => !x.file).length;
   $('#xref-list').replaceChildren(...list.map(x => {
     const chip = Object.assign(document.createElement('span'), { className: 'chip ' + (x.file ? 'ok' : 'miss'), textContent: x.name });
-    chip.title = x.file ? `Using ${x.file}` : `Add a DWG file named ${x.name}.dwg`; return chip;
+    chip.title = x.file ? t('xref.chip.ok', { file: x.file }) : t('xref.chip.miss', { name: x.name }); return chip;
   }));
-  $('#xref-help').textContent = missing ? `${missing} not added yet. Add DWG files with the same names to include them.` : 'All linked drawings are included.';
+  $('#xref-help').textContent = missing ? t('xref.help.missing', { n: missing }) : t('xref.help.ok');
   const m = $('#xref-msg'); m.hidden = !msg; m.textContent = msg;
 }
 async function addXrefs(files) {
-  const { P } = state, msgs = [], btn = $('#xref-add'); btn.disabled = true; setStatus('Adding linked drawings…');
+  const { P } = state, msgs = [], btn = $('#xref-add'); btn.disabled = true; setStatus(t('status.adding'));
   for (const f of files) {
-    if (!/\.(dwg|dxf)$/i.test(f.name)) { msgs.push(`"${f.name}" is not a DWG or DXF file.`); continue; }
-    try { if (!(await attachXref(P, f.name, await f.arrayBuffer()))) msgs.push(`"${f.name}" is not used by this drawing, so it was ignored.`); }
-    catch (e) { console.error(e); msgs.push(`We could not read "${f.name}".`); }
+    if (!/\.(dwg|dxf)$/i.test(f.name)) { msgs.push(t('x.notdwg', { f: f.name })); continue; }
+    try { if (!(await attachXref(P, f.name, await f.arrayBuffer()))) msgs.push(t('x.ignored', { f: f.name })); }
+    catch (e) { console.error(e); msgs.push(t('x.unreadable', { f: f.name })); }
   }
   state.items = listItems(P); buildWork(); renderXrefs(msgs.join(' ')); renderThumbs(); btn.disabled = false; setStatus('');
   if (xdlg.open) { if (P.xrefs.some(x => !x.file)) fillPrompt(msgs.join(' ')); else xdlg.close(); } // keep asking until nothing is missing, or the user skips
@@ -86,7 +92,7 @@ const xdlg = $('#xref-dialog');
 function fillPrompt(msg = '') {
   const missing = state.P.xrefs.filter(x => !x.file);
   $('#xd-list').replaceChildren(...missing.slice(0, 12).map(x => Object.assign(document.createElement('li'), { textContent: `${x.name}.dwg` })));
-  if (missing.length > 12) $('#xd-list').append(Object.assign(document.createElement('li'), { textContent: `…and ${missing.length - 12} more` }));
+  if (missing.length > 12) $('#xd-list').append(Object.assign(document.createElement('li'), { textContent: t('xd.more', { n: missing.length - 12 }) }));
   const m = $('#xd-msg'); m.hidden = !msg; m.textContent = msg;
 }
 function promptXrefs() {
@@ -100,7 +106,7 @@ $('#xref-file').addEventListener('change', e => { const fs = [...e.target.files]
 
 /* ---------- the list of sheets ---------- */
 const title = it => (it.kind === 'layout' ? it.name : it.name); // layouts keep their own name; model areas are "Drawing N"
-const subtitle = it => (it.empty ? 'Nothing to print' : it.kind === 'model' ? 'Everything on one page' : it.kind === 'area' ? (it.important ? 'Smart plot' : 'Smart plot · small item') : it.label);
+const subtitle = it => (it.empty ? t('card.empty') : it.kind === 'model' ? t('card.model') : it.kind === 'area' ? t(it.important ? 'card.smart' : 'card.small') : it.label.replace(/ (landscape|portrait)$/, (m, o) => ' ' + t(o))); // the engine's sheet label ends in the English orientation word
 
 function buildWork() {
   const { items, name, P } = state;
@@ -108,20 +114,20 @@ function buildWork() {
   const note = $('#file-notice');
 const dxf = P.version === 'DXF';
   note.hidden = P.version === 'AC1032' && !dxf;
-  note.textContent = dxf ? 'DXF files print the model drawing only. Sheet layouts are not stored in the file we read, so use a DWG if you need them.' : P.version === 'AC1032' ? '' : `This drawing was saved in an older format (${P.versionName}). Most things should print, but please check the result.`;
+  note.textContent = dxf ? t('notice.dxf') : P.version === 'AC1032' ? '' : t('notice.old', { ver: P.versionName });
 
   const anyLayout = items.some(i => i.kind === 'layout' && !i.empty);
   // sheets win; otherwise the important Smart plot areas (or the whole drawing) are ticked
   items.forEach(it => { it.on = !it.empty && (it.kind === 'layout' || (!anyLayout && (it.kind === 'model' || it.important))); });
   const areas = items.filter(i => i.kind === 'area'), smart = $('#smart-note');
   smart.hidden = areas.length < 2 && !(areas.length && anyLayout);
-  if (!smart.hidden) $('#smart-text').textContent = areas.length > 1 ? `Found ${areas.length} separate drawings in the model and left out stray marks.` : 'Cleaned up the model and left out stray marks.';
+  if (!smart.hidden) $('#smart-text').textContent = areas.length > 1 ? t('smart.many', { n: areas.length }) : t('smart.one');
 
   updateLayerNote();
   $('#items').replaceChildren(...items.map(it => {
     const card = document.createElement('div'); card.className = 'card' + (it.empty ? ' empty' : '') + (it.on ? ' on' : '');
     const thumb = Object.assign(document.createElement('button'), { type: 'button', className: 'thumb loading' });
-    thumb.setAttribute('aria-label', `Preview ${title(it)}`);
+    thumb.setAttribute('aria-label', t('card.preview', { name: title(it) }));
     const canvas = Object.assign(document.createElement('canvas'), { width: 600, height: 430 }); thumb.append(canvas);
     thumb.addEventListener('click', () => openPreview(it));
     const pick = document.createElement('label'); pick.className = 'pick';
@@ -144,26 +150,26 @@ $('#sel-all').addEventListener('click', () => {
 
 function update() {
   const n = state.items.filter(i => i.on).length, btn = $('#download');
-  const usable = state.items.filter(i => !i.empty); $('#sel-all').textContent = usable.length && usable.every(i => i.on) ? 'Select none' : 'Select all';
+  const usable = state.items.filter(i => !i.empty); $('#sel-all').textContent = t(usable.length && usable.every(i => i.on) ? 'select.none' : 'select.all');
   const png = $('#fmt').value === 'png';
   $('#out-seg').hidden = n < 2 || png; // combined or separate only matters with 2+ PDF sheets (pictures always come as separate files)
   btn.disabled = n === 0;
-  btn.textContent = png ? (n > 1 ? `Download ${n} images (.zip)` : 'Download image') : n > 1 ? ($('#o-many').checked ? `Download ${n} PDFs (.zip)` : `Download PDF (${n} pages)`) : 'Download PDF';
-  setStatus(n === 0 ? 'Tick at least one sheet to print.' : '');
+  btn.textContent = png ? (n > 1 ? t('dl.imgs', { n }) : t('dl.img')) : n > 1 ? ($('#o-many').checked ? t('dl.pdfzip', { n }) : t('dl.pdfpages', { n })) : t('dl.pdf');
+  setStatus(n === 0 ? t('status.tick') : '');
 }
 
 async function renderThumbs() {
   const { token, items, P } = state, colour = $('#c-col').checked;
-  let done = 0;
+  let done = 0, progress = false;
   for (const it of items) {
     if (token !== state.token) return;
-    if (items.length > 1) setStatus(`Preparing previews… ${++done} of ${items.length}`);
+    if (items.length > 1) { setStatus(t('status.prep', { i: ++done, n: items.length })); progress = true; }
     it.thumb.classList.add('loading');
     try { const r = await drawPreview(P, it, it.canvas, { colour, hidden: [...state.hidden] }); it.aspect = parseFloat(r.extentsSize[0]) / parseFloat(r.extentsSize[1]); }
     catch (e) { console.error(e); }
     it.thumb.classList.remove('loading'); await sleep(0);
   }
-  if (token === state.token && status.textContent.startsWith('Preparing previews')) update(); // clear our progress line (update() sets the normal message)
+  if (token === state.token && progress) update(); // clear our progress line (update() sets the normal message)
 }
 for (const id of ['#c-bw', '#c-col']) $(id).addEventListener('change', () => { prefs.colour = $('#c-col').checked; savePrefs(); if (state.P) renderThumbs(); });
 $('#paper').addEventListener('change', () => { prefs.paper = $('#paper').value; savePrefs(); });
@@ -227,19 +233,19 @@ function renderLayerRows() {
     const lab = document.createElement('label'), box = Object.assign(document.createElement('input'), { type: 'checkbox', checked: !l.off && !state.hidden.has(l.name), disabled: l.off });
     box.addEventListener('change', () => { box.checked ? state.hidden.delete(l.name) : state.hidden.add(l.name); layerChanged(); });
     const sw = Object.assign(document.createElement('span'), { className: 'sw' }); sw.style.background = l.color;
-    const nm = Object.assign(document.createElement('span'), { className: 'nm', textContent: l.name, title: l.off ? `${l.name} (hidden in the drawing itself)` : l.name });
+    const nm = Object.assign(document.createElement('span'), { className: 'nm', textContent: l.name, title: l.off ? t('l.hidden', { name: l.name }) : l.name });
     lab.append(box, sw, nm, Object.assign(document.createElement('span'), { className: 'ct', textContent: l.count })); li.append(lab); return li;
   }));
-  const shown = layerList.filter(l => !l.off && !state.hidden.has(l.name)).length; $('#l-count').textContent = `${shown} of ${layerList.length} shown`;
+  renderLayerCount();
 }
 function layerChanged() { layersChanged = true; renderLayerCount(); schedulePaint(); updateLayerNote(); }
-const renderLayerCount = () => { const shown = layerList.filter(l => !l.off && !state.hidden.has(l.name)).length; $('#l-count').textContent = `${shown} of ${layerList.length} shown`; };
+const renderLayerCount = () => { const shown = layerList.filter(l => !l.off && !state.hidden.has(l.name)).length; $('#l-count').textContent = t('l.count', { shown, total: layerList.length }); };
 $('#l-search').addEventListener('input', renderLayerRows);
 $('#l-all').addEventListener('click', () => { state.hidden.clear(); renderLayerRows(); layerChanged(); });
 $('#l-none').addEventListener('click', () => { layerList.forEach(l => { if (!l.off) state.hidden.add(l.name); }); renderLayerRows(); layerChanged(); });
 function updateLayerNote() {
   const n = state.hidden.size, note = $('#layer-note'); note.hidden = n === 0;
-  if (n) $('#layer-text').textContent = `${n} layer${n > 1 ? 's' : ''} switched off. They won't be in the PDF.`;
+  if (n) $('#layer-text').textContent = tn('layers.text', n);
 }
 $('#layer-reset').addEventListener('click', () => { state.hidden.clear(); updateLayerNote(); renderThumbs(); });
 
@@ -289,13 +295,13 @@ function drawMeasure() {
   for (const p of pts) { g.beginPath(); g.arc(p.x, p.y, dot, 0, 7); g.fill(); }
 }
 function readout() {
-  const box = $('#pv-readout'); if (!measure?.b) { box.hidden = false; box.textContent = 'Click the second point'; return; }
+  const box = $('#pv-readout'); if (!measure?.b) { box.hidden = false; box.textContent = t('m.second'); return; }
   const A = toDrawing(measure.a), B = toDrawing(measure.b), d = Math.hypot(B.x - A.x, B.y - A.y), U = drawingUnits(state.P);
   let value = d, label = U.label, note = '';
   if (pvMap.paper) { // a sheet is in millimetres of paper; inside a viewport the real distance is paper distance / viewport scale
     const inVp = pvViews.find(v => [A, B].every(p => p.x >= v.rect[0] && p.x <= v.rect[2] && p.y >= v.rect[1] && p.y <= v.rect[3]));
-    if (inVp) { value = d / inVp.s; note = `Real distance in the drawing (${fmt(d * pvMap.u)} mm on the sheet).${U.mm ? '' : ' This file does not say what its units are.'}`; } else { value = d * pvMap.u; label = 'mm'; note = 'Distance on the sheet. Measure inside a drawing view for real distances.'; }
-  } else if (!U.mm) note = 'This drawing has no unit set, so the value is in drawing units.';
+    if (inVp) { value = d / inVp.s; note = t('m.real', { mm: fmt(d * pvMap.u) }) + (U.mm ? '' : t('m.nounits')); } else { value = d * pvMap.u; label = 'mm'; note = t('m.sheet'); }
+  } else if (!U.mm) note = t('m.nounit2');
   const mm = label === 'mm' ? value : U.mm && label === U.label ? value * U.mm : 0;
   box.replaceChildren(`${fmt(value)} ${label}`); if (mm >= 1000) box.append(Object.assign(document.createElement('small'), { textContent: `${fmt(mm / 1000)} m` }));
   if (note) box.append(Object.assign(document.createElement('small'), { textContent: note }));
@@ -320,7 +326,7 @@ $('#download').addEventListener('click', async () => {
   const colour = $('#c-col').checked, paper = $('#paper').value, parts = [], warnings = {}, png = $('#fmt').value === 'png';
   try {
     for (const [i, it] of chosen.entries()) {
-      setStatus(chosen.length > 1 ? `Making ${png ? 'image' : 'page'} ${i + 1} of ${chosen.length}…` : `Making your ${png ? 'image' : 'PDF'}…`); await sleep(30);
+      setStatus(chosen.length > 1 ? t(png ? 'status.imgn' : 'status.page', { i: i + 1, n: chosen.length }) : t(png ? 'status.img' : 'status.pdf')); await sleep(30);
       if (png) { parts.push(await makePng(P, it, colour)); continue; }
       const opts = { colour, hidden: [...state.hidden] };
       if (it.kind !== 'layout') Object.assign(opts, paper === 'asdrawn' ? { paper: [420, 297], orient: 'landscape' } : { paper: [FIT[paper][1], FIT[paper][0]], orient: 'auto' });
@@ -332,7 +338,7 @@ $('#download').addEventListener('click', async () => {
     const ext = png ? 'png' : 'pdf', separate = chosen.length > 1 && (png || $('#o-many').checked); // one file per sheet, bundled in a .zip so the browser saves them reliably
     let bytes, file, mime = 'application/pdf';
     if (separate) {
-      setStatus('Packing the files…'); await sleep(20);
+      setStatus(t('status.pack')); await sleep(20);
       const zip = new JSZip(); parts.forEach((b, i) => zip.file(`${base} - ${safe(title(chosen[i]))}.${ext}`, b));
       bytes = await zip.generateAsync({ type: 'uint8array' }); file = `${base}.zip`; mime = 'application/zip';
     } else if (png) {
@@ -343,10 +349,10 @@ $('#download').addEventListener('click', async () => {
     }
     const url = URL.createObjectURL(new Blob([bytes], { type: mime }));
     Object.assign(document.createElement('a'), { href: url, download: file }).click(); setTimeout(() => URL.revokeObjectURL(url), 10000);
-    setStatus(`Saved ${file}`, 'ok');
-    const list = describeWarnings(warnings);
-    if (list.length) { notes.replaceChildren(...list.map(t => Object.assign(document.createElement('li'), { textContent: t }))); notes.hidden = false; }
-  } catch (e) { console.error(e); setStatus('Sorry, we could not make that PDF. Please try again.', 'err'); }
+    setStatus(t('status.saved', { file }), 'ok');
+    const list = describeWarnings(warnings, (k, n, v) => (n === undefined ? t(k, v) : tn(k, n, v)));
+    if (list.length) { notes.replaceChildren(...list.map(text => Object.assign(document.createElement('li'), { textContent: text }))); notes.hidden = false; }
+  } catch (e) { console.error(e); setStatus(t('status.fail'), 'err'); }
   btn.disabled = false;
 });
 

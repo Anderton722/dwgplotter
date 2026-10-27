@@ -3,9 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SheetPrint – open a DWG or DXF, save a PDF</title>
+<title>DWG to PDF Converter – Free, Online, No Upload | DWG Plotter</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Crect x=%271.5%27 y=%271.5%27 width=%2721%27 height=%2721%27 rx=%276.5%27 fill=%27%234f46e5%27/%3E%3Cpath d=%27M7 15.5 11 9l3 4 3-5%27 fill=%27none%27 stroke=%27%23fff%27 stroke-width=%271.9%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E">
-<meta name="description" content="Open any DWG drawing in your browser and save it as a PDF. Nothing is uploaded.">
+<meta name="description" content="Convert DWG and DXF drawings to PDF free, in your browser. Open DWG files without AutoCAD. Layouts plot as drawn, and nothing is uploaded.">
+<link rel="canonical" href="https://dwgplotter.com/plotter/">
+<meta property="og:title" content="DWG to PDF Converter – Free, Online, No Upload">
+<meta property="og:description" content="Open DWG and DXF drawings without AutoCAD and save them as PDF. Nothing is uploaded.">
+<meta property="og:type" content="website">
 <link rel="stylesheet" href="style.css?v=13">
 </head>
 <body>
@@ -13,7 +17,7 @@
 <header class="top">
   <a class="brand" href="./">
     <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--accent2)"/></linearGradient></defs><rect x="1.5" y="1.5" width="21" height="21" rx="6.5" fill="url(#lg)"/><path d="M7 15.5 11 9l3 4 3-5" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    SheetPrint
+    DWG Plotter
   </a>
   <span class="private">Private: runs in your browser</span>
 </header>
@@ -22,8 +26,8 @@
 
   <!-- Choose a drawing -->
   <section id="drop-view" class="hero">
-    <h1>Open a DWG or DXF.<br><span class="grad">Save it as a PDF.</span></h1>
-    <p class="lead">No CAD software needed.</p>
+    <h1>Convert DWG to PDF.<br><span class="grad">Free, in your browser.</span></h1>
+    <p class="lead">Open DWG and DXF drawings without AutoCAD. No software needed, nothing uploaded.</p>
 
     <label class="drop" id="drop" tabindex="0">
       <input type="file" id="file" accept=".dwg,.dxf" multiple hidden>
@@ -147,6 +151,6 @@
 
 <script src="../vendor/pdf-lib.min.js"></script>
 <script src="../vendor/jszip.min.js"></script>
-<script type="module" src="app.js?v=29"></script>
+<script type="module" src="app.js?v=30"></script>
 </body>
 </html>

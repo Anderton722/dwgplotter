@@ -8,6 +8,6 @@
 | [JSZip](https://stuk.github.io/jszip/) | Making .zip downloads | MIT or GPL-3.0-or-later | `vendor/jszip.min.js` |
 | [Hershey Text](https://github.com/techninja/hersheytext) | Single-stroke fallback lettering | MIT | `vendor/hersheytext.min.json`, `vendor/hersheytext-LICENSE.txt` |
 
-SheetPrint itself is released under the GNU General Public License v3 (see `LICENSE`).
+DWG Plotter itself is released under the GNU General Public License v3 (see `LICENSE`).
 
-AutoCAD and DWG are trademarks of Autodesk, Inc. SheetPrint is not affiliated with or endorsed by Autodesk. Autodesk SHX fonts are not distributed with this project.
+AutoCAD and DWG are trademarks of Autodesk, Inc. DWG Plotter is not affiliated with or endorsed by Autodesk. Autodesk SHX fonts are not distributed with this project.

@@ -13,4 +13,4 @@ fonts/*.shx
 *.backup.js
 spike_body.js
 .claude/
-dist/
+/dist/

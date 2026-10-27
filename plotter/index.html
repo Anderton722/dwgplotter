@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SheetPrint – open a DWG or DXF, save a PDF</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Crect x=%271.5%27 y=%271.5%27 width=%2721%27 height=%2721%27 rx=%276.5%27 fill=%27%234f46e5%27/%3E%3Cpath d=%27M7 15.5 11 9l3 4 3-5%27 fill=%27none%27 stroke=%27%23fff%27 stroke-width=%271.9%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E">
+<meta name="description" content="Open any DWG drawing in your browser and save it as a PDF. Nothing is uploaded.">
+<link rel="stylesheet" href="style.css?v=13">
+</head>
+<body>
+
+<header class="top">
+  <a class="brand" href="./">
+    <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--accent2)"/></linearGradient></defs><rect x="1.5" y="1.5" width="21" height="21" rx="6.5" fill="url(#lg)"/><path d="M7 15.5 11 9l3 4 3-5" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    SheetPrint
+  </a>
+  <span class="private">Private: runs in your browser</span>
+</header>
+
+<main>
+
+  <!-- Choose a drawing -->
+  <section id="drop-view" class="hero">
+    <h1>Open a DWG or DXF.<br><span class="grad">Save it as a PDF.</span></h1>
+    <p class="lead">No CAD software needed.</p>
+
+    <label class="drop" id="drop" tabindex="0">
+      <input type="file" id="file" accept=".dwg,.dxf" multiple hidden>
+      <strong>Drop a DWG or DXF file here</strong>
+      <span>or click to choose one</span>
+    </label>
+
+    <div id="drop-error" class="notice error" role="alert" hidden></div>
+    <p class="fine">Your drawing is never uploaded. If it links to other DWG files (xrefs), drop them in together.</p>
+  </section>
+
+  <!-- Reading -->
+  <section id="loading-view" class="loading" hidden aria-live="polite">
+    <div class="spinner" aria-hidden="true"></div>
+    <p id="loading-text">Reading your drawing…</p>
+  </section>
+
+  <!-- Choose what to print -->
+  <section id="work-view" hidden>
+    <div class="filebar">
+      <h1 id="file-name">drawing.dwg</h1>
+      <button class="link" id="open-other" type="button">Open another</button>
+    </div>
+    <div id="file-notice" class="notice" hidden></div>
+
+    <div id="xrefs" class="xrefs" hidden>
+      <div class="xhead">
+        <strong>Linked drawings</strong>
+        <span class="muted" id="xref-help"></span>
+        <button class="link" id="xref-add" type="button">Add files</button>
+        <input type="file" id="xref-file" accept=".dwg,.dxf" multiple hidden>
+      </div>
+      <div id="xref-list" class="chips"></div>
+      <p id="xref-msg" class="xmsg" hidden></p>
+    </div>
+
+    <p id="layer-note" class="smart" hidden><span class="tag alt">Layers</span><span id="layer-text"></span><button class="link" id="layer-reset" type="button">Show all</button></p>
+    <p id="smart-note" class="smart" hidden><span class="tag">Smart plot</span><span id="smart-text"></span><button class="link" id="sel-all" type="button">Select all</button></p>
+    <div id="items" class="items"></div>
+
+    <div class="actions">
+      <div class="seg" role="radiogroup" aria-label="Colour">
+        <input type="radio" name="colour" id="c-bw" value="bw" checked><label for="c-bw">Black &amp; white</label>
+        <input type="radio" name="colour" id="c-col" value="colour"><label for="c-col">Colour</label>
+      </div>
+
+      <div class="seg" id="out-seg" role="radiogroup" aria-label="Save as" hidden>
+        <input type="radio" name="output" id="o-one" value="one" checked><label for="o-one">Combined</label>
+        <input type="radio" name="output" id="o-many" value="many"><label for="o-many">Separate</label>
+      </div>
+
+      <details class="more">
+        <summary>More options</summary>
+        <div class="pop">
+          <label class="field" for="fmt">Save as
+            <select id="fmt">
+              <option value="pdf">PDF</option>
+              <option value="png">PNG image</option>
+            </select>
+          </label>
+          <label class="field" for="paper">Paper size (PDF)
+            <select id="paper">
+              <option value="asdrawn">As drawn</option>
+              <option value="A4">Fit to A4</option>
+              <option value="A3">Fit to A3</option>
+              <option value="A2">Fit to A2</option>
+              <option value="A1">Fit to A1</option>
+            </select>
+          </label>
+        </div>
+      </details>
+
+      <button class="primary" id="download" type="button" disabled>Download PDF</button>
+    </div>
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+    <ul id="notes" class="notes" hidden></ul>
+  </section>
+
+</main>
+
+<footer class="foot">Free software (GPL v3). <a href="https://github.com/Anderton722/dwgplotter" id="source-link" rel="noopener">Source code</a> · <a href="https://github.com/Anderton722/dwgplotter/blob/main/NOTICE.md" rel="noopener">Credits</a></footer>
+
+<!-- Missing linked drawings (xrefs) prompt -->
+<dialog id="xref-dialog" class="small" aria-labelledby="xd-title">
+  <div class="xd">
+    <h2 id="xd-title">Some linked drawings are missing</h2>
+    <p>This drawing shows other DWG files inside it (called xrefs). They were not uploaded, so parts of the drawing may be missing from your PDF.</p>
+    <p class="xd-ask">Can you upload these files?</p>
+    <ul id="xd-list" class="xd-list"></ul>
+    <p id="xd-msg" class="xmsg" hidden></p>
+    <div class="xd-actions">
+      <button class="ghost" id="xd-skip" type="button">Continue without them</button>
+      <button class="primary" id="xd-add" type="button">Upload files</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- Large preview -->
+<dialog id="preview" aria-labelledby="pv-title">
+  <div class="pv-head">
+    <h2 id="pv-title">Preview</h2>
+    <div class="pv-tools">
+      <button type="button" class="tool" id="pv-layers-btn" aria-pressed="false">Layers</button>
+      <button type="button" class="tool" id="pv-measure-btn" aria-pressed="false">Measure</button>
+      <button type="button" id="pv-close" class="link">Close</button>
+    </div>
+  </div>
+  <div class="pv-body">
+    <div class="pv-view" id="pv-view" tabindex="0" aria-label="Preview. Drag to move, scroll to zoom, double-click to reset.">
+      <canvas id="pv-canvas"></canvas><canvas id="pv-over"></canvas>
+      <div id="pv-readout" class="readout" hidden></div>
+    </div>
+    <aside class="layers" id="pv-layers" hidden aria-label="Layers">
+      <div class="lhead"><strong>Layers</strong><span class="muted" id="l-count"></span></div>
+      <input type="search" id="l-search" placeholder="Find a layer" aria-label="Find a layer" autocomplete="off">
+      <div class="lacts"><button type="button" class="link" id="l-all">Show all</button><button type="button" class="link" id="l-none">Hide all</button></div>
+      <ul id="l-list" class="llist"></ul>
+    </aside>
+  </div>
+</dialog>
+
+<script src="../vendor/pdf-lib.min.js"></script>
+<script src="../vendor/jszip.min.js"></script>
+<script type="module" src="app.js?v=29"></script>
+</body>
+</html>

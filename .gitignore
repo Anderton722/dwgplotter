@@ -1,0 +1,16 @@
+# private client drawings and test material
+samples/
+DWGs/
+output/
+*.dwg
+*.dxf
+*.dwf
+
+# Autodesk fonts: not ours to publish
+fonts/*.shx
+
+# scratch
+*.backup.js
+spike_body.js
+.claude/
+dist/

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>DWG spike</title>
+<style>
+body{font:14px system-ui;margin:12px;background:#f4f4f6;color:#222}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+canvas{background:#fff;border:1px solid #bbb;max-width:100%}
+pre{background:#fff;padding:8px;border:1px solid #ccc;max-height:200px;overflow:auto}
+select,button{font:inherit;padding:4px 8px}
+</style></head><body>
+<h3>DWG spike – parse, list printables, render</h3>
+<div class="row">
+  <select id="file"></select>
+  <select id="item"></select>
+  <button id="go">Render</button>
+  <label><input type="checkbox" id="colour"> Plot in colour</label>
+  <button id="pdf">Download layout as PDF</button>
+  <span id="msg"></span>
+</div>
+<pre id="info"></pre>
+<div class="row">
+  <div><div>Our render</div><canvas id="ours" width="1400" height="990"></canvas></div>
+  <div><div>Your plotted PDF</div><canvas id="ref" width="1400" height="990"></canvas></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="compare.js?v=6"></script>
+<script type="module" src="spike.js?v=128"></script>
+</body></html>

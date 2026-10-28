@@ -2,6 +2,8 @@ import { openSet, attachXref, listItems, drawPreview, plotItem, mergePdfs, descr
 import { t, tn, applyStatic, LANG, LANGS } from '/plotter/i18n.js?v=1';
 
 const $ = s => document.querySelector(s);
+// usage counter: sends only an event name (never a file name or contents); failures are ignored
+const count = e => { try { navigator.sendBeacon('/api/count?e=' + e); } catch {} };
 // the page text comes from i18n.js; paper-size options and the language picker are filled in here
 applyStatic();
 if (LANG !== 'en') document.querySelectorAll('a[href^="/dwg-to-pdf/"], a[href^="/open-dwg-without-autocad/"], a[href^="/dxf-to-pdf/"], a[href^="/privacy/"]').forEach(a => a.setAttribute('href', '/' + LANG + a.getAttribute('href'))); // the guides exist in each language
@@ -62,7 +64,8 @@ async function openFiles(files) {
     if (token !== state.token) return;
     state = { P: set.P, name: set.mainName || files[0].name, items, token, hidden: new Set() };
     buildWork(); renderXrefs(ignoredMessage(set.ignored)); show('work'); renderThumbs(); promptXrefs();
-  } catch (e) { console.error(e); if (token === state.token) { show('drop'); showError(e); } }
+    count(files.some(f => /\.dwg$/i.test(f.name)) ? 'open_dwg' : 'open_dxf');
+  } catch (e) { console.error(e); count('open_fail'); if (token === state.token) { show('drop'); showError(e); } }
 }
 const ignoredMessage = names => (names.length ? tn('ign', names.length, { names: names.join(', ') }) : '');
 
@@ -350,7 +353,7 @@ $('#download').addEventListener('click', async () => {
     }
     const url = URL.createObjectURL(new Blob([bytes], { type: mime }));
     Object.assign(document.createElement('a'), { href: url, download: file }).click(); setTimeout(() => URL.revokeObjectURL(url), 10000);
-    setStatus(t('status.saved', { file }), 'ok');
+    setStatus(t('status.saved', { file }), 'ok'); count(separate ? 'save_zip' : png ? 'save_png' : 'save_pdf');
     const list = describeWarnings(warnings, (k, n, v) => (n === undefined ? t(k, v) : tn(k, n, v)));
     if (list.length) { notes.replaceChildren(...list.map(text => Object.assign(document.createElement('li'), { textContent: text }))); notes.hidden = false; }
   } catch (e) { console.error(e); setStatus(t('status.fail'), 'err'); }

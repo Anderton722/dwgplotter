@@ -45,4 +45,8 @@ lang_page zh zh-Hans "DWG 转 PDF 在线转换器 – 免费，无需上传 | DW
 rm -f dist/.ld.html dist/.gl.html
 cp pages/version-check.js dist/version-check.js
 [ -f og.png ] && cp og.png dist/og.png
+# Google AdSense: account tag and Auto ads script on every page, and ads.txt authorising the account.
+ADS='ca-pub-5758232042156871'
+find dist -name '*.html' -exec sed -i "s#</head>#<meta name=\"google-adsense-account\" content=\"$ADS\">\n<script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=$ADS\" crossorigin=\"anonymous\"></script>\n</head>#" {} +
+printf 'google.com, pub-5758232042156871, DIRECT, f08c47fec0942fa0\n' > dist/ads.txt
 echo "built dist: $(find dist -type f | wc -l) files, $(du -sh dist | cut -f1)"

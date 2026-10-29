@@ -7,6 +7,9 @@ cp engine.js dwgworker.js dxf.js shx.js pdfctx.js LICENSE NOTICE.md dist/
 cp -r vendor/libredwg vendor/*.js vendor/*.json vendor/*.txt dist/vendor/
 printf '/  /plotter/  200\n' > dist/_redirects
 printf 'User-agent: *\nAllow: /\nSitemap: https://dwgplotter.com/sitemap.xml\n' > dist/robots.txt
+# Bing Webmaster Tools ownership file, and the IndexNow key (tools/indexnow.py pings Bing with changed URLs).
+printf '<?xml version="1.0"?>\n<users>\n\t<user>44853333A377467F39C328ADBCA36EA9</user>\n</users>\n' > dist/BingSiteAuth.xml
+printf '19b80853c466891e670ada0ac219a97b' > dist/19b80853c466891e670ada0ac219a97b.txt
 sh pages/make.sh dist
 cp pages/pages.css dist/pages.css
 # One copy of the app per language (/es/, /fr/, /de/, /zh/): same page, with the language set in <html lang>, its own title, description and hreflang links, and its text pre-filled.

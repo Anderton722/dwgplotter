@@ -1,0 +1,19 @@
+<h1>About DWG Plotter</h1>
+<p class="lead">DWG Plotter is a free, open-source tool for turning DWG and DXF drawings into PDFs, right in your web browser.</p>
+
+<h2>Why it exists</h2>
+<p>People are often sent a drawing they cannot open: a site manager without CAD software, a client checking a plan, an office printing a drawing set. Most online converters ask you to upload the file to their server, which is not acceptable for client or confidential drawings, and many return a blurry picture of the drawing instead of a proper plot. DWG Plotter reads the drawing on your own computer and prints each sheet the way it was drawn.</p>
+
+<h2>How it works</h2>
+<p>When you open a drawing, the page reads it with <a href="https://www.gnu.org/software/libredwg/" rel="noopener">LibreDWG</a>, an open-source DWG reader from the GNU project, compiled to run inside the browser. DXF files are read with dxf-parser. The page then draws each layout with its lineweights, linetypes and colours, and writes a vector PDF with pdf-lib. All of this happens in your browser tab. The file never leaves your computer.</p>
+
+<h2>Open source</h2>
+<p>The whole site is free software under the GNU General Public License v3. You can read the <a href="https://github.com/Anderton722/dwgplotter" rel="noopener">source code</a>, check that nothing is uploaded, run your own copy, or suggest improvements. The libraries it uses are listed in the <a href="https://github.com/Anderton722/dwgplotter/blob/main/NOTICE.md" rel="noopener">credits</a>.</p>
+
+<h2>Contact</h2>
+<p>To report a drawing that does not print correctly, ask a question or suggest a feature, open an issue on <a href="https://github.com/Anderton722/dwgplotter/issues" rel="noopener">GitHub</a>. Please do not attach confidential drawings.</p>
+
+<h2>Trademarks</h2>
+<p>AutoCAD and DWG TrueView are trademarks of Autodesk, Inc. DWG Plotter is an independent project and is not affiliated with or endorsed by Autodesk. "DWG" is used here only to describe the file format the tool reads.</p>
+
+<p><a class="cta" href="/">Open the converter</a></p>

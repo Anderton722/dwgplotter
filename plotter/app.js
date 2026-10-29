@@ -1,12 +1,12 @@
 import { openSet, attachXref, listItems, drawPreview, plotItem, mergePdfs, describeWarnings, listLayers, drawingUnits } from '/engine.js?v=26';
-import { t, tn, applyStatic, LANG, LANGS } from '/plotter/i18n.js?v=1';
+import { t, tn, applyStatic, LANG, LANGS } from '/plotter/i18n.js?v=2';
 
 const $ = s => document.querySelector(s);
 // usage counter: sends only an event name (never a file name or contents); failures are ignored
 const count = e => { try { navigator.sendBeacon('/api/count?e=' + e); } catch {} };
 // the page text comes from i18n.js; paper-size options and the language picker are filled in here
 applyStatic();
-if (LANG !== 'en') document.querySelectorAll('a[href^="/dwg-to-pdf/"], a[href^="/open-dwg-without-autocad/"], a[href^="/dxf-to-pdf/"], a[href^="/privacy/"]').forEach(a => a.setAttribute('href', '/' + LANG + a.getAttribute('href'))); // the guides exist in each language
+if (LANG !== 'en') document.querySelectorAll('a[href^="/dwg-to-pdf/"], a[href^="/open-dwg-without-autocad/"], a[href^="/dxf-to-pdf/"], a[href^="/privacy/"], a[href^="/about/"]').forEach(a => a.setAttribute('href', '/' + LANG + a.getAttribute('href'))); // the guides exist in each language
 document.querySelectorAll('#paper option[data-size]').forEach(o => { o.textContent = t('paper.fit', { size: o.dataset.size }); });
 {
   const sel = $('#lang'), home = { en: '/', es: '/es/', fr: '/fr/', de: '/de/', zh: '/zh/' };
@@ -41,6 +41,13 @@ addEventListener('drop', e => {
   if (!views.work.hidden && state.P?.xrefs?.length) addXrefs(files); else openFiles(files);
 });
 $('#open-other').addEventListener('click', () => { state.token++; input.value = ''; show('drop'); });
+// the sample drawing (also opened by a ?sample link); its opens and saves are counted apart from real use
+async function openSample() {
+  try { const r = await fetch('/plotter/sample.dxf?v=1'); if (!r.ok) throw new Error(r.status); openFiles([new File([await r.blob()], t('sample.file'))], true); }
+  catch (e) { showError(e); }
+}
+$('#sample').addEventListener('click', openSample);
+if (new URLSearchParams(location.search).has('sample')) openSample();
 
 const MESSAGES = { NOT_DWG: 'err.notdwg', UNREADABLE: 'err.unreadable' };
 function showError(e) {
@@ -52,7 +59,7 @@ function showError(e) {
 }
 
 // One file, or a drawing together with the drawings it links to (xrefs): the one that links to the others is the main drawing.
-async function openFiles(files) {
+async function openFiles(files, sample = false) {
   const token = ++state.token; $('#drop-error').hidden = true;
   const mb = files.reduce((s, f) => s + f.size, 0) / 1048576; // the reader runs in this tab, so a big file can make the page pause for a few seconds: say so first
   show('loading'); $('#loading-text').textContent = t(files.length > 1 ? 'loading.many' : 'loading.one') + (mb > 3 ? t('loading.big', { mb: Math.round(mb) }) : ''); await sleep(60);
@@ -62,9 +69,9 @@ async function openFiles(files) {
     $('#loading-text').textContent = t('loading.sheets'); await sleep(10);
     const items = listItems(set.P);
     if (token !== state.token) return;
-    state = { P: set.P, name: set.mainName || files[0].name, items, token, hidden: new Set() };
+    state = { P: set.P, name: set.mainName || files[0].name, items, token, hidden: new Set(), sample };
     buildWork(); renderXrefs(ignoredMessage(set.ignored)); show('work'); renderThumbs(); promptXrefs();
-    count(files.some(f => /\.dwg$/i.test(f.name)) ? 'open_dwg' : 'open_dxf');
+    count(sample ? 'open_sample' : files.some(f => /\.dwg$/i.test(f.name)) ? 'open_dwg' : 'open_dxf');
   } catch (e) { console.error(e); count('open_fail'); if (token === state.token) { show('drop'); showError(e); } }
 }
 const ignoredMessage = names => (names.length ? tn('ign', names.length, { names: names.join(', ') }) : '');
@@ -117,7 +124,7 @@ function buildWork() {
   $('#file-name').textContent = name;
   const note = $('#file-notice');
 const dxf = P.version === 'DXF';
-  note.hidden = P.version === 'AC1032' && !dxf;
+  note.hidden = state.sample || (P.version === 'AC1032' && !dxf);
   note.textContent = dxf ? t('notice.dxf') : P.version === 'AC1032' ? '' : t('notice.old', { ver: P.versionName });
 
   const anyLayout = items.some(i => i.kind === 'layout' && !i.empty);
@@ -353,7 +360,7 @@ $('#download').addEventListener('click', async () => {
     }
     const url = URL.createObjectURL(new Blob([bytes], { type: mime }));
     Object.assign(document.createElement('a'), { href: url, download: file }).click(); setTimeout(() => URL.revokeObjectURL(url), 10000);
-    setStatus(t('status.saved', { file }), 'ok'); count(separate ? 'save_zip' : png ? 'save_png' : 'save_pdf');
+    setStatus(t('status.saved', { file }), 'ok'); count(state.sample ? 'save_sample' : separate ? 'save_zip' : png ? 'save_png' : 'save_pdf');
     const list = describeWarnings(warnings, (k, n, v) => (n === undefined ? t(k, v) : tn(k, n, v)));
     if (list.length) { notes.replaceChildren(...list.map(text => Object.assign(document.createElement('li'), { textContent: text }))); notes.hidden = false; }
   } catch (e) { console.error(e); setStatus(t('status.fail'), 'err'); }

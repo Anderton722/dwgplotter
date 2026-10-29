@@ -1,0 +1,19 @@
+<h1>关于 DWG Plotter</h1>
+<p class="lead">DWG Plotter 是一款免费的开源工具，可直接在浏览器中把 DWG 和 DXF 图纸转换为 PDF。</p>
+
+<h2>为什么做这个工具</h2>
+<p>我们常常收到打不开的图纸：没有 CAD 软件的现场经理、审核图纸的客户、需要打印整套图纸的办公室。大多数在线转换器要求把文件上传到它们的服务器，这对客户图纸或保密图纸来说是不可接受的，而且很多只返回一张模糊的图片，而不是真正的出图。DWG Plotter 在你自己的电脑上读取图纸，并按原样打印每一张图纸。</p>
+
+<h2>工作原理</h2>
+<p>打开图纸时，页面使用 <a href="https://www.gnu.org/software/libredwg/" rel="noopener">LibreDWG</a>（GNU 项目的开源 DWG 读取库，已编译为可在浏览器中运行）读取它。DXF 文件使用 dxf-parser 读取。随后页面按线宽、线型和颜色绘制每个布局，并用 pdf-lib 生成矢量 PDF。这一切都在你的浏览器标签页中完成，文件始终不会离开你的电脑。</p>
+
+<h2>开源</h2>
+<p>整个网站是遵循 GNU 通用公共许可证第 3 版的自由软件。你可以阅读<a href="https://github.com/Anderton722/dwgplotter" rel="noopener">源代码</a>，核实没有任何上传，运行自己的副本，或提出改进建议。所用的库列在<a href="https://github.com/Anderton722/dwgplotter/blob/main/NOTICE.md" rel="noopener">致谢</a>中。</p>
+
+<h2>联系方式</h2>
+<p>如需报告打印不正确的图纸、提问或建议新功能，请在 <a href="https://github.com/Anderton722/dwgplotter/issues" rel="noopener">GitHub</a> 上提交 issue。请不要附上保密图纸。</p>
+
+<h2>商标</h2>
+<p>AutoCAD 和 DWG TrueView 是 Autodesk, Inc. 的商标。DWG Plotter 是独立项目，与 Autodesk 无关联，也未获其认可。这里的“DWG”仅用于描述本工具读取的文件格式。</p>
+
+<p><a class="cta" href="/zh/">打开转换器</a></p>

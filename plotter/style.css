@@ -173,6 +173,10 @@ dialog.small[open] { display: block; }
 .about p, .about li { font-size: 15px; line-height: 1.6; }
 .about ul { padding-left: 20px; margin: 6px 0; }
 .about a { color: var(--accent); }
+.about h3 { font-size: 15.5px; margin: 16px 0 2px; color: var(--ink); }
+.about .why strong { color: var(--ink); }
+.sample-row { margin-top: 12px; font-size: 14.5px; color: var(--muted); }
+.foot .tm { display: inline-block; margin-top: 8px; font-size: 12px; }
 
 .hint { margin: 2px 0 14px; font-size: 14.5px; color: var(--muted); }
 

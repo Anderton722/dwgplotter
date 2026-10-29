@@ -12,7 +12,13 @@
 <meta property="og:description" content="Open DWG and DXF drawings without AutoCAD and save them as PDF. Nothing is uploaded.">
 <meta name="google-site-verification" content="mt3O_5iGpPJaIUBdHO94mef5YegDd2SRzanpie_H1uY" />
 <meta property="og:type" content="website">
-<link rel="stylesheet" href="/plotter/style.css?v=19">
+<meta property="og:url" content="https://dwgplotter.com/">
+<meta property="og:image" content="https://dwgplotter.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<!--LDJSON-->
+<link rel="stylesheet" href="/plotter/style.css?v=20">
 </head>
 <body>
 
@@ -40,6 +46,7 @@
       <span data-i18n="drop.sub">or click to choose one</span>
     </label>
 
+    <p class="sample-row"><span data-i18n="sample.q">No drawing to hand?</span> <button class="link" id="sample" type="button" data-i18n="sample.btn">Try a sample drawing</button></p>
     <div id="drop-error" class="notice error" role="alert" hidden></div>
     <p class="fine" data-i18n="fine">Your drawing is never uploaded. If it links to other DWG files (xrefs), drop them in together.</p>
     <div class="about">
@@ -47,6 +54,26 @@
       <p data-i18n="about.1p">Drop in a DWG or DXF drawing and save it as a PDF. Every layout in the file is listed, and each sheet prints as drawn, with its lineweights and linetypes. Drawings that keep everything in the model are cut into their real drawings by Smart plot.</p>
       <h2 data-i18n="about.2h">Your drawing stays on your computer</h2>
       <p data-i18n="about.2p">The file is read and converted in your own browser. It is not uploaded to a server, so it is safe to use with client and confidential drawings. There is no sign-up and nothing to install.</p>
+      <h2 data-i18n="why.h">Why use DWG Plotter</h2>
+      <ul class="why">
+        <li><strong data-i18n="why.1t">Sharp vector PDFs.</strong> <span data-i18n="why.1p">Lines and text stay crisp at any zoom, and the file stays small. Many online converters give you a picture of the drawing instead.</span></li>
+        <li><strong data-i18n="why.2t">Every sheet, as drawn.</strong> <span data-i18n="why.2p">Each layout prints at its own sheet size, not squeezed onto A4. Save them as one combined PDF or as separate files.</span></li>
+        <li><strong data-i18n="why.3t">Plotted like the real thing.</strong> <span data-i18n="why.3p">Black and white with lineweights, like a monochrome plot style, or full colour.</span></li>
+        <li><strong data-i18n="why.4t">Linked drawings included.</strong> <span data-i18n="why.4p">Drop in the xref files with the main drawing and they are drawn in place.</span></li>
+        <li><strong data-i18n="why.5t">Nothing uploaded, ever.</strong> <span data-i18n="why.5p">Most converters send your file to their server. Here it never leaves your computer, and the source code is public so anyone can check.</span></li>
+        <li><strong data-i18n="why.6t">Free, with no catch.</strong> <span data-i18n="why.6p">No sign-up, no watermark, no daily limit.</span></li>
+      </ul>
+      <h2 data-i18n="faq.h">Questions</h2>
+      <h3 data-i18n="faq.1q">Is it really free?</h3>
+      <p data-i18n="faq.1a">Yes. There is no sign-up, no watermark and no limit on how many drawings you convert. It is open-source software.</p>
+      <h3 data-i18n="faq.2q">Is my drawing uploaded anywhere?</h3>
+      <p data-i18n="faq.2a">No. The drawing is read and converted inside your browser, on your own computer. It is never sent to a server.</p>
+      <h3 data-i18n="faq.3q">Which DWG versions can it open?</h3>
+      <p data-i18n="faq.3a">Drawings saved from AutoCAD R14 up to the current 2018 format, and DXF files. Very old or damaged files may not open.</p>
+      <h3 data-i18n="faq.4q">Does it work on a Mac, a Chromebook or a phone?</h3>
+      <p data-i18n="faq.4a">Yes. It runs in any modern browser, including Chrome, Edge, Firefox and Safari. Nothing needs to be installed.</p>
+      <h3 data-i18n="faq.5q">Can I print several sheets at once?</h3>
+      <p data-i18n="faq.5a">Yes. Tick the layouts you want and save them as one combined PDF, or as separate PDFs in a zip file.</p>
       <h2 data-i18n="about.3h">Guides</h2>
       <ul>
         <li><a href="/dwg-to-pdf/" data-i18n="guide.1">How to convert DWG to PDF</a></li>
@@ -126,7 +153,8 @@
 
 </main>
 
-<footer class="foot"><span data-i18n="foot.free">Free software (GPL v3).</span> <a href="https://github.com/Anderton722/dwgplotter" id="source-link" rel="noopener" data-i18n="foot.source">Source code</a> · <a href="https://github.com/Anderton722/dwgplotter/blob/main/NOTICE.md" rel="noopener" data-i18n="foot.credits">Credits</a> · <a href="/privacy/" data-i18n="foot.privacy">Privacy</a> · <a href="/dwg-to-pdf/" data-i18n="foot.g1">DWG to PDF</a> · <a href="/open-dwg-without-autocad/" data-i18n="foot.g2">Open DWG without AutoCAD</a> · <a href="/dxf-to-pdf/" data-i18n="foot.g3">DXF to PDF</a></footer>
+<footer class="foot"><span data-i18n="foot.free">Free software (GPL v3).</span> <a href="https://github.com/Anderton722/dwgplotter" id="source-link" rel="noopener" data-i18n="foot.source">Source code</a> · <a href="https://github.com/Anderton722/dwgplotter/blob/main/NOTICE.md" rel="noopener" data-i18n="foot.credits">Credits</a> · <a href="/about/" data-i18n="foot.about">About</a> · <a href="/privacy/" data-i18n="foot.privacy">Privacy</a> · <a href="/dwg-to-pdf/" data-i18n="foot.g1">DWG to PDF</a> · <a href="/open-dwg-without-autocad/" data-i18n="foot.g2">Open DWG without AutoCAD</a> · <a href="/dxf-to-pdf/" data-i18n="foot.g3">DXF to PDF</a>
+<br><span class="tm" data-i18n="foot.tm">AutoCAD and DWG TrueView are trademarks of Autodesk, Inc. DWG Plotter is an independent project and is not affiliated with or endorsed by Autodesk.</span></footer>
 
 <!-- Missing linked drawings (xrefs) prompt -->
 <dialog id="xref-dialog" class="small" aria-labelledby="xd-title">
@@ -169,6 +197,6 @@
 
 <script src="/vendor/pdf-lib.min.js"></script>
 <script src="/vendor/jszip.min.js"></script>
-<script type="module" src="/plotter/app.js?v=37"></script>
+<script type="module" src="/plotter/app.js?v=38"></script>
 </body>
 </html>

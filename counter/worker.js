@@ -1,6 +1,6 @@
 // Usage counter for dwgplotter.com. Route: dwgplotter.com/api/count*  Binding: KV namespace COUNTS.
 // Stores one number per event per day (key "2026-10-28:save_pdf"). No IP, file name, or file data is read or kept.
-const EVENTS = new Set(['open_dwg', 'open_dxf', 'open_fail', 'save_pdf', 'save_png', 'save_zip']);
+const EVENTS = new Set(['open_dwg', 'open_dxf', 'open_fail', 'save_pdf', 'save_png', 'save_zip', 'open_sample', 'save_sample']);
 export default {
   async fetch(req, env) {
     const e = new URL(req.url).searchParams.get('e');

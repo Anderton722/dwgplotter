@@ -12,22 +12,26 @@ cp pages/pages.css dist/pages.css
 # One copy of the app per language (/es/, /fr/, /de/, /zh/): same page, with the language set in <html lang> and its own title, description and hreflang links.
 HREFLANG='<link rel="alternate" hreflang="en" href="https://dwgplotter.com/">\n<link rel="alternate" hreflang="es" href="https://dwgplotter.com/es/">\n<link rel="alternate" hreflang="fr" href="https://dwgplotter.com/fr/">\n<link rel="alternate" hreflang="de" href="https://dwgplotter.com/de/">\n<link rel="alternate" hreflang="zh-Hans" href="https://dwgplotter.com/zh/">\n<link rel="alternate" hreflang="x-default" href="https://dwgplotter.com/">'
 lang_page() { # code, html lang, title, description, og title, og description
-  mkdir -p "dist/$1"
-  sed -e "s#^<html lang=\"en\">#<html lang=\"$2\">#" -e "s#^<title>.*</title>#<title>$3</title>#" \
+  mkdir -p "dist/$1"; py tools/ldjson.py home "$1" > dist/.ld.html
+  sed -e "/<!--LDJSON-->/{r dist/.ld.html" -e "d}" -e "s#^<meta property=\"og:url\" content=\".*\">#<meta property=\"og:url\" content=\"https://dwgplotter.com/$1/\">#" \
+      -e "s#^<html lang=\"en\">#<html lang=\"$2\">#" -e "s#^<title>.*</title>#<title>$3</title>#" \
       -e "s#^<meta name=\"description\" content=\".*\">#<meta name=\"description\" content=\"$4\">#" \
       -e "s#^<link rel=\"canonical\" href=\".*\">#<link rel=\"canonical\" href=\"https://dwgplotter.com/$1/\">#" \
       -e "s#^<meta property=\"og:title\" content=\".*\">#<meta property=\"og:title\" content=\"$5\">#" \
       -e "s#^<meta property=\"og:description\" content=\".*\">#<meta property=\"og:description\" content=\"$6\">#" \
       -e "s#<!--HREFLANG-->#$HREFLANG#" plotter/index.html > "dist/$1/index.html"
 }
-sed -i "s#<!--HREFLANG-->#$HREFLANG#" dist/plotter/index.html
+py tools/ldjson.py home en > dist/.ld.html
+sed -i -e "s#<!--HREFLANG-->#$HREFLANG#" -e "/<!--LDJSON-->/{r dist/.ld.html" -e "d}" dist/plotter/index.html
 lang_page es es "Convertidor de DWG a PDF – Gratis, online, sin subir archivos | DWG Plotter" "Convierte dibujos DWG y DXF a PDF gratis, en tu navegador. Abre archivos DWG sin AutoCAD. Las presentaciones se imprimen tal como están dibujadas y no se sube nada." "Convertidor de DWG a PDF – Gratis, online, sin subir archivos" "Abre dibujos DWG y DXF sin AutoCAD y guárdalos como PDF. No se sube nada."
 lang_page fr fr "Convertisseur DWG en PDF – Gratuit, en ligne, sans envoi de fichier | DWG Plotter" "Convertissez des dessins DWG et DXF en PDF gratuitement, dans votre navigateur. Ouvrez des fichiers DWG sans AutoCAD. Les présentations sont tracées telles que dessinées et rien n'est envoyé." "Convertisseur DWG en PDF – Gratuit, en ligne, sans envoi de fichier" "Ouvrez des dessins DWG et DXF sans AutoCAD et enregistrez-les en PDF. Rien n'est envoyé."
 lang_page de de "DWG-in-PDF-Konverter – Kostenlos, online, ohne Upload | DWG Plotter" "Wandeln Sie DWG- und DXF-Zeichnungen kostenlos im Browser in PDF um. DWG-Dateien ohne AutoCAD öffnen. Layouts werden wie gezeichnet gedruckt, und nichts wird hochgeladen." "DWG-in-PDF-Konverter – Kostenlos, online, ohne Upload" "DWG- und DXF-Zeichnungen ohne AutoCAD öffnen und als PDF speichern. Nichts wird hochgeladen."
 lang_page zh zh-Hans "DWG 转 PDF 在线转换器 – 免费，无需上传 | DWG Plotter" "在浏览器中免费将 DWG 和 DXF 图纸转为 PDF。无需 AutoCAD 即可打开 DWG 文件。布局按原样打印，不上传任何内容。" "DWG 转 PDF 在线转换器 – 免费，无需上传" "无需 AutoCAD 即可打开 DWG 和 DXF 图纸并保存为 PDF。不上传任何内容。"
 { printf '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
   printf '<url><loc>https://dwgplotter.com/</loc></url>\n'
-  for p in es fr de zh dwg-to-pdf open-dwg-without-autocad dxf-to-pdf privacy; do printf '<url><loc>https://dwgplotter.com/%s/</loc></url>\n' "$p"; done
-  for l in es fr de zh; do for p in dwg-to-pdf open-dwg-without-autocad dxf-to-pdf privacy; do printf '<url><loc>https://dwgplotter.com/%s/%s/</loc></url>\n' "$l" "$p"; done; done
+  for p in es fr de zh dwg-to-pdf open-dwg-without-autocad dxf-to-pdf about privacy; do printf '<url><loc>https://dwgplotter.com/%s/</loc></url>\n' "$p"; done
+  for l in es fr de zh; do for p in dwg-to-pdf open-dwg-without-autocad dxf-to-pdf about privacy; do printf '<url><loc>https://dwgplotter.com/%s/%s/</loc></url>\n' "$l" "$p"; done; done
   printf '</urlset>\n'; } > dist/sitemap.xml
+rm -f dist/.ld.html
+[ -f og.png ] && cp og.png dist/og.png
 echo "built dist: $(find dist -type f | wc -l) files, $(du -sh dist | cut -f1)"

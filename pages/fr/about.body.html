@@ -1,0 +1,19 @@
+<h1>À propos de DWG Plotter</h1>
+<p class="lead">DWG Plotter est un outil gratuit et libre qui transforme les dessins DWG et DXF en PDF, directement dans votre navigateur.</p>
+
+<h2>Pourquoi cet outil</h2>
+<p>On reçoit souvent un dessin qu'on ne peut pas ouvrir : un conducteur de travaux sans logiciel de CAO, un client qui vérifie un plan, un bureau qui imprime un jeu de plans. La plupart des convertisseurs en ligne demandent d'envoyer le fichier sur leur serveur, ce qui n'est pas acceptable pour des dessins de clients ou confidentiels, et beaucoup renvoient une image floue au lieu d'un vrai tracé. DWG Plotter lit le dessin sur votre propre ordinateur et imprime chaque feuille telle qu'elle a été dessinée.</p>
+
+<h2>Comment ça marche</h2>
+<p>Quand vous ouvrez un dessin, la page le lit avec <a href="https://www.gnu.org/software/libredwg/" rel="noopener">LibreDWG</a>, un lecteur DWG libre du projet GNU, compilé pour fonctionner dans le navigateur. Les fichiers DXF sont lus avec dxf-parser. La page dessine ensuite chaque présentation avec ses épaisseurs, types de ligne et couleurs, puis crée un PDF vectoriel avec pdf-lib. Tout se passe dans l'onglet de votre navigateur. Le fichier ne quitte jamais votre ordinateur.</p>
+
+<h2>Logiciel libre</h2>
+<p>Tout le site est un logiciel libre sous licence publique générale GNU v3. Vous pouvez lire le <a href="https://github.com/Anderton722/dwgplotter" rel="noopener">code source</a>, vérifier que rien n'est envoyé, utiliser votre propre copie ou proposer des améliorations. Les bibliothèques utilisées sont listées dans les <a href="https://github.com/Anderton722/dwgplotter/blob/main/NOTICE.md" rel="noopener">crédits</a>.</p>
+
+<h2>Contact</h2>
+<p>Pour signaler un dessin mal imprimé, poser une question ou proposer une fonction, ouvrez un ticket sur <a href="https://github.com/Anderton722/dwgplotter/issues" rel="noopener">GitHub</a>. N'y joignez pas de dessins confidentiels.</p>
+
+<h2>Marques</h2>
+<p>AutoCAD et DWG TrueView sont des marques d'Autodesk, Inc. DWG Plotter est un projet indépendant, sans lien avec Autodesk et non approuvé par Autodesk. « DWG » sert ici uniquement à désigner le format de fichier lu par l'outil.</p>
+
+<p><a class="cta" href="/fr/">Ouvrir le convertisseur</a></p>

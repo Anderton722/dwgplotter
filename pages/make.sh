@@ -9,14 +9,20 @@ HREFLANG_BASE() { # slug (may be empty for the home page)
   done
   printf '<link rel="alternate" hreflang="x-default" href="https://dwgplotter.com/%s/">\n' "$1"
 }
+GUIDES() { # column of pages/guides.tsv, language prefix, current slug, heading: links to every other guide in that language
+  [ "$3" = privacy ] && return
+  printf '<nav class="more"><h2>%s</h2><ul>\n' "$4"
+  tr -d '\r' < pages/guides.tsv | awk -F'\t' -v c="$1" -v p="$2" -v s="$3" '$1 != s { printf "<li><a href=\"%s/%s/\">%s</a></li>\n", p, $1, $c }'
+  printf '</ul></nav>\n'
+}
 page() { # lang, slug, title, description
   lang="$1"; slug="$2"; title="$3"; desc="$4"
   case $lang in
-    en) dir="$OUT/$slug"; home="/"; hl=en; pre="";   badge="Your drawings are never uploaded"; free="Free software (GPL v3)."; src="Source code"; cred="Credits"; priv="Privacy"; g1="DWG to PDF"; g2="Open DWG without AutoCAD"; g3="DXF to PDF"; abt="About"; tm="AutoCAD and DWG TrueView are trademarks of Autodesk, Inc. DWG Plotter is an independent project and is not affiliated with or endorsed by Autodesk.";;
-    es) dir="$OUT/es/$slug"; home="/es/"; hl=es; pre="/es"; badge="Tus dibujos nunca se suben a ningún servidor"; free="Software libre (GPL v3)."; src="Código fuente"; cred="Créditos"; priv="Privacidad"; g1="DWG a PDF"; g2="Abrir DWG sin AutoCAD"; g3="DXF a PDF"; abt="Acerca de"; tm="AutoCAD y DWG TrueView son marcas comerciales de Autodesk, Inc. DWG Plotter es un proyecto independiente y no está afiliado a Autodesk ni cuenta con su respaldo.";;
-    fr) dir="$OUT/fr/$slug"; home="/fr/"; hl=fr; pre="/fr"; badge="Vos dessins ne sont jamais envoyés"; free="Logiciel libre (GPL v3)."; src="Code source"; cred="Crédits"; priv="Confidentialité"; g1="DWG en PDF"; g2="Ouvrir un DWG sans AutoCAD"; g3="DXF en PDF"; abt="À propos"; tm="AutoCAD et DWG TrueView sont des marques d'Autodesk, Inc. DWG Plotter est un projet indépendant, sans lien avec Autodesk et non approuvé par Autodesk.";;
-    de) dir="$OUT/de/$slug"; home="/de/"; hl=de; pre="/de"; badge="Ihre Zeichnungen werden nie hochgeladen"; free="Freie Software (GPL v3)."; src="Quellcode"; cred="Danksagungen"; priv="Datenschutz"; g1="DWG in PDF"; g2="DWG ohne AutoCAD öffnen"; g3="DXF in PDF"; abt="Über uns"; tm="AutoCAD und DWG TrueView sind Marken von Autodesk, Inc. DWG Plotter ist ein unabhängiges Projekt und steht in keiner Verbindung zu Autodesk.";;
-    zh) dir="$OUT/zh/$slug"; home="/zh/"; hl=zh-Hans; pre="/zh"; badge="您的图纸绝不会被上传"; free="自由软件（GPL v3）。"; src="源代码"; cred="致谢"; priv="隐私"; g1="DWG 转 PDF"; g2="无需 AutoCAD 打开 DWG"; g3="DXF 转 PDF"; abt="关于"; tm="AutoCAD 和 DWG TrueView 是 Autodesk, Inc. 的商标。DWG Plotter 是独立项目，与 Autodesk 无关联，也未获其认可。";;
+    en) dir="$OUT/$slug"; home="/"; hl=en; pre="";   badge="Your drawings are never uploaded"; free="Free software (GPL v3)."; src="Source code"; cred="Credits"; priv="Privacy"; g1="DWG to PDF"; g2="Open DWG without AutoCAD"; g3="DXF to PDF"; more="More guides"; col=2; abt="About"; tm="AutoCAD and DWG TrueView are trademarks of Autodesk, Inc. DWG Plotter is an independent project and is not affiliated with or endorsed by Autodesk.";;
+    es) dir="$OUT/es/$slug"; home="/es/"; hl=es; pre="/es"; badge="Tus dibujos nunca se suben a ningún servidor"; free="Software libre (GPL v3)."; src="Código fuente"; cred="Créditos"; priv="Privacidad"; g1="DWG a PDF"; g2="Abrir DWG sin AutoCAD"; g3="DXF a PDF"; more="Más guías"; col=3; abt="Acerca de"; tm="AutoCAD y DWG TrueView son marcas comerciales de Autodesk, Inc. DWG Plotter es un proyecto independiente y no está afiliado a Autodesk ni cuenta con su respaldo.";;
+    fr) dir="$OUT/fr/$slug"; home="/fr/"; hl=fr; pre="/fr"; badge="Vos dessins ne sont jamais envoyés"; free="Logiciel libre (GPL v3)."; src="Code source"; cred="Crédits"; priv="Confidentialité"; g1="DWG en PDF"; g2="Ouvrir un DWG sans AutoCAD"; g3="DXF en PDF"; more="Autres guides"; col=4; abt="À propos"; tm="AutoCAD et DWG TrueView sont des marques d'Autodesk, Inc. DWG Plotter est un projet indépendant, sans lien avec Autodesk et non approuvé par Autodesk.";;
+    de) dir="$OUT/de/$slug"; home="/de/"; hl=de; pre="/de"; badge="Ihre Zeichnungen werden nie hochgeladen"; free="Freie Software (GPL v3)."; src="Quellcode"; cred="Danksagungen"; priv="Datenschutz"; g1="DWG in PDF"; g2="DWG ohne AutoCAD öffnen"; g3="DXF in PDF"; more="Weitere Anleitungen"; col=5; abt="Über uns"; tm="AutoCAD und DWG TrueView sind Marken von Autodesk, Inc. DWG Plotter ist ein unabhängiges Projekt und steht in keiner Verbindung zu Autodesk.";;
+    zh) dir="$OUT/zh/$slug"; home="/zh/"; hl=zh-Hans; pre="/zh"; badge="您的图纸绝不会被上传"; free="自由软件（GPL v3）。"; src="源代码"; cred="致谢"; priv="隐私"; g1="DWG 转 PDF"; g2="无需 AutoCAD 打开 DWG"; g3="DXF 转 PDF"; more="更多指南"; col=6; abt="关于"; tm="AutoCAD 和 DWG TrueView 是 Autodesk, Inc. 的商标。DWG Plotter 是独立项目，与 Autodesk 无关联，也未获其认可。";;
   esac
   body="pages/$slug.body.html"; [ "$lang" != en ] && body="pages/$lang/$slug.body.html"
   canon="https://dwgplotter.com$pre/$slug/"; mkdir -p "$dir"
@@ -39,7 +45,7 @@ $(HREFLANG_BASE "$slug")
 $(py tools/ldjson.py faq "$body")
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Crect x=%271.5%27 y=%271.5%27 width=%2721%27 height=%2721%27 rx=%276.5%27 fill=%27%234f46e5%27/%3E%3Cpath d=%27M7 15.5 11 9l3 4 3-5%27 fill=%27none%27 stroke=%27%23fff%27 stroke-width=%271.9%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E">
 <link rel="stylesheet" href="/plotter/style.css?v=20">
-<link rel="stylesheet" href="/pages.css?v=1">
+<link rel="stylesheet" href="/pages.css?v=2">
 </head>
 <body>
 <header class="top">
@@ -48,6 +54,7 @@ $(py tools/ldjson.py faq "$body")
 </header>
 <main class="doc">
 $(cat "$body")
+$(GUIDES "$col" "$pre" "$slug" "$more")
 </main>
 <footer class="foot">$free <a href="https://github.com/Anderton722/dwgplotter" rel="noopener">$src</a> · <a href="https://github.com/Anderton722/dwgplotter/blob/main/NOTICE.md" rel="noopener">$cred</a> · <a href="$pre/about/">$abt</a> · <a href="$pre/privacy/">$priv</a> · <a href="$pre/dwg-to-pdf/">$g1</a> · <a href="$pre/open-dwg-without-autocad/">$g2</a> · <a href="$pre/dxf-to-pdf/">$g3</a>
 <br><span class="tm">$tm</span></footer>
@@ -86,3 +93,5 @@ page zh dwg-to-pdf "如何免费将 DWG 转为 PDF，无需 AutoCAD" "在浏览�
 page zh open-dwg-without-autocad "没有 AutoCAD 如何打开 DWG 文件" "没有 AutoCAD 时打开和查看 DWG 图纸的方法，包括可在浏览器中免费使用并保存为 PDF 的查看器。"
 page zh dxf-to-pdf "DXF 转 PDF：免费在线转换 DXF 图纸" "在浏览器中免费将 DXF 图纸转为 PDF。打印模型图形，保留线宽和线型。不上传任何内容。"
 page zh privacy "隐私政策" "DWG Plotter 如何处理您的图纸和数据。图纸在您的浏览器中读取，绝不会上传。"
+
+. pages/make-wave.sh

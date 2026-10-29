@@ -1,12 +1,11 @@
 import { openSet, attachXref, listItems, drawPreview, plotItem, mergePdfs, describeWarnings, listLayers, drawingUnits } from '/engine.js?v=26';
-import { t, tn, applyStatic, LANG, LANGS } from '/plotter/i18n.js?v=2';
+import { t, tn, applyStatic, LANG, LANGS } from '/plotter/i18n.js?v=3';
 
 const $ = s => document.querySelector(s);
 // usage counter: sends only an event name (never a file name or contents); failures are ignored
 const count = e => { try { navigator.sendBeacon('/api/count?e=' + e); } catch {} };
 // the page text comes from i18n.js; paper-size options and the language picker are filled in here
 applyStatic();
-if (LANG !== 'en') document.querySelectorAll('a[href^="/dwg-to-pdf/"], a[href^="/open-dwg-without-autocad/"], a[href^="/dxf-to-pdf/"], a[href^="/privacy/"], a[href^="/about/"]').forEach(a => a.setAttribute('href', '/' + LANG + a.getAttribute('href'))); // the guides exist in each language
 document.querySelectorAll('#paper option[data-size]').forEach(o => { o.textContent = t('paper.fit', { size: o.dataset.size }); });
 {
   const sel = $('#lang'), home = { en: '/', es: '/es/', fr: '/fr/', de: '/de/', zh: '/zh/' };
@@ -26,6 +25,9 @@ const savePrefs = () => { try { localStorage.setItem(PREF, JSON.stringify(prefs)
 if (prefs.colour) $('#c-col').checked = true;
 if (prefs.paper) $('#paper').value = prefs.paper;
 if (prefs.fmt) $('#fmt').value = prefs.fmt;
+const ask = new URLSearchParams(location.search); // the guide pages link here with a format or colour already chosen
+if (['pdf', 'png', 'jpg'].includes(ask.get('fmt'))) $('#fmt').value = ask.get('fmt');
+if (ask.has('colour')) $('#c-col').checked = true;
 if (prefs.output === 'many') $('#o-many').checked = true;
 for (const id of ['#o-one', '#o-many']) $(id).addEventListener('change', () => { prefs.output = $('#o-many').checked ? 'many' : 'one'; savePrefs(); update(); });
 
@@ -162,7 +164,7 @@ $('#sel-all').addEventListener('click', () => {
 function update() {
   const n = state.items.filter(i => i.on).length, btn = $('#download');
   const usable = state.items.filter(i => !i.empty); $('#sel-all').textContent = t(usable.length && usable.every(i => i.on) ? 'select.none' : 'select.all');
-  const png = $('#fmt').value === 'png';
+  const png = $('#fmt').value !== 'pdf';
   $('#out-seg').hidden = n < 2 || png; // combined or separate only matters with 2+ PDF sheets (pictures always come as separate files)
   btn.disabled = n === 0;
   btn.textContent = png ? (n > 1 ? t('dl.imgs', { n }) : t('dl.img')) : n > 1 ? ($('#o-many').checked ? t('dl.pdfzip', { n }) : t('dl.pdfpages', { n })) : t('dl.pdf');
@@ -322,11 +324,11 @@ function readout() {
 /* ---------- saving the PDF ---------- */
 const FIT = { A4: [210, 297], A3: [297, 420], A2: [420, 594], A1: [594, 841] };
 // A picture of one sheet (about 4000 px on its long side), white background, honouring colour and switched-off layers
-async function makePng(P, it, colour) {
+async function makePng(P, it, colour, jpg) {
   const aspect = it.kind === 'layout' ? it.sheet[0] / it.sheet[1] : it.aspect || 1.4, long = 4000, c = document.createElement('canvas');
   [c.width, c.height] = aspect >= 1 ? [long, Math.round(long / aspect)] : [Math.round(long * aspect), long];
   await drawPreview(P, it, c, { colour, hidden: [...state.hidden] });
-  return new Promise((res, rej) => c.toBlob(b => (b ? res(b) : rej(new Error('png'))), 'image/png'));
+  return new Promise((res, rej) => c.toBlob(b => (b ? res(b) : rej(new Error('image'))), jpg ? 'image/jpeg' : 'image/png', 0.92));
 }
 const status = $('#status');
 function setStatus(msg, kind = '') { status.textContent = msg; status.className = 'status ' + kind; }
@@ -334,11 +336,11 @@ function setStatus(msg, kind = '') { status.textContent = msg; status.className 
 $('#download').addEventListener('click', async () => {
   const { P, items, name } = state, chosen = items.filter(i => i.on); if (!chosen.length) return;
   const btn = $('#download'), notes = $('#notes'); btn.disabled = true; notes.hidden = true;
-  const colour = $('#c-col').checked, paper = $('#paper').value, parts = [], warnings = {}, png = $('#fmt').value === 'png';
+  const colour = $('#c-col').checked, paper = $('#paper').value, parts = [], warnings = {}, fmt = $('#fmt').value, png = fmt !== 'pdf'; // png: any picture format
   try {
     for (const [i, it] of chosen.entries()) {
       setStatus(chosen.length > 1 ? t(png ? 'status.imgn' : 'status.page', { i: i + 1, n: chosen.length }) : t(png ? 'status.img' : 'status.pdf')); await sleep(30);
-      if (png) { parts.push(await makePng(P, it, colour)); continue; }
+      if (png) { parts.push(await makePng(P, it, colour, fmt === 'jpg')); continue; }
       const opts = { colour, hidden: [...state.hidden] };
       if (it.kind !== 'layout') Object.assign(opts, paper === 'asdrawn' ? { paper: [420, 297], orient: 'landscape' } : { paper: [FIT[paper][1], FIT[paper][0]], orient: 'auto' });
       else if (paper !== 'asdrawn') opts.fit = FIT[paper];
@@ -346,21 +348,21 @@ $('#download').addEventListener('click', async () => {
       for (const [k, v] of Object.entries(r.warnings || {})) warnings[k] = (warnings[k] || 0) + v;
     }
     const safe = s => s.replace(/[\\/:*?"<>|]+/g, '_'), base = safe(name.replace(/\.(dwg|dxf)$/i, ''));
-    const ext = png ? 'png' : 'pdf', separate = chosen.length > 1 && (png || $('#o-many').checked); // one file per sheet, bundled in a .zip so the browser saves them reliably
+    const ext = fmt, separate = chosen.length > 1 && (png || $('#o-many').checked); // one file per sheet, bundled in a .zip so the browser saves them reliably
     let bytes, file, mime = 'application/pdf';
     if (separate) {
       setStatus(t('status.pack')); await sleep(20);
       const zip = new JSZip(); parts.forEach((b, i) => zip.file(`${base} - ${safe(title(chosen[i]))}.${ext}`, b));
       bytes = await zip.generateAsync({ type: 'uint8array' }); file = `${base}.zip`; mime = 'application/zip';
     } else if (png) {
-      bytes = parts[0]; mime = 'image/png'; file = `${base} - ${safe(title(chosen[0]))}.png`;
+      bytes = parts[0]; mime = fmt === 'jpg' ? 'image/jpeg' : 'image/png'; file = `${base} - ${safe(title(chosen[0]))}.${ext}`;
     } else {
       bytes = parts.length === 1 ? parts[0] : await mergePdfs(parts);
       file = `${base}${chosen.length === 1 ? ' - ' + safe(title(chosen[0])) : ''}.pdf`;
     }
     const url = URL.createObjectURL(new Blob([bytes], { type: mime }));
     Object.assign(document.createElement('a'), { href: url, download: file }).click(); setTimeout(() => URL.revokeObjectURL(url), 10000);
-    setStatus(t('status.saved', { file }), 'ok'); count(state.sample ? 'save_sample' : separate ? 'save_zip' : png ? 'save_png' : 'save_pdf');
+    setStatus(t('status.saved', { file }), 'ok'); count(state.sample ? 'save_sample' : separate ? 'save_zip' : png ? 'save_' + fmt : 'save_pdf');
     const list = describeWarnings(warnings, (k, n, v) => (n === undefined ? t(k, v) : tn(k, n, v)));
     if (list.length) { notes.replaceChildren(...list.map(text => Object.assign(document.createElement('li'), { textContent: text }))); notes.hidden = false; }
   } catch (e) { console.error(e); setStatus(t('status.fail'), 'err'); }

@@ -1,0 +1,33 @@
+<h1>DWG 版本检查器</h1>
+<p class="lead">查看 DWG 或 DXF 文件是用哪个 AutoCAD 版本保存的。把文件拖到下方。只读取开头几个字节，不上传任何内容。</p>
+
+<label class="drop vc-drop" tabindex="0">
+  <input type="file" id="vc-file" accept=".dwg,.dxf,.dwt" hidden>
+  <strong>将 DWG 或 DXF 文件拖到这里</strong>
+  <span>或点击选择文件</span>
+</label>
+<div id="vc-out" class="vc-out" aria-live="polite" hidden
+  data-ok="{file}：{code}，{name} 格式。DWG Plotter 可以打开。"
+  data-part="{file}：{code}，{name} 格式。可能可以在这里打开，但旧文件只部分支持。"
+  data-old="{file}：{code}，{name} 格式。版本太旧，无法在这里打开。请发件人另存为较新的版本。"
+  data-dxf="{file}：以 {name} 格式（{code}）保存的 DXF 文件。"
+  data-bad="{file} 看起来不是 AutoCAD 图纸。它可能已损坏、被压缩，或是其他类型的文件。"
+  data-open="在 DWG Plotter 中打开"></div>
+
+<h2>结果的含义</h2>
+<p>版本代码（如 AC1027）决定了哪些软件能打开图纸。新代码无法在旧软件中打开。完整列表见 <a href="/zh/dwg-versions/">DWG 版本详解</a>。</p>
+<ul>
+  <li><strong>AC1032（2018 格式）</strong>：2018 年至今的所有 AutoCAD 版本都使用。</li>
+  <li><strong>AC1027（2013 格式）</strong>：2013 至 2017 版使用。</li>
+  <li><strong>AC1024（2010 格式）</strong>：2010 至 2012 版使用。</li>
+</ul>
+
+<h2>常见问题</h2>
+<h3>我的文件会被上传吗？</h3>
+<p>不会。检查器在您的浏览器中读取文件开头，不发送任何内容。</p>
+<h3>需要哪个版本的 AutoCAD 才能打开？</h3>
+<p>结果中所示版本及之后的任何版本。例如 AC1027 文件可在 AutoCAD 2013 及更高版本中打开。不用 AutoCAD 查看，请使用<a href="/zh/dwg-viewer/">免费 DWG 查看器</a>。</p>
+<h3>文件无法识别怎么办？</h3>
+<p>参见 <a href="/zh/dwg-file-wont-open/">DWG 文件打不开</a>了解常见原因。</p>
+
+<script src="/version-check.js?v=1" defer></script>

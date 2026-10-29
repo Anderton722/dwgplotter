@@ -18,11 +18,16 @@ def out(obj):
     sys.stdout.reconfigure(encoding='utf-8')
     print('<script type="application/ld+json">' + json.dumps(obj, ensure_ascii=False, separators=(',', ':')) + '</script>')
 
-def home(lang):
+def strings(lang):
+    """The interface text for one language, read from plotter/i18n.js."""
     src = (ROOT / 'plotter' / 'i18n.js').read_text(encoding='utf-8')
     block = re.search(r'^const %s = \{(.*?)^\};' % lang, src, re.S | re.M).group(1)
     d = {k: re.sub(r"\\(.)", r'\1', v) for k, v in re.findall(r"'([\w.]+)':\s*'((?:[^'\\]|\\.)*)'", block)}
     d.update({k: re.sub(r"\\(.)", r'\1', v) for k, v in re.findall(r"(?<![\w'.])(\w+):\s*'((?:[^'\\]|\\.)*)'", block)})
+    return d
+
+def home(lang):
+    d = strings(lang)
     url = 'https://dwgplotter.com' + HOME[lang]
     app = {'@type': 'SoftwareApplication', 'name': 'DWG Plotter', 'url': url, 'description': d['lead'],
            'applicationCategory': 'DesignApplication', 'operatingSystem': 'Any (runs in a web browser)', 'inLanguage': HL[lang],

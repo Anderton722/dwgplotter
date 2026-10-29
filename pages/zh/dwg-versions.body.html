@@ -1,0 +1,39 @@
+<h1>DWG 版本<span class="grad">详解</span></h1>
+<p class="lead">DWG 格式每隔几年就会更改。每个版本都有一个代码，例如 AC1015 或 AC1032，写在文件的最开头。本页列出这些版本，并说明它们对打开图纸意味着什么。</p>
+<p><a class="cta" href="/zh/dwg-version-checker/">检查文件版本</a></p>
+
+<h2>DWG 版本对照表</h2>
+<table class="tbl">
+  <thead><tr><th>代码</th><th>格式</th><th>使用该格式的 AutoCAD 版本</th><th>本站能否打开</th></tr></thead>
+  <tbody>
+    <tr><td>AC1032</td><td>2018</td><td>2018 至当前版本</td><td>能</td></tr>
+    <tr><td>AC1027</td><td>2013</td><td>2013 至 2017</td><td>能</td></tr>
+    <tr><td>AC1024</td><td>2010</td><td>2010 至 2012</td><td>能</td></tr>
+    <tr><td>AC1021</td><td>2007</td><td>2007 至 2009</td><td>能</td></tr>
+    <tr><td>AC1018</td><td>2004</td><td>2004 至 2006</td><td>能</td></tr>
+    <tr><td>AC1015</td><td>2000</td><td>2000、2000i、2002</td><td>能</td></tr>
+    <tr><td>AC1014</td><td>R14</td><td>Release 14</td><td>能</td></tr>
+    <tr><td>AC1012</td><td>R13</td><td>Release 13</td><td>部分支持</td></tr>
+    <tr><td>AC1009</td><td>R11/R12</td><td>Release 11 和 12</td><td>不能</td></tr>
+    <tr><td>AC1006 及更早</td><td>R10 及更早</td><td>20 世纪 80 年代的版本</td><td>不能</td></tr>
+  </tbody>
+</table>
+
+<h2>为什么版本很重要</h2>
+<ul>
+  <li><strong>新文件无法在旧软件中打开。</strong>以 2018 格式保存的图纸无法在 AutoCAD 2017 或只支持到 2013 格式的软件中打开。</li>
+  <li><strong>旧文件可能无法在新查看器中打开。</strong>许多现代工具（包括本工具）从 R14 开始支持。</li>
+  <li><strong>格式更新比软件更新少。</strong>AutoCAD 2024 仍以 2018 格式保存，所以“2024 的文件”就是 AC1032 文件。</li>
+</ul>
+
+<h2>如何查看文件版本</h2>
+<ol>
+  <li>最快的方法：拖入 <a href="/zh/dwg-version-checker/">DWG 版本检查器</a>。它只读取开头几个字节，不上传任何内容。</li>
+  <li>手动查看：用纯文本编辑器打开文件，前六个字符就是代码，例如 AC1027。</li>
+  <li>DXF 文件的版本位于文件开头附近的 <code>$ACADVER</code> 之后。</li>
+</ol>
+
+<h2>如何把 DWG 保存为旧版本</h2>
+<p>在 AutoCAD 中使用“另存为”，选择较旧的“AutoCAD 20xx 图形”类型，或在“打开和保存”选项中设置默认格式。其他 CAD 软件也有类似设置。如果没有 CAD 软件，可以请发件人另存，或把图纸转换为 <a href="/zh/dwg-to-pdf/">PDF</a>。</p>
+
+<p><a class="cta" href="/zh/">打开 DWG 文件</a></p>

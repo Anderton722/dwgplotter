@@ -1,0 +1,33 @@
+<h1>DWG-Versionsprüfer</h1>
+<p class="lead">Finden Sie heraus, mit welcher AutoCAD-Version eine DWG- oder DXF-Datei gespeichert wurde. Legen Sie die Datei unten ab. Nur die ersten Bytes werden gelesen, und nichts wird hochgeladen.</p>
+
+<label class="drop vc-drop" tabindex="0">
+  <input type="file" id="vc-file" accept=".dwg,.dxf,.dwt" hidden>
+  <strong>DWG- oder DXF-Datei hier ablegen</strong>
+  <span>oder zum Auswählen klicken</span>
+</label>
+<div id="vc-out" class="vc-out" aria-live="polite" hidden
+  data-ok="{file}: {code}, das {name}-Format. DWG Plotter kann sie öffnen."
+  data-part="{file}: {code}, das {name}-Format. Sie öffnet sich hier vielleicht, ältere Dateien werden aber nur teilweise unterstützt."
+  data-old="{file}: {code}, das {name}-Format. Diese Datei ist zu alt, um sie hier zu öffnen. Bitten Sie den Absender, sie in einer neueren Version zu speichern."
+  data-dxf="{file}: eine DXF-Datei im {name}-Format ({code})."
+  data-bad="{file} sieht nicht wie eine AutoCAD-Zeichnung aus. Sie ist vielleicht beschädigt, gezippt oder eine andere Art von Datei."
+  data-open="In DWG Plotter öffnen"></div>
+
+<h2>Was das Ergebnis bedeutet</h2>
+<p>Der Versionscode, etwa AC1027, entscheidet, welche Software eine Zeichnung öffnen kann. Neuere Codes öffnen sich nicht in älteren Programmen. Die vollständige Liste steht unter <a href="/de/dwg-versions/">DWG-Versionen erklärt</a>.</p>
+<ul>
+  <li><strong>AC1032 (2018-Format)</strong> verwenden alle AutoCAD-Versionen von 2018 bis heute.</li>
+  <li><strong>AC1027 (2013-Format)</strong> verwenden die Versionen 2013 bis 2017.</li>
+  <li><strong>AC1024 (2010-Format)</strong> verwenden die Versionen 2010 bis 2012.</li>
+</ul>
+
+<h2>Fragen</h2>
+<h3>Wird meine Datei hochgeladen?</h3>
+<p>Nein. Der Prüfer liest den Anfang der Datei in Ihrem Browser, und nichts wird gesendet.</p>
+<h3>Welche AutoCAD-Version brauche ich zum Öffnen?</h3>
+<p>Jede ab der im Ergebnis genannten. Eine AC1027-Datei öffnet sich zum Beispiel in AutoCAD 2013 und neuer. Zum Ansehen ohne AutoCAD nutzen Sie den <a href="/de/dwg-viewer/">kostenlosen DWG-Viewer</a>.</p>
+<h3>Die Datei wird nicht erkannt. Was nun?</h3>
+<p>Siehe <a href="/de/dwg-file-wont-open/">DWG lässt sich nicht öffnen</a> für die üblichen Ursachen.</p>
+
+<script src="/version-check.js?v=1" defer></script>

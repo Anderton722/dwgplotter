@@ -1,0 +1,33 @@
+<h1>Comprobador de versión DWG</h1>
+<p class="lead">Descubre con qué versión de AutoCAD se guardó un archivo DWG o DXF. Suelta el archivo abajo. Solo se leen los primeros bytes y no se sube nada.</p>
+
+<label class="drop vc-drop" tabindex="0">
+  <input type="file" id="vc-file" accept=".dwg,.dxf,.dwt" hidden>
+  <strong>Suelta aquí un archivo DWG o DXF</strong>
+  <span>o haz clic para elegirlo</span>
+</label>
+<div id="vc-out" class="vc-out" aria-live="polite" hidden
+  data-ok="{file}: {code}, formato {name}. DWG Plotter puede abrirlo."
+  data-part="{file}: {code}, formato {name}. Puede que se abra aquí, pero los archivos antiguos solo se admiten en parte."
+  data-old="{file}: {code}, formato {name}. Es demasiado antiguo para abrirlo aquí. Pide al remitente que lo guarde en una versión más nueva."
+  data-dxf="{file}: un archivo DXF guardado en formato {name} ({code})."
+  data-bad="{file} no parece un dibujo de AutoCAD. Puede estar dañado, comprimido o ser otro tipo de archivo."
+  data-open="Abrirlo en DWG Plotter"></div>
+
+<h2>Qué significa el resultado</h2>
+<p>El código de versión, como AC1027, decide qué programas pueden abrir un dibujo. Los códigos más nuevos no se abren en programas antiguos. La lista completa está en <a href="/es/dwg-versions/">las versiones de DWG explicadas</a>.</p>
+<ul>
+  <li><strong>AC1032 (formato 2018)</strong> lo usan todas las versiones de AutoCAD desde 2018 hasta hoy.</li>
+  <li><strong>AC1027 (formato 2013)</strong> lo usan las versiones 2013 a 2017.</li>
+  <li><strong>AC1024 (formato 2010)</strong> lo usan las versiones 2010 a 2012.</li>
+</ul>
+
+<h2>Preguntas</h2>
+<h3>¿Se sube mi archivo?</h3>
+<p>No. El comprobador lee el principio del archivo en tu navegador y no se envía nada.</p>
+<h3>¿Qué versión de AutoCAD necesito para abrirlo?</h3>
+<p>Cualquiera desde la indicada en el resultado. Por ejemplo, un archivo AC1027 se abre en AutoCAD 2013 y posteriores. Para verlo sin AutoCAD, usa el <a href="/es/dwg-viewer/">visor DWG gratuito</a>.</p>
+<h3>El archivo no se reconoce. ¿Y ahora?</h3>
+<p>Consulta <a href="/es/dwg-file-wont-open/">el archivo DWG no se abre</a> para ver las causas habituales.</p>
+
+<script src="/version-check.js?v=1" defer></script>

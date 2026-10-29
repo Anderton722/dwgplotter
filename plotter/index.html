@@ -75,10 +75,8 @@
       <h3 data-i18n="faq.5q">Can I print several sheets at once?</h3>
       <p data-i18n="faq.5a">Yes. Tick the layouts you want and save them as one combined PDF, or as separate PDFs in a zip file.</p>
       <h2 data-i18n="about.3h">Guides</h2>
-      <ul>
-        <li><a href="/dwg-to-pdf/" data-i18n="guide.1">How to convert DWG to PDF</a></li>
-        <li><a href="/open-dwg-without-autocad/" data-i18n="guide.2">How to open a DWG file without AutoCAD</a></li>
-        <li><a href="/dxf-to-pdf/" data-i18n="guide.3">DXF to PDF</a></li>
+      <ul class="guides">
+<!--GUIDES-->
       </ul>
     </div>
   </section>
@@ -131,6 +129,7 @@
             <select id="fmt">
               <option value="pdf">PDF</option>
               <option value="png" data-i18n="fmt.png">PNG image</option>
+              <option value="jpg" data-i18n="fmt.jpg">JPG image</option>
             </select>
           </label>
           <label class="field" for="paper"><span data-i18n="paper.label">Paper size (PDF)</span>
@@ -197,6 +196,6 @@
 
 <script src="/vendor/pdf-lib.min.js"></script>
 <script src="/vendor/jszip.min.js"></script>
-<script type="module" src="/plotter/app.js?v=38"></script>
+<script type="module" src="/plotter/app.js?v=39"></script>
 </body>
 </html>

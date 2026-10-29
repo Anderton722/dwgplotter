@@ -1,0 +1,33 @@
+<h1>DWG version checker</h1>
+<p class="lead">Find out which version of AutoCAD a DWG or DXF file was saved in. Drop the file below. Only the first few bytes are read, and nothing is uploaded.</p>
+
+<label class="drop vc-drop" tabindex="0">
+  <input type="file" id="vc-file" accept=".dwg,.dxf,.dwt" hidden>
+  <strong>Drop a DWG or DXF file here</strong>
+  <span>or click to choose one</span>
+</label>
+<div id="vc-out" class="vc-out" aria-live="polite" hidden
+  data-ok="{file}: {code}, the {name} format. DWG Plotter can open it."
+  data-part="{file}: {code}, the {name} format. It may open here, but older files are only partly supported."
+  data-old="{file}: {code}, the {name} format. This is too old to open here. Ask the sender to save it in a newer version."
+  data-dxf="{file}: a DXF file saved in the {name} format ({code})."
+  data-bad="{file} does not look like an AutoCAD drawing. It may be damaged, zipped, or a different kind of file."
+  data-open="Open it in DWG Plotter"></div>
+
+<h2>What the result means</h2>
+<p>The version code, such as AC1027, decides which software can open a drawing. Newer codes do not open in older programs. The full list is in <a href="/dwg-versions/">DWG versions explained</a>.</p>
+<ul>
+  <li><strong>AC1032 (2018 format)</strong> is used by every AutoCAD release from 2018 to today.</li>
+  <li><strong>AC1027 (2013 format)</strong> is used by releases 2013 to 2017.</li>
+  <li><strong>AC1024 (2010 format)</strong> is used by releases 2010 to 2012.</li>
+</ul>
+
+<h2>Questions</h2>
+<h3>Is my file uploaded?</h3>
+<p>No. The checker reads the start of the file in your browser and nothing is sent anywhere.</p>
+<h3>Which AutoCAD version do I need to open it?</h3>
+<p>Any release from the one named in the result onwards. For example, an AC1027 file opens in AutoCAD 2013 and later. To look at it without AutoCAD, use the <a href="/dwg-viewer/">free DWG viewer</a>.</p>
+<h3>The file is not recognised. What now?</h3>
+<p>See <a href="/dwg-file-wont-open/">DWG file won't open</a> for the usual causes.</p>
+
+<script src="/version-check.js?v=1" defer></script>

@@ -11,3 +11,16 @@
 .doc a { color: var(--accent); }
 .doc .cta { display: inline-block; margin: 14px 0; padding: 12px 22px; border-radius: 14px; background: linear-gradient(100deg, var(--accent), var(--accent2)); color: var(--accent-ink); font-weight: 650; text-decoration: none; }
 .doc .cta:hover { filter: brightness(1.06); }
+.doc .cta.ghost { background: none; color: var(--accent); box-shadow: inset 0 0 0 1.5px var(--accent); margin-left: 6px; }
+.doc .tbl { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 15px; display: block; overflow-x: auto; }
+.doc .tbl th, .doc .tbl td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.doc .tbl th { color: var(--muted); font-weight: 600; }
+.doc code { font-size: .92em; padding: 1px 5px; border-radius: 6px; background: var(--accent-soft); }
+.doc .vc-drop { margin: 18px 0 12px; padding: 44px 20px; }
+.doc .vc-out { padding: 14px 16px; border-radius: 14px; margin-bottom: 8px; border: 1px solid var(--line); }
+.doc .vc-out.ok { border-color: var(--ok); }
+.doc .vc-out.err { background: var(--err-bg); color: var(--err-ink); border-color: transparent; }
+.doc .more { margin-top: 44px; padding-top: 8px; border-top: 1px solid var(--line); }
+.doc .more ul { columns: 2; column-gap: 28px; padding-left: 18px; }
+@media (max-width: 560px) { .doc .more ul { columns: 1; } .doc .cta.ghost { margin-left: 0; } }
+.doc .tbl td:nth-child(3), .doc .tbl th:nth-child(3) { white-space: normal; min-width: 10em; }

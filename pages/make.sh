@@ -26,13 +26,14 @@ page() { # lang, slug, title, description
   esac
   body="pages/$slug.body.html"; [ "$lang" != en ] && body="pages/$lang/$slug.body.html"
   canon="https://dwgplotter.com$pre/$slug/"; mkdir -p "$dir"
+  full="$title | DWG Plotter"; [ "$(printf %s "$full" | py -c "import sys; print(len(sys.stdin.read()))")" -gt 60 ] && full="$title"
   cat > "$dir/index.html" <<EOF
 <!doctype html>
 <html lang="$hl">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>$title | DWG Plotter</title>
+<title>$full</title>
 <meta name="description" content="$desc">
 <link rel="canonical" href="$canon">
 $(HREFLANG_BASE "$slug")
@@ -42,9 +43,9 @@ $(HREFLANG_BASE "$slug")
 <meta property="og:url" content="$canon">
 <meta property="og:image" content="https://dwgplotter.com/og.png">
 <meta name="twitter:card" content="summary_large_image">
-$(py tools/ldjson.py faq "$body")
+$(py tools/ldjson.py faq "$body" "$canon" "https://dwgplotter.com$home" "$title")
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Crect x=%271.5%27 y=%271.5%27 width=%2721%27 height=%2721%27 rx=%276.5%27 fill=%27%234f46e5%27/%3E%3Cpath d=%27M7 15.5 11 9l3 4 3-5%27 fill=%27none%27 stroke=%27%23fff%27 stroke-width=%271.9%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E">
-<link rel="stylesheet" href="/plotter/style.css?v=20">
+<link rel="stylesheet" href="/plotter/style.css?v=21">
 <link rel="stylesheet" href="/pages.css?v=2">
 </head>
 <body>
@@ -74,17 +75,17 @@ page zh about "关于" "DWG Plotter 是一款在浏览器中运行的免费开�
 
 page en privacy "Privacy Policy" "How DWG Plotter handles your drawings and data. Drawings are read in your browser and are never uploaded."
 
-page es dwg-to-pdf "Cómo convertir DWG a PDF gratis, sin AutoCAD" "Convierte un dibujo DWG a PDF gratis en tu navegador. Imprime cada presentación tal como está dibujada, con grosores de línea, en blanco y negro o color. No se sube nada."
+page es dwg-to-pdf "Cómo convertir DWG a PDF gratis, sin AutoCAD" "Convierte un dibujo DWG a PDF gratis en tu navegador. Cada presentación sale tal como está dibujada, con grosores de línea. No se sube nada."
 page es open-dwg-without-autocad "Cómo abrir un archivo DWG sin AutoCAD" "Formas de abrir y leer un dibujo DWG cuando no tienes AutoCAD, incluido un visor gratuito en el navegador que lo guarda como PDF."
 page es dxf-to-pdf "DXF a PDF: convierte un dibujo DXF gratis online" "Convierte un dibujo DXF a PDF gratis en tu navegador. Imprime el dibujo del modelo con grosores y tipos de línea. No se sube nada."
 page es privacy "Política de privacidad" "Cómo trata DWG Plotter tus dibujos y datos. Los dibujos se leen en tu navegador y nunca se suben."
 
-page fr dwg-to-pdf "Comment convertir un DWG en PDF gratuitement, sans AutoCAD" "Convertissez un dessin DWG en PDF gratuitement dans votre navigateur. Chaque présentation est tracée telle que dessinée, avec les épaisseurs de ligne, en noir et blanc ou en couleur. Rien n'est envoyé."
+page fr dwg-to-pdf "Comment convertir un DWG en PDF gratuitement, sans AutoCAD" "Convertissez un DWG en PDF gratuitement dans votre navigateur. Chaque présentation est tracée telle que dessinée, avec les épaisseurs de ligne. Rien n'est envoyé."
 page fr open-dwg-without-autocad "Comment ouvrir un fichier DWG sans AutoCAD" "Comment ouvrir et lire un dessin DWG sans AutoCAD, y compris avec une visionneuse gratuite dans le navigateur qui l'enregistre en PDF."
 page fr dxf-to-pdf "DXF en PDF : convertir un dessin DXF gratuitement en ligne" "Convertissez un dessin DXF en PDF gratuitement dans votre navigateur. Imprime le dessin du modèle avec épaisseurs et types de ligne. Rien n'est envoyé."
 page fr privacy "Politique de confidentialité" "Comment DWG Plotter traite vos dessins et vos données. Les dessins sont lus dans votre navigateur et ne sont jamais envoyés."
 
-page de dwg-to-pdf "DWG kostenlos in PDF umwandeln – ohne AutoCAD" "Wandeln Sie eine DWG-Zeichnung kostenlos im Browser in PDF um. Jedes Layout wird wie gezeichnet gedruckt, mit Linienstärken, in Schwarzweiß oder Farbe. Nichts wird hochgeladen."
+page de dwg-to-pdf "DWG kostenlos in PDF umwandeln – ohne AutoCAD" "Wandeln Sie eine DWG-Zeichnung kostenlos im Browser in PDF um. Jedes Layout wie gezeichnet, mit Linienstärken. Nichts wird hochgeladen."
 page de open-dwg-without-autocad "So öffnen Sie eine DWG-Datei ohne AutoCAD" "So öffnen und lesen Sie eine DWG-Zeichnung ohne AutoCAD – auch mit einem kostenlosen Browser-Viewer, der sie als PDF speichert."
 page de dxf-to-pdf "DXF in PDF: DXF-Zeichnung kostenlos online umwandeln" "Wandeln Sie eine DXF-Zeichnung kostenlos im Browser in PDF um. Druckt die Modellzeichnung mit Linienstärken und Linientypen. Nichts wird hochgeladen."
 page de privacy "Datenschutzerklärung" "Wie DWG Plotter mit Ihren Zeichnungen und Daten umgeht. Zeichnungen werden in Ihrem Browser gelesen und nie hochgeladen."

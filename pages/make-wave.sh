@@ -1,5 +1,5 @@
 # Content waves 1 and 2: one page per search, in each language (sourced by make.sh)
-page en dwg-viewer "Free DWG Viewer Online – No Upload, No Sign-Up" "View DWG drawings online free. See every layout, zoom, switch layers on and off and measure, then save as PDF. Nothing is uploaded. Works on Windows, Mac and Chromebook."
+page en dwg-viewer "Free DWG Viewer Online – No Upload, No Sign-Up" "View DWG drawings online free. See every layout, zoom, switch layers and measure, then save as PDF. Nothing is uploaded. Works on Windows, Mac and Chromebook."
 page en dxf-viewer "Free DXF Viewer Online – View DXF Files in Your Browser" "Open and view DXF files online free. Zoom, hide layers and measure, then save as PDF or image. The file is read on your computer and never uploaded."
 page en dwg-to-png "DWG to PNG or JPG – Convert a Drawing to an Image Free" "Convert a DWG or DXF drawing to a high-resolution PNG or JPG image, free in your browser. Hide layers first, black and white or colour. Nothing is uploaded."
 page en multiple-layouts-to-pdf "Print All DWG Layouts to One PDF – Free, Online" "Plot every layout in a DWG into one multi-page PDF, each sheet at its own size, or as separate PDFs. Free, in your browser, without AutoCAD. Nothing is uploaded."

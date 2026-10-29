@@ -1,6 +1,7 @@
 """Prints a <script type="application/ld+json"> block for the build (structured data for search engines).
   py tools/ldjson.py home <lang>      the app: SoftwareApplication + FAQPage, with the questions taken from plotter/i18n.js
-  py tools/ldjson.py faq <body.html>  a guide: FAQPage from its <h3>question</h3><p>answer</p> pairs (prints nothing if there are none)
+  py tools/ldjson.py faq <body.html> <url> <home url> <title>
+                                      a guide: BreadcrumbList (home > page), plus FAQPage from its <h3>question</h3><p>answer</p> pairs
 The text always matches what the page shows, because it is read from the same source."""
 import html, json, pathlib, re, sys
 
@@ -37,10 +38,13 @@ def home(lang):
     pairs = [(d[f'faq.{i}q'], d[f'faq.{i}a']) for i in range(1, 10) if f'faq.{i}q' in d]
     out({'@context': 'https://schema.org', '@graph': [app, faq(pairs)]})
 
-def guide(path):
+def guide(path, url, home, title):
     body = pathlib.Path(path).read_text(encoding='utf-8')
     pairs = [(strip(q), strip(a)) for q, a in re.findall(r'<h3>(.*?)</h3>\s*<p>(.*?)</p>', body, re.S)]
-    if pairs: out({'@context': 'https://schema.org', **faq(pairs)})
+    crumbs = {'@type': 'BreadcrumbList', 'itemListElement': [
+        {'@type': 'ListItem', 'position': 1, 'name': 'DWG Plotter', 'item': home},
+        {'@type': 'ListItem', 'position': 2, 'name': title, 'item': url}]}
+    out({'@context': 'https://schema.org', '@graph': [crumbs] + ([faq(pairs)] if pairs else [])})
 
 if __name__ == '__main__':
-    {'home': home, 'faq': guide}[sys.argv[1]](sys.argv[2])
+    {'home': home, 'faq': guide}[sys.argv[1]](*sys.argv[2:])

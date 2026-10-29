@@ -55,7 +55,7 @@ main { flex: 1; width: 100%; max-width: 1100px; margin: 0 auto; padding: 10px ma
 
 /* choose what to print */
 .filebar { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin: 14px 0 22px; }
-.filebar h1 { font-size: clamp(18px, 2.2vw, 22px); font-weight: 650; letter-spacing: -.015em; margin: 0; word-break: break-word; }
+.filebar h2 { font-size: clamp(18px, 2.2vw, 22px); font-weight: 650; letter-spacing: -.015em; margin: 0; word-break: break-word; }
 .link { background: none; border: 0; padding: 6px 4px; color: var(--accent); cursor: pointer; font-weight: 600; white-space: nowrap; }
 .link:hover { text-decoration: underline; text-underline-offset: 3px; }
 

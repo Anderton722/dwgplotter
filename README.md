@@ -1,13 +1,21 @@
 # DWG Plotter
 
-Open a DWG or DXF drawing in your browser and save it as a PDF. Nothing is uploaded: the drawing is read and plotted on your own device.
+**Free DWG to PDF converter and DWG viewer that runs entirely in your browser. Try it at [dwgplotter.com](https://dwgplotter.com/).**
 
-- Lists every layout (sheet) and the model space, and prints the layouts as drawn
+Open a DWG or DXF drawing without AutoCAD and save it as a PDF. Nothing is uploaded: the drawing is read and plotted on your own device by [LibreDWG](https://www.gnu.org/software/libredwg/) compiled to WebAssembly.
+
+[![DWG Plotter: drop a DWG or DXF file and save it as PDF](og.png)](https://dwgplotter.com/)
+
+- **Vector PDF**, sharp at any zoom, not a screenshot of the drawing
+- Lists every layout (sheet) and the model space, and plots each layout as drawn at its own sheet size
 - "Smart plot" finds the real drawings in a cluttered model space and leaves out stray marks
-- Black and white or colour, combined or separate files, PDF or PNG
+- Black and white with lineweights, or colour; combined or separate files; PDF, PNG or JPG
 - Viewer with layer on/off and a measure tool that snaps to line ends and corners
 - Linked drawings (xrefs) are used when you supply the matching files
 - Reads DWG (AutoCAD R14 to 2018 and newer) and DXF (model space only)
+- Works on Windows, Mac, Linux and Chromebook; no install, no account
+
+Guides: [DWG to PDF](https://dwgplotter.com/dwg-to-pdf/) · [DWG viewer](https://dwgplotter.com/dwg-viewer/) · [Open DWG without AutoCAD](https://dwgplotter.com/open-dwg-without-autocad/) · [DWG version checker](https://dwgplotter.com/dwg-version-checker/) · [DWG file won't open](https://dwgplotter.com/dwg-file-wont-open/)
 
 ## Run it
 

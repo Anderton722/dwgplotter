@@ -2,8 +2,8 @@ import { openSet, attachXref, listItems, drawPreview, plotItem, mergePdfs, descr
 import { t, tn, applyStatic, LANG, LANGS } from '/plotter/i18n.js?v=3';
 
 const $ = s => document.querySelector(s);
-// usage counter: sends only an event name (never a file name or contents); failures are ignored
-const count = e => { try { navigator.sendBeacon('/api/count?e=' + e); } catch {} };
+// usage counter: sends only an event name (never a file name or contents), to our counter and Google Analytics; failures are ignored
+const count = e => { try { navigator.sendBeacon('/api/count?e=' + e); } catch {} try { window.gtag?.('event', e); } catch {} };
 // the page text comes from i18n.js; paper-size options and the language picker are filled in here
 applyStatic();
 document.querySelectorAll('#paper option[data-size]').forEach(o => { o.textContent = t('paper.fit', { size: o.dataset.size }); });

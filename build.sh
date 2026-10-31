@@ -49,4 +49,6 @@ cp pages/version-check.js dist/version-check.js
 ADS='ca-pub-5758232042156871'
 find dist -name '*.html' -exec sed -i "s#</head>#<meta name=\"google-adsense-account\" content=\"$ADS\">\n<script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=$ADS\" crossorigin=\"anonymous\"></script>\n</head>#" {} +
 printf 'google.com, pub-5758232042156871, DIRECT, f08c47fec0942fa0\n' > dist/ads.txt
+# Google Analytics 4 (with consent defaults for the EEA, UK and Switzerland) before </head> on every page.
+py -c "import pathlib,sys; t=pathlib.Path('pages/ga4.html').read_text(encoding='utf-8'); [p.write_text(p.read_text(encoding='utf-8').replace('</head>', t+'</head>',1), encoding='utf-8') for p in pathlib.Path('dist').rglob('*.html')]"
 echo "built dist: $(find dist -type f | wc -l) files, $(du -sh dist | cut -f1)"

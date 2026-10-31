@@ -1,0 +1,12 @@
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('consent', 'default', {ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied',
+  region: ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH']});
+var optedOut = navigator.globalPrivacyControl === true || navigator.doNotTrack === '1';
+gtag('consent', 'default', {ad_storage: optedOut ? 'denied' : 'granted', ad_user_data: optedOut ? 'denied' : 'granted',
+  ad_personalization: optedOut ? 'denied' : 'granted', analytics_storage: optedOut ? 'denied' : 'granted'});
+gtag('js', new Date());
+gtag('config', 'G-9ECXB8V97M', {allow_google_signals: false, allow_ad_personalization_signals: false});
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9ECXB8V97M"></script>

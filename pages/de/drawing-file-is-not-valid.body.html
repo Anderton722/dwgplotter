@@ -1,0 +1,41 @@
+
+<h1>„Zeichnungsdatei ist ungültig“: <span class="grad">Ursachen und Lösungen</span></h1>
+<p class="lead">AutoCAD und andere CAD-Programme melden „Zeichnungsdatei ist ungültig“ („Drawing file is not valid“), wenn sie eine DWG nicht lesen können. Meist ist die Datei beschädigt, unvollständig oder gar keine echte DWG. So finden Sie heraus, was vorliegt, und retten die Zeichnung.</p>
+<p><a class="cta" href="/de/">Datei hier öffnen</a></p>
+
+<h2>Zuerst prüfen, was die Datei ist</h2>
+<p>Ziehen Sie sie in den <a href="/de/dwg-version-checker/">DWG-Versionsprüfer</a>. Er liest nur die ersten Bytes, im Browser.</p>
+<ul>
+  <li><strong>Er zeigt einen Versionscode</strong> wie AC1032 oder AC1027: Die Datei ist eine echte DWG, der Schaden liegt weiter innen. Weiter mit den Lösungen unten.</li>
+  <li><strong>Er meldet, dass es keine Zeichnung ist:</strong> Die Datei wurde abgeschnitten, umbenannt, gepackt oder ist ein anderer Dateityp. Siehe „Die Datei ist keine echte DWG“.</li>
+</ul>
+
+<h2>Häufige Ursachen</h2>
+<h3>Warum meldet eine DWG „Zeichnungsdatei ist ungültig“?</h3>
+<p>Die häufigsten Ursachen sind ein unvollständiger Download oder E-Mail-Anhang, eine Datei, die beim Absturz des Programms oder bei einem Netzwerkausfall gespeichert wurde, eine in .dwg umbenannte Datei, die eigentlich etwas anderes ist, und eine Datei aus Software, die das DWG-Format fehlerhaft schreibt.</p>
+<h3>Liegt es daran, dass die Datei zu neu ist?</h3>
+<p>Meist nicht. Eine Datei aus einer neueren Version führt normalerweise zu einer anderen Meldung über eine inkompatible Version. Siehe <a href="/de/dwg-incompatible-version/">DWG mit inkompatibler Version erstellt</a>.</p>
+
+<h2>Lösungen, von schnell bis aufwendig</h2>
+<h3 class="step">1. Eine neue Kopie besorgen</h3>
+<p>Prüfen Sie die Dateigröße. Eine Zeichnung mit 0 Byte oder wenigen Kilobyte ist defekt. Bitten Sie den Absender, sie erneut zu schicken, gepackt oder per Download-Link, denn E-Mail-Systeme kürzen oder blockieren DWG-Anhänge manchmal.</p>
+<h3 class="step">2. In einem anderen Programm öffnen</h3>
+<p>Programme lesen beschädigte Dateien unterschiedlich. Probieren Sie den <a href="/de/">kostenlosen DWG-Viewer</a>: Wenn er die Zeichnung öffnet, speichern Sie sie sofort als PDF.</p>
+<h3 class="step">3. Die Sicherungsdatei verwenden</h3>
+<p>AutoCAD legt den vorherigen Speicherstand als .bak-Datei im selben Ordner ab. Kopieren Sie sie, benennen Sie die Kopie von .bak in .dwg um und öffnen Sie sie. Verloren gehen nur die Änderungen seit dem letzten Speichern.</p>
+<h3 class="step">4. Nach einer automatischen Sicherung suchen</h3>
+<p>Automatische Sicherungen enden auf .sv$ und liegen im temporären Ordner, der in den Optionen des Programms eingestellt ist. Kopieren Sie eine, benennen Sie sie in .dwg um und öffnen Sie sie.</p>
+<h3 class="step">5. In AutoCAD „Wiederherstellen“ ausführen</h3>
+<p>Wenn Sie AutoCAD oder ein ähnliches CAD-Programm haben, verwenden Sie den Befehl WIEDERHERST (RECOVER) statt des normalen Öffnens. Er repariert, was möglich ist, und listet die Korrekturen auf. Danach PRÜFUNG (AUDIT) ausführen.</p>
+<h3 class="step">6. In eine neue Zeichnung einfügen</h3>
+<p>Wenn das Wiederherstellen scheitert, legen Sie eine neue Zeichnung an und fügen Sie die beschädigte Datei als Block oder als Xref ein. So lässt sich die Geometrie manchmal retten, wenn der Dateikopf beschädigt ist.</p>
+
+<h2>Die Datei ist keine echte DWG</h2>
+<ul>
+  <li><strong>Sie ist gepackt.</strong> Namen wie zeichnung.dwg.zip, oder eine Datei, die eigentlich ein ZIP ist, müssen zuerst entpackt werden.</li>
+  <li><strong>Es ist eine andere Art .dwg.</strong> Einige fremde Programme verwenden ebenfalls die Endung .dwg.</li>
+  <li><strong>Es ist eine umbenannte DXF oder PDF.</strong> Geben Sie ihr die richtige Endung zurück und öffnen Sie sie als solche.</li>
+</ul>
+<p>Weitere Gründe, warum sich eine Zeichnung nicht öffnet: <a href="/de/dwg-file-wont-open/">DWG lässt sich nicht öffnen</a>.</p>
+
+<p><a class="cta" href="/de/">Jetzt eine DWG öffnen</a></p>

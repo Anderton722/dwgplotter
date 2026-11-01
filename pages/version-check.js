@@ -3,7 +3,7 @@ const NAMES = { AC1032: '2018', AC1027: '2013', AC1024: '2010', AC1021: '2007', 
 const OPENS = ['AC1014', 'AC1015', 'AC1018', 'AC1021', 'AC1024', 'AC1027', 'AC1032'];
 const out = document.getElementById('vc-out'), input = document.getElementById('vc-file'), drop = input.closest('label');
 const fill = (s, v) => s.replace(/\{(\w+)\}/g, (m, k) => v[k] ?? m);
-const home = (() => { const l = document.documentElement.lang.slice(0, 2); return l === 'en' ? '/' : `/${l}/`; })();
+const home = (() => { const l = document.documentElement.lang.slice(0, 2); return ['es', 'fr', 'de', 'zh'].includes(l) ? `/${l}/` : '/'; })();
 
 async function check(file) {
   const head = new Uint8Array(await file.slice(0, 65536).arrayBuffer()), text = new TextDecoder('latin1').decode(head);

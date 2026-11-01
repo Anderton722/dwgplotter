@@ -1,0 +1,41 @@
+
+<h1>"Drawing file is not valid": <span class="grad">causes and fixes</span></h1>
+<p class="lead">AutoCAD and other CAD programs show "Drawing file is not valid" when they cannot read a DWG. Usually the file is damaged, incomplete or not really a DWG. Here is how to find out which, and how to get the drawing back.</p>
+<p><a class="cta" href="/">Try opening the file here</a></p>
+
+<h2>First, check what the file is</h2>
+<p>Drop it into the <a href="/dwg-version-checker/">DWG version checker</a>. It reads only the first bytes, in your browser.</p>
+<ul>
+  <li><strong>It shows a version code</strong> such as AC1032 or AC1027: the file is a real DWG, and the damage is further inside. Go to the fixes below.</li>
+  <li><strong>It says the file is not a drawing:</strong> it was cut off, renamed, zipped or is a different kind of file. See "The file is not really a DWG".</li>
+</ul>
+
+<h2>Common causes</h2>
+<h3>Why does a DWG say "drawing file is not valid"?</h3>
+<p>The most common causes are an incomplete download or email attachment, a file saved while the program crashed or the network dropped, a file renamed to .dwg that is really something else, and a file saved by software that writes DWG incorrectly.</p>
+<h3>Is it caused by the file being too new?</h3>
+<p>Usually not. A file from a newer version normally gives a different message about an incompatible version. See <a href="/dwg-incompatible-version/">DWG created by an incompatible version</a>.</p>
+
+<h2>Fixes, from quickest to slowest</h2>
+<h3 class="step">1. Get a fresh copy</h3>
+<p>Check the file size. A drawing of 0 bytes or a few kilobytes is broken. Ask the sender to send it again, zipped or through a file-sharing link, because email systems sometimes cut off or block DWG attachments.</p>
+<h3 class="step">2. Open it in a different program</h3>
+<p>Programs read damaged files differently. Try the <a href="/">free DWG viewer</a> here: if it opens, save the drawing as a PDF straight away.</p>
+<h3 class="step">3. Use the backup file</h3>
+<p>AutoCAD keeps the previous save as a .bak file in the same folder. Copy it, rename the copy from .bak to .dwg and open it. You lose only the changes since the last save.</p>
+<h3 class="step">4. Look for an autosave file</h3>
+<p>Autosave files end in .sv$ and are kept in the temporary folder set in the program's options. Copy one, rename it to .dwg and open it.</p>
+<h3 class="step">5. Run Recover in AutoCAD</h3>
+<p>If you have AutoCAD or a similar CAD program, use the RECOVER command (or "Drawing Utilities &gt; Recover") instead of a normal open. It repairs what it can and reports what it fixed. Run AUDIT afterwards.</p>
+<h3 class="step">6. Insert it into a new drawing</h3>
+<p>If Recover fails, start a new drawing and insert the damaged file as a block, or attach it as an xref. This sometimes brings back the geometry when the file's header is damaged.</p>
+
+<h2>The file is not really a DWG</h2>
+<ul>
+  <li><strong>It is zipped.</strong> Names like drawing.dwg.zip, or a file that is really a zip, need unzipping first.</li>
+  <li><strong>It is a different .dwg.</strong> A few unrelated programs use the .dwg ending.</li>
+  <li><strong>It is a DXF or PDF that was renamed.</strong> Rename it back and open it as that kind of file.</li>
+</ul>
+<p>More reasons a drawing will not open are on <a href="/dwg-file-wont-open/">DWG file won't open</a>.</p>
+
+<p><a class="cta" href="/">Open a DWG now</a></p>

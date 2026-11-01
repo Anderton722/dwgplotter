@@ -1,0 +1,36 @@
+<h1>Verifica versione DWG</h1>
+<p class="lead">Scopri con quale versione di AutoCAD è stato salvato un file DWG o DXF. Trascina il file qui sotto. Vengono letti solo i primi byte e non viene caricato nulla.</p>
+
+<label class="drop vc-drop" tabindex="0">
+  <input type="file" id="vc-file" accept=".dwg,.dxf,.dwt" hidden>
+  <strong>Trascina qui un file DWG o DXF</strong>
+  <span>oppure fai clic per sceglierlo</span>
+</label>
+<div id="vc-out" class="vc-out" aria-live="polite" hidden
+  data-ok="{file}: {code}, formato {name}. DWG Plotter può aprirlo."
+  data-part="{file}: {code}, formato {name}. Potrebbe aprirsi qui, ma i file vecchi sono supportati solo in parte."
+  data-old="{file}: {code}, formato {name}. È troppo vecchio per aprirlo qui. Chiedi al mittente di salvarlo in una versione più recente."
+  data-dxf="{file}: un file DXF salvato nel formato {name} ({code})."
+  data-bad="{file} non sembra un disegno AutoCAD. Potrebbe essere danneggiato, compresso o un altro tipo di file."
+  data-open="Aprilo in DWG Plotter"></div>
+
+<h2>Cosa significa il risultato</h2>
+<p>Il codice di versione, come AC1027, decide quali programmi possono aprire un disegno. I codici più recenti non si aprono nei programmi più vecchi.</p>
+<ul>
+  <li><strong><a href="/ac1032/">AC1032 (formato 2018)</a></strong> è usato da tutte le versioni di AutoCAD dal 2018 a oggi.</li>
+  <li><strong><a href="/ac1027/">AC1027 (formato 2013)</a></strong> è usato dalle versioni dal 2013 al 2017.</li>
+  <li><strong><a href="/ac1024/">AC1024 (formato 2010)</a></strong> è usato dalle versioni dal 2010 al 2012.</li>
+  <li><strong><a href="/ac1021/">AC1021 (formato 2007)</a></strong> è usato dalle versioni dal 2007 al 2009.</li>
+  <li><strong><a href="/ac1018/">AC1018 (formato 2004)</a></strong> è usato dalle versioni dal 2004 al 2006.</li>
+  <li><strong><a href="/ac1015/">AC1015 (formato 2000)</a></strong> è usato dalle versioni 2000, 2000i e 2002.</li>
+</ul>
+
+<h2>Domande</h2>
+<h3>Il mio file viene caricato?</h3>
+<p>No. La verifica legge l'inizio del file nel tuo browser e non viene inviato nulla.</p>
+<h3>Quale versione di AutoCAD mi serve per aprirlo?</h3>
+<p>Qualsiasi versione a partire da quella indicata nel risultato. Per esempio, un file AC1027 si apre in AutoCAD 2013 e successivi. Per vederlo senza AutoCAD, usa il <a href="/">visualizzatore DWG gratuito</a>.</p>
+<h3>Il file non viene riconosciuto. E adesso?</h3>
+<p>Leggi <a href="/it/dwg-file-wont-open/">il file DWG non si apre</a> per le cause più comuni.</p>
+
+<script src="/version-check.js?v=2" defer></script>

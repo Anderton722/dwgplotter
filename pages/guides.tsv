@@ -14,3 +14,5 @@ dwg-file-wont-open	DWG file won't open? Fixes	¿El DWG no se abre? Soluciones	Le
 what-is-a-dwg-file	What is a DWG file?	¿Qué es un archivo DWG?	Qu'est-ce qu'un fichier DWG ?	Was ist eine DWG-Datei?	什么是 DWG 文件？
 dwg-versions	DWG versions explained	Versiones de DWG explicadas	Les versions DWG expliquées	DWG-Versionen erklärt	DWG 版本详解
 dwg-version-checker	DWG version checker	Comprobador de versión DWG	Vérificateur de version DWG	DWG-Versionsprüfer	DWG 版本检查器
+drawing-file-is-not-valid	"Drawing file is not valid" fix	"El archivo de dibujo no es válido"	« Le fichier dessin n'est pas valide »	„Zeichnungsdatei ist ungültig“	“图形文件无效”怎么办
+dwg-incompatible-version	DWG from an incompatible version	DWG de una versión incompatible	DWG d'une version incompatible	DWG aus inkompatibler Version	DWG 版本不兼容

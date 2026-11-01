@@ -7,12 +7,15 @@ HREFLANG_BASE() { # slug (may be empty for the home page)
     case $l in en) p="/$1/";; zh-Hans) p="/zh/$1/";; *) p="/$l/$1/";; esac
     printf '<link rel="alternate" hreflang="%s" href="https://dwgplotter.com%s">\n' "$l" "$p"
   done
+  for l in $EXTRA; do [ -f "pages/$l/$1.body.html" ] && printf '<link rel="alternate" hreflang="%s" href="https://dwgplotter.com/%s/%s/">\n' "$l" "$l" "$1"; done
   printf '<link rel="alternate" hreflang="x-default" href="https://dwgplotter.com/%s/">\n' "$1"
 }
+EXTRA="it pt" # languages with only a few guides (listed in pages/guides-extra.tsv); their links to the app and footer pages go to the English ones
 GUIDES() { # column of pages/guides.tsv, language prefix, current slug, heading: links to every other guide in that language
   [ "$3" = privacy ] && return
   printf '<nav class="more"><h2>%s</h2><ul>\n' "$4"
-  tr -d '\r' < pages/guides.tsv | awk -F'\t' -v c="$1" -v p="$2" -v s="$3" '$1 != s { printf "<li><a href=\"%s/%s/\">%s</a></li>\n", p, $1, $c }'
+  case $2 in /it|/pt) list=pages/guides-extra.tsv;; *) list=pages/guides.tsv;; esac
+  tr -d '\r' < $list | awk -F'\t' -v c="$1" -v p="$2" -v s="$3" '$1 != s { printf "<li><a href=\"%s/%s/\">%s</a></li>\n", p, $1, $c }'
   printf '</ul></nav>\n'
 }
 page() { # lang, slug, title, description
@@ -23,7 +26,10 @@ page() { # lang, slug, title, description
     fr) dir="$OUT/fr/$slug"; home="/fr/"; hl=fr; pre="/fr"; badge="Vos dessins ne sont jamais envoyés"; free="Logiciel libre (GPL v3)."; src="Code source"; cred="Crédits"; priv="Confidentialité"; g1="DWG en PDF"; g2="Ouvrir un DWG sans AutoCAD"; g3="DXF en PDF"; more="Autres guides"; col=4; abt="À propos"; tm="AutoCAD et DWG TrueView sont des marques d'Autodesk, Inc. DWG Plotter est un projet indépendant, sans lien avec Autodesk et non approuvé par Autodesk.";;
     de) dir="$OUT/de/$slug"; home="/de/"; hl=de; pre="/de"; badge="Ihre Zeichnungen werden nie hochgeladen"; free="Freie Software (GPL v3)."; src="Quellcode"; cred="Danksagungen"; priv="Datenschutz"; g1="DWG in PDF"; g2="DWG ohne AutoCAD öffnen"; g3="DXF in PDF"; more="Weitere Anleitungen"; col=5; abt="Über uns"; tm="AutoCAD und DWG TrueView sind Marken von Autodesk, Inc. DWG Plotter ist ein unabhängiges Projekt und steht in keiner Verbindung zu Autodesk.";;
     zh) dir="$OUT/zh/$slug"; home="/zh/"; hl=zh-Hans; pre="/zh"; badge="您的图纸绝不会被上传"; free="自由软件（GPL v3）。"; src="源代码"; cred="致谢"; priv="隐私"; g1="DWG 转 PDF"; g2="无需 AutoCAD 打开 DWG"; g3="DXF 转 PDF"; more="更多指南"; col=6; abt="关于"; tm="AutoCAD 和 DWG TrueView 是 Autodesk, Inc. 的商标。DWG Plotter 是独立项目，与 Autodesk 无关联，也未获其认可。";;
+    it) dir="$OUT/it/$slug"; home="/"; hl=it; pre="/it"; badge="I tuoi disegni non vengono mai caricati"; free="Software libero (GPL v3)."; src="Codice sorgente"; cred="Crediti"; priv="Privacy"; g1="DWG to PDF"; g2="Open DWG without AutoCAD"; g3="DXF to PDF"; more="Altre guide"; col=2; abt="About"; tm="AutoCAD e DWG TrueView sono marchi di Autodesk, Inc. DWG Plotter è un progetto indipendente, non affiliato ad Autodesk né approvato da Autodesk.";;
+    pt) dir="$OUT/pt/$slug"; home="/"; hl=pt; pre="/pt"; badge="Seus desenhos nunca são enviados"; free="Software livre (GPL v3)."; src="Código-fonte"; cred="Créditos"; priv="Privacy"; g1="DWG to PDF"; g2="Open DWG without AutoCAD"; g3="DXF to PDF"; more="Mais guias"; col=3; abt="About"; tm="AutoCAD e DWG TrueView são marcas da Autodesk, Inc. O DWG Plotter é um projeto independente, sem vínculo com a Autodesk nem aprovado por ela.";;
   esac
+  fpre="$pre"; case $lang in it|pt) fpre="";; esac
   body="pages/$slug.body.html"; [ "$lang" != en ] && body="pages/$lang/$slug.body.html"
   canon="https://dwgplotter.com$pre/$slug/"; mkdir -p "$dir"
   full="$title | DWG Plotter"; [ "$(printf %s "$full" | py -c "import sys; print(len(sys.stdin.read()))")" -gt 60 ] && full="$title"
@@ -57,7 +63,7 @@ $(py tools/ldjson.py faq "$body" "$canon" "https://dwgplotter.com$home" "$title"
 $(cat "$body")
 $(GUIDES "$col" "$pre" "$slug" "$more")
 </main>
-<footer class="foot">$free <a href="https://github.com/Anderton722/dwgplotter" rel="noopener">$src</a> · <a href="https://github.com/Anderton722/dwgplotter/blob/main/NOTICE.md" rel="noopener">$cred</a> · <a href="$pre/about/">$abt</a> · <a href="$pre/privacy/">$priv</a> · <a href="$pre/dwg-to-pdf/">$g1</a> · <a href="$pre/open-dwg-without-autocad/">$g2</a> · <a href="$pre/dxf-to-pdf/">$g3</a>
+<footer class="foot">$free <a href="https://github.com/Anderton722/dwgplotter" rel="noopener">$src</a> · <a href="https://github.com/Anderton722/dwgplotter/blob/main/NOTICE.md" rel="noopener">$cred</a> · <a href="$fpre/about/">$abt</a> · <a href="$fpre/privacy/">$priv</a> · <a href="$fpre/dwg-to-pdf/">$g1</a> · <a href="$fpre/open-dwg-without-autocad/">$g2</a> · <a href="$fpre/dxf-to-pdf/">$g3</a>
 <br><span class="tm">$tm</span></footer>
 </body>
 </html>
@@ -97,3 +103,4 @@ page zh privacy "隐私政策" "DWG Plotter 如何处理您的图纸和数据。
 
 . pages/make-wave.sh
 . pages/versions.sh
+. pages/extra.sh

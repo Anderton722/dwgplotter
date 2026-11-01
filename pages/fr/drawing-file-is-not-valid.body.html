@@ -1,0 +1,41 @@
+
+<h1>« Le fichier dessin n'est pas valide » : <span class="grad">causes et solutions</span></h1>
+<p class="lead">AutoCAD et d'autres logiciels de CAO affichent « Le fichier dessin n'est pas valide » (« Drawing file is not valid ») quand ils ne peuvent pas lire un DWG. Le plus souvent, le fichier est abîmé, incomplet ou n'est pas vraiment un DWG. Voici comment savoir lequel et récupérer le dessin.</p>
+<p><a class="cta" href="/fr/">Essayer d'ouvrir le fichier ici</a></p>
+
+<h2>D'abord, vérifiez ce qu'est le fichier</h2>
+<p>Déposez-le dans le <a href="/fr/dwg-version-checker/">vérificateur de version DWG</a>. Il ne lit que les premiers octets, dans votre navigateur.</p>
+<ul>
+  <li><strong>Il affiche un code de version</strong> comme AC1032 ou AC1027 : le fichier est un vrai DWG et le problème est plus loin à l'intérieur. Passez aux solutions ci-dessous.</li>
+  <li><strong>Il indique que ce n'est pas un dessin :</strong> le fichier a été tronqué, renommé, compressé, ou c'est un autre type de fichier. Voir « Le fichier n'est pas vraiment un DWG ».</li>
+</ul>
+
+<h2>Causes courantes</h2>
+<h3>Pourquoi un DWG affiche-t-il « le fichier dessin n'est pas valide » ?</h3>
+<p>Les causes les plus fréquentes sont un téléchargement ou une pièce jointe incomplète, un fichier enregistré pendant un plantage ou une coupure réseau, un fichier renommé en .dwg qui est en réalité autre chose, et un fichier enregistré par un logiciel qui écrit mal le format DWG.</p>
+<h3>Est-ce parce que le fichier est trop récent ?</h3>
+<p>En général non. Un fichier d'une version plus récente donne normalement un autre message, sur une version incompatible. Voir <a href="/fr/dwg-incompatible-version/">DWG créé par une version incompatible</a>.</p>
+
+<h2>Solutions, de la plus rapide à la plus longue</h2>
+<h3 class="step">1. Obtenez une nouvelle copie</h3>
+<p>Regardez la taille du fichier. Un dessin de 0 octet ou de quelques kilo-octets est cassé. Demandez à l'expéditeur de le renvoyer, compressé ou par un lien de partage, car les messageries tronquent ou bloquent parfois les pièces jointes DWG.</p>
+<h3 class="step">2. Ouvrez-le avec un autre logiciel</h3>
+<p>Chaque logiciel lit les fichiers abîmés différemment. Essayez la <a href="/fr/">visionneuse DWG gratuite</a> : si le dessin s'ouvre, enregistrez-le tout de suite en PDF.</p>
+<h3 class="step">3. Utilisez le fichier de sauvegarde</h3>
+<p>AutoCAD conserve l'enregistrement précédent dans un fichier .bak du même dossier. Copiez-le, renommez la copie de .bak en .dwg et ouvrez-la. Vous ne perdez que les modifications depuis le dernier enregistrement.</p>
+<h3 class="step">4. Cherchez un fichier d'enregistrement automatique</h3>
+<p>Ces fichiers se terminent par .sv$ et se trouvent dans le dossier temporaire indiqué dans les options du logiciel. Copiez-en un, renommez-le en .dwg et ouvrez-le.</p>
+<h3 class="step">5. Lancez Récupérer dans AutoCAD</h3>
+<p>Si vous avez AutoCAD ou un logiciel de CAO similaire, utilisez la commande RECUPERER (RECOVER) au lieu d'une ouverture normale. Elle répare ce qu'elle peut et indique ce qu'elle a corrigé. Lancez ensuite AUDIT.</p>
+<h3 class="step">6. Insérez-le dans un nouveau dessin</h3>
+<p>Si Récupérer échoue, créez un nouveau dessin et insérez le fichier abîmé comme bloc ou comme xréf. Cela permet parfois de retrouver la géométrie quand l'en-tête du fichier est abîmé.</p>
+
+<h2>Le fichier n'est pas vraiment un DWG</h2>
+<ul>
+  <li><strong>Il est compressé.</strong> Un nom comme dessin.dwg.zip, ou un fichier qui est en fait un zip, doit d'abord être décompressé.</li>
+  <li><strong>C'est un autre .dwg.</strong> Quelques logiciels sans rapport utilisent l'extension .dwg.</li>
+  <li><strong>C'est un DXF ou un PDF renommé.</strong> Rendez-lui son extension et ouvrez-le comme tel.</li>
+</ul>
+<p>D'autres raisons pour lesquelles un dessin ne s'ouvre pas : <a href="/fr/dwg-file-wont-open/">le fichier DWG ne s'ouvre pas</a>.</p>
+
+<p><a class="cta" href="/fr/">Ouvrir un DWG maintenant</a></p>

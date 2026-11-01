@@ -41,6 +41,7 @@ lang_page zh zh-Hans "DWG 转 PDF 在线转换器 – 免费，无需上传 | DW
   SLUGS="$(tr -d '\r' < pages/guides.tsv | cut -f1) about privacy $(grep -o '^page en ac[0-9]*' pages/versions.sh | cut -d' ' -f3)"
   for p in es fr de zh $SLUGS; do printf '<url><loc>https://dwgplotter.com/%s/</loc></url>\n' "$p"; done
   for l in es fr de zh; do for p in $SLUGS; do printf '<url><loc>https://dwgplotter.com/%s/%s/</loc></url>\n' "$l" "$p"; done; done
+  for l in it pt; do for p in $(tr -d '\r' < pages/guides-extra.tsv | cut -f1); do printf '<url><loc>https://dwgplotter.com/%s/%s/</loc></url>\n' "$l" "$p"; done; done
   printf '</urlset>\n'; } > dist/sitemap.xml
 rm -f dist/.ld.html dist/.gl.html
 cp pages/version-check.js dist/version-check.js

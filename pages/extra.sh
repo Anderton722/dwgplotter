@@ -1,0 +1,7 @@
+# Italian and Portuguese guides (only these few; see EXTRA in make.sh and pages/guides-extra.tsv).
+page it what-is-a-dwg-file "Cos'è un file DWG? Formato, significato e come aprirlo gratis" "DWG sta per drawing: un disegno CAD di AutoCAD. Cosa contiene il formato, le differenze con DXF e PDF, e come aprire un file DWG gratis nel browser."
+page it dwg-file-wont-open "Il file DWG non si apre? 7 cause e soluzioni" "Perché un file DWG non si apre o si apre vuoto: download danneggiato, file zip, versione, xref mancanti, oggetti speciali, file non valido. Con la soluzione."
+page it dwg-version-checker "Verifica versione DWG: con quale AutoCAD è stato salvato?" "Scopri con quale versione di AutoCAD è stato salvato un file DWG o DXF. Vengono letti solo i primi byte, nel browser, e non si carica nulla. Gratis."
+page pt what-is-a-dwg-file "O que é um arquivo DWG? Formato, significado e como abrir grátis" "DWG vem de drawing: um desenho CAD do AutoCAD. O que o formato contém, a diferença para DXF e PDF, e como abrir um arquivo DWG grátis no navegador."
+page pt dwg-file-wont-open "Arquivo DWG não abre? 7 causas e soluções" "Por que um arquivo DWG não abre ou abre em branco: download corrompido, zip, versão, xrefs faltando, objetos especiais, arquivo inválido. Com a solução."
+page pt dwg-version-checker "Verificador de versão DWG: qual AutoCAD salvou o arquivo?" "Descubra em qual versão do AutoCAD um arquivo DWG ou DXF foi salvo. Só os primeiros bytes são lidos, no navegador, e nada é enviado. Grátis."

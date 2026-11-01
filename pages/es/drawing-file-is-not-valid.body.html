@@ -1,0 +1,41 @@
+
+<h1>"El archivo de dibujo no es válido": <span class="grad">causas y soluciones</span></h1>
+<p class="lead">AutoCAD y otros programas CAD muestran "El archivo de dibujo no es válido" ("Drawing file is not valid") cuando no pueden leer un DWG. Normalmente el archivo está dañado, incompleto o no es un DWG de verdad. Así puedes saber cuál es el caso y recuperar el dibujo.</p>
+<p><a class="cta" href="/es/">Probar a abrir el archivo aquí</a></p>
+
+<h2>Primero, comprueba qué es el archivo</h2>
+<p>Suéltalo en el <a href="/es/dwg-version-checker/">comprobador de versión DWG</a>. Solo lee los primeros bytes, en tu navegador.</p>
+<ul>
+  <li><strong>Muestra un código de versión</strong> como AC1032 o AC1027: el archivo es un DWG real y el daño está más adentro. Sigue con las soluciones de abajo.</li>
+  <li><strong>Dice que no es un dibujo:</strong> se cortó, se renombró, está comprimido o es otro tipo de archivo. Mira "El archivo no es realmente un DWG".</li>
+</ul>
+
+<h2>Causas habituales</h2>
+<h3>¿Por qué un DWG dice que el archivo de dibujo no es válido?</h3>
+<p>Las causas más comunes son una descarga o un adjunto incompleto, un archivo guardado mientras el programa se colgaba o la red se cortaba, un archivo renombrado a .dwg que en realidad es otra cosa, y un archivo guardado por un programa que escribe mal el formato DWG.</p>
+<h3>¿Se debe a que el archivo es demasiado nuevo?</h3>
+<p>Normalmente no. Un archivo de una versión más nueva suele dar otro mensaje, sobre una versión incompatible. Mira <a href="/es/dwg-incompatible-version/">DWG creado con una versión incompatible</a>.</p>
+
+<h2>Soluciones, de la más rápida a la más lenta</h2>
+<h3 class="step">1. Consigue una copia nueva</h3>
+<p>Mira el tamaño del archivo. Un dibujo de 0 bytes o de pocos kilobytes está roto. Pide que te lo vuelvan a enviar, comprimido o con un enlace de descarga, porque el correo a veces corta o bloquea los adjuntos DWG.</p>
+<h3 class="step">2. Ábrelo con otro programa</h3>
+<p>Cada programa lee los archivos dañados de forma distinta. Prueba el <a href="/es/">visor DWG gratuito</a>: si se abre, guarda el dibujo en PDF enseguida.</p>
+<h3 class="step">3. Usa el archivo de copia de seguridad</h3>
+<p>AutoCAD guarda la versión anterior como archivo .bak en la misma carpeta. Cópialo, cambia la extensión de .bak a .dwg y ábrelo. Solo pierdes los cambios desde el último guardado.</p>
+<h3 class="step">4. Busca un archivo de guardado automático</h3>
+<p>Los archivos de guardado automático terminan en .sv$ y están en la carpeta temporal indicada en las opciones del programa. Copia uno, cámbiale la extensión a .dwg y ábrelo.</p>
+<h3 class="step">5. Usa Recuperar en AutoCAD</h3>
+<p>Si tienes AutoCAD u otro programa CAD, usa el comando RECUPERAR (RECOVER) en lugar de abrir normalmente. Repara lo que puede e informa de lo que ha corregido. Después ejecuta AUDIT.</p>
+<h3 class="step">6. Insértalo en un dibujo nuevo</h3>
+<p>Si Recuperar falla, crea un dibujo nuevo e inserta el archivo dañado como bloque o como referencia externa. A veces así vuelve la geometría cuando la cabecera del archivo está dañada.</p>
+
+<h2>El archivo no es realmente un DWG</h2>
+<ul>
+  <li><strong>Está comprimido.</strong> Nombres como dibujo.dwg.zip, o un archivo que en realidad es un zip, hay que descomprimirlos primero.</li>
+  <li><strong>Es otro tipo de .dwg.</strong> Algunos programas sin relación usan la extensión .dwg.</li>
+  <li><strong>Es un DXF o un PDF renombrado.</strong> Devuélvele su extensión y ábrelo como ese tipo de archivo.</li>
+</ul>
+<p>Más motivos por los que un dibujo no se abre en <a href="/es/dwg-file-wont-open/">el archivo DWG no se abre</a>.</p>
+
+<p><a class="cta" href="/es/">Abrir un DWG ahora</a></p>

@@ -38,7 +38,7 @@ lang_page de de "DWG-in-PDF-Konverter – Kostenlos, online, ohne Upload" "DWG- 
 lang_page zh zh-Hans "DWG 转 PDF 在线转换器 – 免费，无需上传 | DWG Plotter" "在浏览器中免费将 DWG 和 DXF 图纸转为 PDF。无需 AutoCAD 即可打开 DWG 文件。布局按原样打印，不上传任何内容。" "DWG 转 PDF 在线转换器 – 免费，无需上传" "无需 AutoCAD 即可打开 DWG 和 DXF 图纸并保存为 PDF。不上传任何内容。" 6
 { printf '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
   printf '<url><loc>https://dwgplotter.com/</loc></url>\n'
-  SLUGS="$(tr -d '\r' < pages/guides.tsv | cut -f1) about privacy"
+  SLUGS="$(tr -d '\r' < pages/guides.tsv | cut -f1) about privacy $(grep -o '^page en ac[0-9]*' pages/versions.sh | cut -d' ' -f3)"
   for p in es fr de zh $SLUGS; do printf '<url><loc>https://dwgplotter.com/%s/</loc></url>\n' "$p"; done
   for l in es fr de zh; do for p in $SLUGS; do printf '<url><loc>https://dwgplotter.com/%s/%s/</loc></url>\n' "$l" "$p"; done; done
   printf '</urlset>\n'; } > dist/sitemap.xml

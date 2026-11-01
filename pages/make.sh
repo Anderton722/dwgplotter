@@ -96,3 +96,4 @@ page zh dxf-to-pdf "DXF 转 PDF：免费在线转换 DXF 图纸" "在浏览器�
 page zh privacy "隐私政策" "DWG Plotter 如何处理您的图纸和数据。图纸在您的浏览器中读取，绝不会上传。"
 
 . pages/make-wave.sh
+. pages/versions.sh

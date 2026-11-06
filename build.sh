@@ -44,7 +44,7 @@ lang_page zh zh-Hans "DWG 转 PDF 在线转换器 – 免费，无需上传 | DW
   for l in it pt; do for p in $(tr -d '\r' < pages/guides-extra.tsv | cut -f1); do printf '<url><loc>https://dwgplotter.com/%s/%s/</loc></url>\n' "$l" "$p"; done; done
   printf '</urlset>\n'; } > dist/sitemap.xml
 rm -f dist/.ld.html dist/.gl.html
-cp pages/version-check.js dist/version-check.js
+cp pages/version-check.js pages/handoff.js dist/
 [ -f og.png ] && cp og.png dist/og.png
 # Google AdSense: account tag and Auto ads script on every page, and ads.txt authorising the account.
 ADS='ca-pub-5758232042156871'

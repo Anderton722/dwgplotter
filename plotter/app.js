@@ -50,6 +50,23 @@ async function openSample() {
 }
 $('#sample').addEventListener('click', openSample);
 if (new URLSearchParams(location.search).has('sample')) openSample();
+// a drawing dropped on a guide page (pages/handoff.js) waits in IndexedDB; it is read once, then deleted
+function takeHandoff() {
+  return new Promise(ok => {
+    const req = indexedDB.open('dwgplotter', 1);
+    req.onupgradeneeded = () => req.result.createObjectStore('handoff');
+    req.onerror = () => ok(null);
+    req.onsuccess = () => {
+      const tx = req.result.transaction('handoff', 'readwrite'), store = tx.objectStore('handoff'), get = store.get('pending');
+      get.onsuccess = () => { store.delete('pending'); const v = get.result; ok(v && Date.now() - v.at < 600000 ? v.files : null); };
+      get.onerror = () => ok(null);
+    };
+  });
+}
+if (new URLSearchParams(location.search).has('open')) {
+  history.replaceState(null, '', location.pathname + location.search.replace(/[?&]open\b/, '').replace(/^&/, '?'));
+  takeHandoff().then(files => { if (files?.length) { count('open_from_guide'); openFiles(files); } }).catch(() => {});
+}
 
 const MESSAGES = { NOT_DWG: 'err.notdwg', UNREADABLE: 'err.unreadable' };
 function showError(e) {

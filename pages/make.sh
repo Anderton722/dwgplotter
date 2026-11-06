@@ -10,6 +10,8 @@ HREFLANG_BASE() { # slug (may be empty for the home page)
   for l in $EXTRA; do [ -f "pages/$l/$1.body.html" ] && printf '<link rel="alternate" hreflang="%s" href="https://dwgplotter.com/%s/%s/">\n' "$l" "$l" "$1"; done
   printf '<link rel="alternate" hreflang="x-default" href="https://dwgplotter.com/%s/">\n' "$1"
 }
+# guides for doing something with a drawing: their first button becomes a drop box that opens the file in the app (tools/dropbox.py)
+TOOLS="dwg-viewer dxf-viewer open-dwg-on-mac open-dwg-without-autocad open-dwg-on-chromebook dwg-to-pdf dxf-to-pdf dwg-to-png multiple-layouts-to-pdf measure-dwg-online dwg-to-pdf-black-and-white dwg-to-pdf-with-xrefs"
 EXTRA="it pt" # languages with only a few guides (listed in pages/guides-extra.tsv); their links to the app and footer pages go to the English ones
 GUIDES() { # column of pages/guides.tsv, language prefix, current slug, heading: links to every other guide in that language
   [ "$3" = privacy ] && return
@@ -52,7 +54,7 @@ $(HREFLANG_BASE "$slug")
 $(py tools/ldjson.py faq "$body" "$canon" "https://dwgplotter.com$home" "$title")
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Crect x=%271.5%27 y=%271.5%27 width=%2721%27 height=%2721%27 rx=%276.5%27 fill=%27%234f46e5%27/%3E%3Cpath d=%27M7 15.5 11 9l3 4 3-5%27 fill=%27none%27 stroke=%27%23fff%27 stroke-width=%271.9%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E">
 <link rel="stylesheet" href="/plotter/style.css?v=21">
-<link rel="stylesheet" href="/pages.css?v=2">
+<link rel="stylesheet" href="/pages.css?v=3">
 </head>
 <body>
 <header class="top">
@@ -60,7 +62,7 @@ $(py tools/ldjson.py faq "$body" "$canon" "https://dwgplotter.com$home" "$title"
   <span class="private">$badge</span>
 </header>
 <main class="doc">
-$(cat "$body")
+$(case " $TOOLS " in *" $slug "*) py tools/dropbox.py "$body" "$lang";; *) cat "$body";; esac)
 $(GUIDES "$col" "$pre" "$slug" "$more")
 </main>
 <footer class="foot">$free <a href="https://github.com/Anderton722/dwgplotter" rel="noopener">$src</a> · <a href="https://github.com/Anderton722/dwgplotter/blob/main/NOTICE.md" rel="noopener">$cred</a> · <a href="$fpre/about/">$abt</a> · <a href="$fpre/privacy/">$priv</a> · <a href="$fpre/dwg-to-pdf/">$g1</a> · <a href="$fpre/open-dwg-without-autocad/">$g2</a> · <a href="$fpre/dxf-to-pdf/">$g3</a>

@@ -1,5 +1,5 @@
 # Content waves 1 and 2: one page per search, in each language (sourced by make.sh)
-page en dwg-viewer "Free DWG Viewer Online – No Upload, No Sign-Up" "View DWG drawings online free. See every layout, zoom, switch layers and measure, then save as PDF. Nothing is uploaded. Works on Windows, Mac and Chromebook."
+page en dwg-viewer "Free Online DWG Viewer – Open DWG Files in Your Browser" "View DWG files online free: drop the file in and see every sheet, zoom, switch layers and measure, then save as PDF. No upload, no sign-up, nothing to install."
 page en dxf-viewer "Free DXF Viewer Online – View DXF Files in Your Browser" "Open and view DXF files online free. Zoom, hide layers and measure, then save as PDF or image. The file is read on your computer and never uploaded."
 page en dwg-to-png "DWG to PNG or JPG – Convert a Drawing to an Image Free" "Convert a DWG or DXF drawing to a high-resolution PNG or JPG image, free in your browser. Hide layers first, black and white or colour. Nothing is uploaded."
 page en multiple-layouts-to-pdf "Print All DWG Layouts to One PDF – Free, Online" "Plot every layout in a DWG into one multi-page PDF, each sheet at its own size, or as separate PDFs. Free, in your browser, without AutoCAD. Nothing is uploaded."
@@ -41,7 +41,7 @@ page fr what-is-a-dwg-file "Qu'est-ce qu'un fichier DWG ? Et comment l'ouvrir gr
 page fr dwg-versions "Les versions DWG expliquées : AC1032, AC1027, AC1024 et plus" "Toutes les versions du format DWG, de R12 à 2018, avec leur code et les versions d'AutoCAD qui les utilisent. Comment connaître la version d'un fichier."
 page fr dwg-version-checker "Vérificateur de version DWG : quel AutoCAD a enregistré ce fichier ?" "Gratuit et immédiat : déposez un DWG ou DXF et voyez avec quelle version d'AutoCAD il a été enregistré (AC1032, AC1027…). Rien n'est envoyé."
 
-page de dwg-viewer "Kostenloser DWG-Viewer online – ohne Upload, ohne Anmeldung" "DWG-Zeichnungen kostenlos online ansehen. Alle Layouts, Zoom, Layer ein- und ausblenden und messen, dann als PDF speichern. Nichts wird hochgeladen."
+page de dwg-viewer "DWG-Datei online öffnen – kostenloser DWG-Viewer ohne Upload" "DWG-Dateien kostenlos online öffnen und ansehen: Datei ablegen, alle Layouts, Zoom, Layer und Messen, dann als PDF speichern. Ohne Anmeldung, nichts wird hochgeladen."
 page de dxf-viewer "Kostenloser DXF-Viewer online – DXF im Browser ansehen" "DXF-Dateien kostenlos online öffnen und ansehen. Zoom, Layer und Messen, dann als PDF oder Bild speichern. Die Datei wird auf Ihrem Computer gelesen."
 page de dwg-to-png "DWG in PNG oder JPG – Zeichnung kostenlos in ein Bild umwandeln" "Wandeln Sie eine DWG- oder DXF-Zeichnung kostenlos im Browser in ein hochauflösendes PNG- oder JPG-Bild um. Layer ausblenden, Schwarzweiß oder Farbe."
 page de multiple-layouts-to-pdf "Alle Layouts einer DWG in eine PDF drucken – kostenlos" "Alle Layouts einer DWG in eine mehrseitige PDF plotten, jedes Blatt in seinem Format, oder als einzelne PDFs. Kostenlos, ohne AutoCAD, ohne Upload."

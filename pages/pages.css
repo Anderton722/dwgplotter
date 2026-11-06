@@ -17,6 +17,10 @@
 .doc .tbl th { color: var(--muted); font-weight: 600; }
 .doc code { font-size: .92em; padding: 1px 5px; border-radius: 6px; background: var(--accent-soft); }
 .doc .vc-drop { margin: 18px 0 12px; padding: 44px 20px; }
+.doc .handoff { margin: 20px 0 14px; padding: 46px 20px; text-align: center; }
+.doc .handoff span { max-width: 440px; }
+.doc .handoff-more { margin-top: 0; }
+.doc .handoff-more .cta.ghost { margin-left: 0; }
 .doc .vc-out { padding: 14px 16px; border-radius: 14px; margin-bottom: 8px; border: 1px solid var(--line); }
 .doc .vc-out.ok { border-color: var(--ok); }
 .doc .vc-out.err { background: var(--err-bg); color: var(--err-ink); border-color: transparent; }

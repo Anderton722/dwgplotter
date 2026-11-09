@@ -21,7 +21,7 @@ SAVE_YEAR = {'AC1032': '2018', 'AC1027': '2013/LT2013', 'AC1024': '2010/LT2010',
 
 T = {
 'en': dict(
-    title='{code} DWG: Which AutoCAD Version Is It?',
+    title='{code} Is AutoCAD {fmt} DWG Format – Open or Check It Free',
     desc='{code} is the AutoCAD {fmt} DWG format, saved by AutoCAD {saved}. Which programs open it, how to save in it, and how to view it free.',
     range='{a} to {b}', current='{a} to the current release', r2000='2000, 2000i and 2002', save='AutoCAD {y} Drawing (*.dwg)',
     h1='{code}: the AutoCAD <span class="grad">{fmt} DWG format</span>',
@@ -54,7 +54,7 @@ T = {
         'AC1018': 'AutoCAD 2004, the first release to save it, introduced true colour and colour books.',
         'AC1015': 'AutoCAD 2000, the first release to save it, introduced multiple layouts and lineweights, which plotting still depends on.'}),
 'es': dict(
-    title='{code}: ¿qué versión de AutoCAD es este DWG?',
+    title='{code} es AutoCAD {fmt}: abre o comprueba tu DWG gratis',
     desc='{code} es el formato DWG de AutoCAD {fmt}, que usa AutoCAD {saved}. Qué programas lo abren, cómo guardar en él y cómo verlo gratis.',
     range='{a} a {b}', current='{a} hasta la versión actual', r2000='2000, 2000i y 2002', save='Dibujo de AutoCAD {y} (*.dwg)',
     h1='{code}: el formato DWG de <span class="grad">AutoCAD {fmt}</span>',
@@ -87,7 +87,7 @@ T = {
         'AC1018': 'AutoCAD 2004, la primera versión que lo guardó, introdujo el color verdadero y los libros de colores.',
         'AC1015': 'AutoCAD 2000, la primera versión que lo guardó, introdujo las presentaciones múltiples y los grosores de línea, de los que aún depende el trazado.'}),
 'fr': dict(
-    title="{code} : quelle version d'AutoCAD pour ce DWG ?",
+    title="{code} correspond à AutoCAD {fmt} : voir ce DWG gratuitement",
     desc="{code} est le format DWG d'AutoCAD {fmt}, utilisé par AutoCAD {saved}. Logiciels qui l'ouvrent et comment le voir gratuitement.",
     range='{a} à {b}', current="{a} jusqu'à la version actuelle", r2000='2000, 2000i et 2002', save='Dessin AutoCAD {y} (*.dwg)',
     h1="{code} : le format DWG d'<span class=\"grad\">AutoCAD {fmt}</span>",
@@ -120,7 +120,7 @@ T = {
         'AC1018': "AutoCAD 2004, la première version à l'enregistrer, a introduit les couleurs vraies et les carnets de couleurs.",
         'AC1015': "AutoCAD 2000, la première version à l'enregistrer, a introduit les présentations multiples et les épaisseurs de ligne, dont le traçage dépend encore."}),
 'de': dict(
-    title='{code}: Welche AutoCAD-Version ist diese DWG?',
+    title='{code} ist AutoCAD {fmt}: DWG kostenlos öffnen und prüfen',
     desc='{code} ist das DWG-Format von AutoCAD {fmt}, verwendet von AutoCAD {saved}. Welche Programme es öffnen und wie Sie es kostenlos ansehen.',
     range='{a} bis {b}', current='{a} bis zur aktuellen Version', r2000='2000, 2000i und 2002', save='AutoCAD {y}-Zeichnung (*.dwg)',
     h1='{code}: das DWG-Format von <span class="grad">AutoCAD {fmt}</span>',
@@ -153,7 +153,7 @@ T = {
         'AC1018': 'AutoCAD 2004, die erste Version, die es speicherte, führte True Color und Farbbücher ein.',
         'AC1015': 'AutoCAD 2000, die erste Version, die es speicherte, führte mehrere Layouts und Linienstärken ein, auf denen das Plotten bis heute beruht.'}),
 'zh': dict(
-    title='{code} 是哪个 AutoCAD 版本的 DWG？',
+    title='{code} 是 AutoCAD {fmt} 格式：免费打开和查看 DWG',
     desc='{code} 是 AutoCAD {fmt} DWG 格式，AutoCAD {saved} 使用该格式。哪些软件能打开、如何保存为该格式，以及如何免费查看。',
     range='{a} 至 {b}', current='{a} 至当前版本', r2000='2000、2000i 和 2002', save='AutoCAD {y} 图形 (*.dwg)',
     h1='{code}：<span class="grad">AutoCAD {fmt}</span> DWG 格式',

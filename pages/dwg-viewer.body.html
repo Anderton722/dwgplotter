@@ -1,41 +1,89 @@
 <h1>Free online DWG viewer, <span class="grad">nothing uploaded</span></h1>
-<p class="lead">Open a DWG drawing in your browser and look through it: every sheet, zoom, layers and measuring. No AutoCAD, no account, and the file never leaves your computer.</p>
+<p class="lead">View DWG files online in your browser: every sheet, zoom, layers and measuring. No AutoCAD, no account, nothing to install, and the file never leaves your computer.</p>
 <p><a class="cta" href="/">Open a DWG file</a> <a class="cta ghost" href="/?sample">Try a sample drawing</a></p>
 
-<h2>How to view a DWG online</h2>
+<h2>How to view a DWG file online</h2>
 <ol>
   <li>Drop your DWG file into the box at the top of this page, or click it to choose the file. The <a href="/">viewer</a> opens with your drawing.</li>
   <li>Every layout (sheet) in the file appears as a preview, plus the model drawing.</li>
   <li>Click a preview to open it large. Scroll or pinch to zoom, and drag to move around.</li>
   <li>Use <strong>Layers</strong> to switch layers on and off, and <strong>Measure</strong> to check a distance.</li>
 </ol>
+<p>That is all. There is no upload step and no waiting for a server to convert the file, so the drawing appears as soon as your browser has read it.</p>
 
 <h2>What you can do in the viewer</h2>
 <ul>
   <li><strong>See every sheet.</strong> Layouts show at their own sheet size with title blocks, viewports and lineweights, the way they were set up for printing.</li>
-  <li><strong>Zoom in on detail.</strong> Lines are drawn as vectors, so small text and dimensions stay sharp.</li>
+  <li><strong>Zoom in on detail.</strong> Lines are drawn as vectors, so small text and dimensions stay sharp however far you zoom.</li>
   <li><strong>Switch layers on and off.</strong> Search the layer list, hide what you do not need, or show only one layer.</li>
   <li><strong>Measure distances.</strong> Click two points to read the distance in the drawing's units. Inside a layout viewport it gives the real distance, not the paper distance.</li>
-  <li><strong>Save what you see.</strong> Save any sheet as a PDF, PNG or JPG, with the layers you switched off left out.</li>
+  <li><strong>Save what you see.</strong> Save any sheet as a PDF, PNG or JPG, with the layers you switched off left out. See <a href="/dwg-to-pdf/">DWG to PDF</a> and <a href="/dwg-to-png/">DWG to PNG</a>.</li>
+  <li><strong>Open linked drawings.</strong> Drop the main drawing and its xrefs in together and they show in place. See <a href="/dwg-to-pdf-with-xrefs/">DWG with xrefs</a>.</li>
 </ul>
 
+<h2>Which files the viewer opens</h2>
+<table class="tbl">
+  <tr><th>File</th><th>What you see</th></tr>
+  <tr><td>DWG from AutoCAD 2018 to today (format AC1032)</td><td>Every layout and the model</td></tr>
+  <tr><td>DWG from AutoCAD 2000 to 2017 (AC1015 to AC1027)</td><td>Every layout and the model</td></tr>
+  <tr><td>DWG from AutoCAD R14 (AC1014)</td><td>Every layout and the model</td></tr>
+  <tr><td>DXF from any CAD or CAM program</td><td>The model drawing (see the <a href="/dxf-viewer/">DXF viewer</a>)</td></tr>
+</table>
+<p>Not sure which version you have? The <a href="/dwg-version-checker/">DWG version checker</a> tells you in a second, and the <a href="/dwg-versions/">DWG version list</a> explains the codes.</p>
+
+<h2>A browser viewer compared with the other ways to open a DWG</h2>
+<table class="tbl wrap">
+  <tr><th></th><th>This viewer</th><th>Desktop viewer</th><th>Upload-based online viewer</th><th>Full CAD program</th></tr>
+  <tr><td>Install</td><td>None</td><td>Yes</td><td>None</td><td>Yes</td></tr>
+  <tr><td>File sent to a server</td><td>No</td><td>No</td><td>Yes</td><td>No</td></tr>
+  <tr><td>Account</td><td>No</td><td>Sometimes</td><td>Often</td><td>Yes</td></tr>
+  <tr><td>Cost</td><td>Free</td><td>Usually free</td><td>Free or paid</td><td>Paid</td></tr>
+  <tr><td>Works on Mac, Chromebook, locked office PC</td><td>Yes</td><td>Depends</td><td>Yes</td><td>Depends</td></tr>
+  <tr><td>Edit the drawing</td><td>No</td><td>No</td><td>Sometimes</td><td>Yes</td></tr>
+</table>
+<p>If you only need to look at a drawing, check a dimension or print it, a viewer is enough. You need CAD software only to change the drawing.</p>
+
 <h2>Why a browser viewer</h2>
-<p>Most free DWG viewers either need an installation or upload your file to a server to turn it into pictures. This one reads the file with code that runs in your own browser, so it opens confidential and client drawings safely and works on any computer, including office PCs where you cannot install software.</p>
+<p>Most free DWG viewers either need an installation or upload your file to a server to turn it into pictures. This one reads the file with code that runs in your own browser, so it opens confidential and client drawings safely and works on any computer, including office PCs where you cannot install software. The code is open source, so anyone can check that nothing is sent.</p>
+
+<h2>Who uses an online DWG viewer</h2>
+<ul>
+  <li><strong>Builders and site teams</strong> checking a plan or detail an architect has emailed.</li>
+  <li><strong>Clients and homeowners</strong> looking through the drawings for their project.</li>
+  <li><strong>Engineers and estimators</strong> measuring quantities from a drawing they cannot edit.</li>
+  <li><strong>Fabricators</strong> checking a DWG or DXF before laser cutting or CNC work.</li>
+  <li><strong>Students</strong> opening course drawings on a laptop without CAD software.</li>
+</ul>
 
 <h2>Open a DWG from email, Teams or the cloud</h2>
 <p>Save the attachment or download the file from OneDrive, Google Drive, Dropbox or SharePoint first, then drop it in above. If the file came as a zip (an eTransmit package), extract it and drop the DWG files in together so linked drawings (xrefs) show in place. If it still will not open, see <a href="/dwg-file-wont-open/">DWG file won't open</a>.</p>
 
+<h2>Tips for large drawings</h2>
+<ul>
+  <li>Close other heavy browser tabs before opening a drawing of 50 MB or more.</li>
+  <li>Open one sheet large at a time. The previews are kept small so a big set stays quick.</li>
+  <li>Switch off busy layers such as hatching or furniture to find what you need faster.</li>
+</ul>
+
 <h2>Questions</h2>
+<h3>Is this DWG viewer really free?</h3>
+<p>Yes. There is no trial, no watermark and no limit on the number of files. It is free, open-source software.</p>
 <h3>Do I need to sign up or log in?</h3>
 <p>No. There is no account, no email address and no trial. Open the page, drop the file in and the drawing appears.</p>
+<h3>Is my drawing uploaded?</h3>
+<p>No. The file is read inside your browser and is not sent to any server. See the <a href="/privacy/">privacy policy</a>.</p>
 <h3>Can I edit the drawing?</h3>
-<p>No. This is a viewer and converter. Editing a DWG needs CAD software.</p>
+<p>No. This is a viewer and converter, not an online DWG editor. You can view, measure, switch layers and save as PDF or an image. Editing a DWG needs CAD software.</p>
+<h3>Can I open a DWG file without AutoCAD?</h3>
+<p>Yes. This viewer needs no AutoCAD and no other CAD program. See <a href="/open-dwg-without-autocad/">how to open a DWG without AutoCAD</a> for the other options.</p>
 <h3>Which DWG files open?</h3>
 <p>Drawings saved from AutoCAD R14 up to the current 2018 format, plus DXF files. Not sure which version you have? Use the <a href="/dwg-version-checker/">DWG version checker</a>.</p>
 <h3>Does it work on a Mac or Chromebook?</h3>
 <p>Yes. It runs in Safari, Chrome, Edge and Firefox. See <a href="/open-dwg-on-mac/">DWG on a Mac</a> and <a href="/open-dwg-on-chromebook/">DWG on a Chromebook</a>.</p>
 <h3>Can I view a DWG on my phone or tablet?</h3>
 <p>Yes, in the phone's browser. Small sheets read fine; for large A1 or A0 sheets a computer screen is more comfortable.</p>
+<h3>Can I print a DWG from the viewer?</h3>
+<p>Yes. Save the sheets as a PDF, then print the PDF at the size you need. See <a href="/multiple-layouts-to-pdf/">every layout into one PDF</a>.</p>
 <h3>Is there a file size limit?</h3>
 <p>Only your computer's memory. Drawings of several tens of megabytes open fine on a normal laptop.</p>
 

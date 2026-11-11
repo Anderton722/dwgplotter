@@ -7,6 +7,7 @@ import html, json, pathlib, re, sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 HOME = {'en': '/', 'es': '/es/', 'fr': '/fr/', 'de': '/de/', 'zh': '/zh/'}
+APPS = {'dwg-viewer', 'dxf-viewer', 'dwg-to-pdf', 'dxf-to-pdf', 'dwg-to-png'}
 HL = {'en': 'en', 'es': 'es', 'fr': 'fr', 'de': 'de', 'zh': 'zh-Hans'}
 
 def strip(s):
@@ -44,7 +45,17 @@ def guide(path, url, home, title):
     crumbs = {'@type': 'BreadcrumbList', 'itemListElement': [
         {'@type': 'ListItem', 'position': 1, 'name': 'DWG Plotter', 'item': home},
         {'@type': 'ListItem', 'position': 2, 'name': title, 'item': url}]}
-    out({'@context': 'https://schema.org', '@graph': [crumbs] + ([faq(pairs)] if pairs else [])})
+    graph = [crumbs] + ([faq(pairs)] if pairs else [])
+    slug = url.rstrip('/').rsplit('/', 1)[-1]
+    if slug in APPS:  # the guide is itself a way into the tool: describe the free web app too
+        lead = re.search(r'<p class="lead">(.*?)</p>', body, re.S)
+        lang = re.match(r'https://dwgplotter\.com/(es|fr|de|zh|it|pt)/', url)
+        graph.append({'@type': 'WebApplication', 'name': strip(re.sub(r'<span[^>]*>.*?</span>', '', title)) or title, 'url': url,
+                      'description': strip(lead.group(1)) if lead else title, 'applicationCategory': 'DesignApplication',
+                      'operatingSystem': 'Any (runs in a web browser)', 'browserRequirements': 'Requires JavaScript and WebAssembly',
+                      'inLanguage': HL.get(lang.group(1), lang.group(1)) if lang else 'en', 'isAccessibleForFree': True,
+                      'offers': {'@type': 'Offer', 'price': '0', 'priceCurrency': 'USD'}, 'image': 'https://dwgplotter.com/og.png'})
+    out({'@context': 'https://schema.org', '@graph': graph})
 
 if __name__ == '__main__':
     {'home': home, 'faq': guide}[sys.argv[1]](*sys.argv[2:])

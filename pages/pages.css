@@ -28,3 +28,4 @@
 .doc .more ul { columns: 2; column-gap: 28px; padding-left: 18px; }
 @media (max-width: 560px) { .doc .more ul { columns: 1; } .doc .cta.ghost { margin-left: 0; } }
 .doc .tbl td:nth-child(3), .doc .tbl th:nth-child(3) { white-space: normal; min-width: 10em; }
+.doc .tbl.wrap th, .doc .tbl.wrap td { white-space: normal; min-width: 0; }

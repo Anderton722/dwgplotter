@@ -12,6 +12,7 @@ printf '<?xml version="1.0"?>\n<users>\n\t<user>44853333A377467F39C328ADBCA36EA9
 printf '19b80853c466891e670ada0ac219a97b' > dist/19b80853c466891e670ada0ac219a97b.txt
 sh pages/make.sh dist
 cp pages/pages.css dist/pages.css
+cp -r img dist/img
 # One copy of the app per language (/es/, /fr/, /de/, /zh/): same page, with the language set in <html lang>, its own title, description and hreflang links, and its text pre-filled.
 HREFLANG='<link rel="alternate" hreflang="en" href="https://dwgplotter.com/">\n<link rel="alternate" hreflang="es" href="https://dwgplotter.com/es/">\n<link rel="alternate" hreflang="fr" href="https://dwgplotter.com/fr/">\n<link rel="alternate" hreflang="de" href="https://dwgplotter.com/de/">\n<link rel="alternate" hreflang="zh-Hans" href="https://dwgplotter.com/zh/">\n<link rel="alternate" hreflang="x-default" href="https://dwgplotter.com/">'
 lang_page() { # code, html lang, title, description, og title, og description, column of pages/guides.tsv

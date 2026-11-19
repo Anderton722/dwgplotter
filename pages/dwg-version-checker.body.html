@@ -22,6 +22,28 @@
   <li><strong><a href="/ac1024/">AC1024 (2010 format)</a></strong> is used by releases 2010 to 2012.</li>
 </ul>
 
+<h2>Quick list of version codes</h2>
+<table class="tbl">
+  <tr><th>Code</th><th>Format</th><th>Saved by AutoCAD</th></tr>
+  <tr><td><a href="/ac1032/">AC1032</a></td><td>2018</td><td>2018 to today</td></tr>
+  <tr><td><a href="/ac1027/">AC1027</a></td><td>2013</td><td>2013 to 2017</td></tr>
+  <tr><td><a href="/ac1024/">AC1024</a></td><td>2010</td><td>2010 to 2012</td></tr>
+  <tr><td><a href="/ac1021/">AC1021</a></td><td>2007</td><td>2007 to 2009</td></tr>
+  <tr><td><a href="/ac1018/">AC1018</a></td><td>2004</td><td>2004 to 2006</td></tr>
+  <tr><td><a href="/ac1015/">AC1015</a></td><td>2000</td><td>2000 to 2002</td></tr>
+  <tr><td>AC1014</td><td>R14</td><td>Release 14</td></tr>
+</table>
+
+<h2>How the checker works</h2>
+<p>Every DWG file starts with six characters that name its format, such as AC1032. The checker reads only those first bytes in your browser and looks the code up. A DXF file stores its version in a header setting called $ACADVER, which the checker reads the same way. The rest of the drawing is never opened or sent anywhere.</p>
+
+<h2>My file is too new for my software. What now?</h2>
+<ul>
+  <li><strong>Ask for an older version.</strong> In AutoCAD, Save As offers older formats such as 2013 or 2010, so the sender can save a copy your software opens.</li>
+  <li><strong>Just need to look at it?</strong> The <a href="/dwg-viewer/">free DWG viewer</a> opens every format up to the current 2018 one.</li>
+  <li><strong>Need a PDF?</strong> Convert it with <a href="/dwg-to-pdf/">DWG to PDF</a>.</li>
+</ul>
+
 <h2>Questions</h2>
 <h3>Is my file uploaded?</h3>
 <p>No. The checker reads the start of the file in your browser and nothing is sent anywhere.</p>

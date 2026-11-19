@@ -29,3 +29,6 @@
 @media (max-width: 560px) { .doc .more ul { columns: 1; } .doc .cta.ghost { margin-left: 0; } }
 .doc .tbl td:nth-child(3), .doc .tbl th:nth-child(3) { white-space: normal; min-width: 10em; }
 .doc .tbl.wrap th, .doc .tbl.wrap td { white-space: normal; min-width: 0; }
+.doc figure { margin: 20px 0; }
+.doc figure img { display: block; max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 12px; }
+.doc figcaption { font-size: 14px; color: var(--muted); margin-top: 6px; }

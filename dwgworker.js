@@ -1,11 +1,11 @@
-import { createModule, LibreDwg, Dwg_File_Type } from './vendor/libredwg/dist/libredwg-web.js';
+import { createModule, LibreDwg, Dwg_File_Type } from './vendor/libredwg/dist/libredwg-web.js?v=089';
 
 // Reads a DWG off the main thread so a big drawing does not freeze the page. Gets { id, buf }, answers { id, db } or { id, error }.
 const BASE = new URL('./vendor/libredwg/wasm/', import.meta.url).href;
 let lib;
 async function getLib() {
   if (lib) return lib;
-  const wasmBinary = new Uint8Array(await (await fetch(BASE + 'libredwg-web.wasm')).arrayBuffer());
+  const wasmBinary = new Uint8Array(await (await fetch(BASE + 'libredwg-web.wasm?v=089')).arrayBuffer());
   lib = new LibreDwg(await createModule({ wasmBinary, locateFile: p => BASE + p }));
   return lib;
 }

@@ -1,4 +1,4 @@
-import { createModule, LibreDwg, Dwg_File_Type } from './vendor/libredwg/dist/libredwg-web.js';
+import { createModule, LibreDwg, Dwg_File_Type } from './vendor/libredwg/dist/libredwg-web.js?v=089';
 import { PdfCtx, makeBoundsCtx, needsRaster } from './pdfctx.js?v=60';
 import { ShxFont } from './shx.js?v=1';
 import { dxfToDb } from './dxf.js?v=6';
@@ -12,7 +12,7 @@ export const config = { fontDir: HERE + 'fonts/' }; // where SHX fonts are serve
 let lib;
 async function getLib() {
   if (lib) return lib;
-  const wasmBinary = new Uint8Array(await (await fetch(BASE + 'libredwg-web.wasm')).arrayBuffer());
+  const wasmBinary = new Uint8Array(await (await fetch(BASE + 'libredwg-web.wasm?v=089')).arrayBuffer());
   lib = new LibreDwg(await createModule({ wasmBinary, locateFile: p => BASE + p }));
   await loadHershey();
   return lib;
@@ -37,7 +37,7 @@ function parse(buf, type = Dwg_File_Type.DWG) {
 let worker, jobId = 0; const jobs = new Map();
 function readInWorker(buf) {
   return new Promise((resolve, reject) => {
-    let w; try { w = worker ||= new Worker(new URL('./dwgworker.js', import.meta.url), { type: 'module' }); } catch { return reject({ fallback: true }); }
+    let w; try { w = worker ||= new Worker(new URL('./dwgworker.js?v=089', import.meta.url), { type: 'module' }); } catch { return reject({ fallback: true }); }
     w.onmessage = ({ data }) => { const j = jobs.get(data.id); if (!j) return; jobs.delete(data.id); data.error ? j.reject({ message: data.error }) : j.resolve(data.db); };
     w.onerror = () => { for (const j of jobs.values()) j.reject({ fallback: true }); jobs.clear(); w.terminate(); if (worker === w) worker = null; };
     const id = ++jobId, copy = buf.slice(0); jobs.set(id, { resolve, reject });

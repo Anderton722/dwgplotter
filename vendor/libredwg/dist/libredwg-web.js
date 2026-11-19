@@ -1216,6 +1216,33 @@ function dwgColorToMLeaderRawColor(color) {
   }
   return RAW_COLOR_TYPE_BY_BLOCK << 24 >> 0;
 }
+function dwgColorToBackgroundFillColor(color) {
+  if (color == null) return void 0;
+  const methodNum = color.method;
+  const method = color.method != null && methodNum !== 0 ? methodNum : color.rgb >>> 24 & 255;
+  const index = color.index;
+  if (method === Dwg_Color_Method.ByLayer || method === Dwg_Color_Method.ByBlock || method === Dwg_Color_Method.None || index === 256) {
+    return void 0;
+  }
+  if (method === Dwg_Color_Method.ForegroundColor) {
+    return 7;
+  }
+  if (method === Dwg_Color_Method.TrueColor) {
+    if (color.rgb == null) return void 0;
+    return color.rgb & 16777215;
+  }
+  if (index >= 1 && index <= 255) {
+    return index;
+  }
+  if (index === 0) {
+    return void 0;
+  }
+  if (color.rgb != null) {
+    const rgb24 = color.rgb & 16777215;
+    if (rgb24 !== 0) return rgb24;
+  }
+  return void 0;
+}
 const MODEL_SPACE = "*MODEL_SPACE";
 const MODEL_SPACE_PREFIX = "*PAPER_SPACE";
 const isModelSpace = (name) => {
@@ -1305,8 +1332,10 @@ class LibreEntityConverter {
         return this.convertAttdef(entity_tio, commonAttrs);
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_CIRCLE) {
         return this.convertCircle(entity_tio, commonAttrs);
-      } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_DIMENSION_ALIGNED || fixedtype == Dwg_Object_Type.DWG_TYPE_DIMENSION_LINEAR) {
+      } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_DIMENSION_ALIGNED) {
         return this.convertAlignedDimension(entity_tio, commonAttrs);
+      } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_DIMENSION_LINEAR) {
+        return this.convertRotatedDimension(entity_tio, commonAttrs);
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_DIMENSION_ANG3PT) {
         return this.convert3PointAngularDimension(entity_tio, commonAttrs);
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_DIMENSION_ANG2LN) {
@@ -1610,15 +1639,37 @@ class LibreEntityConverter {
     };
   }
   convertAlignedDimension(entity, commonAttrs) {
+    return this.convertLinearOrAlignedDimension(
+      entity,
+      commonAttrs,
+      "AcDbAlignedDimension"
+    );
+  }
+  convertRotatedDimension(entity, commonAttrs) {
+    return this.convertLinearOrAlignedDimension(
+      entity,
+      commonAttrs,
+      "AcDbRotatedDimension"
+    );
+  }
+  /**
+   * Shared fields for DIMENSION_ALIGNED / DIMENSION_LINEAR.
+   *
+   * Rotated (linear) dimensions must use subclass marker AcDbRotatedDimension
+   * and `dim_rotation` (DXF group 50). Using AcDbAlignedDimension plus
+   * `ins_rotation` (block insert / OCS rotation) makes consumers regenerate
+   * the dimension along the slanted chord between extension-line origins.
+   */
+  convertLinearOrAlignedDimension(entity, commonAttrs, subclassMarker) {
     const libredwg = this.libredwg;
     const dimensionCommonAttrs = this.getDimensionCommonAttrs(entity);
     const insertionPoint = libredwg.dwg_dynapi_entity_data(entity, "clone_ins_pt");
     const subDefinitionPoint1 = libredwg.dwg_dynapi_entity_data(entity, "xline1_pt");
     const subDefinitionPoint2 = libredwg.dwg_dynapi_entity_data(entity, "xline2_pt");
-    const rotationAngle = libredwg.dwg_dynapi_entity_data(entity, "ins_rotation");
+    const rotationAngle = subclassMarker === "AcDbRotatedDimension" ? libredwg.dwg_dynapi_entity_data(entity, "dim_rotation") : 0;
     const obliqueAngle = libredwg.dwg_dynapi_entity_data(entity, "oblique_angle");
     return {
-      subclassMarker: "AcDbAlignedDimension",
+      subclassMarker,
       ...commonAttrs,
       ...dimensionCommonAttrs,
       insertionPoint,
@@ -1984,8 +2035,14 @@ class LibreEntityConverter {
   }
   convertLeader(entity, commonAttrs) {
     const libredwg = this.libredwg;
-    const styleName = libredwg.dwg_entity_mtext_get_style_name(entity);
-    const isArrowheadEnabled = libredwg.dwg_dynapi_entity_data(entity, "arrowhead_type");
+    let styleName = "";
+    try {
+      styleName = libredwg.dwg_entity_get_dimstyle_name(entity) || "";
+    } catch {
+      styleName = "";
+    }
+    const arrowheadOn = libredwg.dwg_dynapi_entity_data(entity, "arrowhead_on");
+    const isArrowheadEnabled = arrowheadOn > 0;
     const isSpline = libredwg.dwg_dynapi_entity_data(entity, "path_type");
     const leaderCreationFlag = libredwg.dwg_dynapi_entity_data(entity, "annot_type");
     const isHooklineSameDirection = libredwg.dwg_dynapi_entity_data(entity, "hookline_dir");
@@ -2004,7 +2061,7 @@ class LibreEntityConverter {
       type: "LEADER",
       ...commonAttrs,
       styleName,
-      isArrowheadEnabled: isArrowheadEnabled > 0,
+      isArrowheadEnabled,
       isSpline: isSpline > 0,
       leaderCreationFlag,
       isHooklineSameDirection: isHooklineSameDirection > 0,
@@ -2701,6 +2758,7 @@ class LibreEntityConverter {
     const fillBoxScale = libredwg.dwg_dynapi_entity_data(entity, "bg_fill_scale");
     const backgroundFillColor = libredwg.dwg_dynapi_entity_data(entity, "bg_fill_color");
     const backgroundFillTransparency = libredwg.dwg_dynapi_entity_data(entity, "bg_fill_trans");
+    const decodedBackgroundFillColor = backgroundFill === 1 ? dwgColorToBackgroundFillColor(backgroundFillColor) : void 0;
     const columnType = libredwg.dwg_dynapi_entity_data(entity, "column_type");
     const columnFlowReversed = libredwg.dwg_dynapi_entity_data(entity, "flow_reversed");
     const columnAutoHeight = libredwg.dwg_dynapi_entity_data(entity, "auto_height");
@@ -2732,10 +2790,8 @@ class LibreEntityConverter {
       lineSpacingStyle,
       lineSpacing,
       backgroundFill,
-      // backgroundColor: backgroundColor.rgb, // TODO: Double check whether it should be color index
       fillBoxScale,
-      backgroundFillColor: backgroundFillColor.rgb,
-      // TODO: Double check whether it should be color index
+      ...decodedBackgroundFillColor !== void 0 ? { backgroundFillColor: decodedBackgroundFillColor } : {},
       backgroundFillTransparency,
       columnType,
       // columnCount: columnCount,
@@ -3149,6 +3205,7 @@ class LibreEntityConverter {
     const generationFlag = libredwg.dwg_dynapi_entity_data(entity, "generation");
     const halign = libredwg.dwg_dynapi_entity_data(entity, "horiz_alignment");
     const valign = libredwg.dwg_dynapi_entity_data(entity, "vert_alignment");
+    const elevation = libredwg.dwg_dynapi_entity_data(entity, "elevation");
     const extrusionDirection = libredwg.dwg_dynapi_entity_data(entity, "extrusion");
     return {
       text,
@@ -3163,6 +3220,7 @@ class LibreEntityConverter {
       generationFlag,
       halign,
       valign,
+      elevation,
       extrusionDirection
     };
   }
@@ -3457,6 +3515,13 @@ class LibreDwgConverter {
     /** Entity indices whose ownerhandle does not resolve to any object. */
     __publicField(this, "ownerlessOrphanIndices", null);
     __publicField(this, "orphanIndexDataPtr", null);
+    /**
+     * True when LAYER.plotflag (DXF 290) is present in the file format
+     * (LibreDWG: SINCE R_2000b / binary version >= 0x16).
+     * Cleared for older versions so convertLayer defaults plotFlag to 1 instead
+     * of LibreDWG's zeroed bit (which would mark every layer non-plottable).
+     */
+    __publicField(this, "layerPlotFlagSupported", true);
     this.libredwg = instance;
     this.entityConverter = new LibreEntityConverter(instance);
   }
@@ -3466,6 +3531,7 @@ class LibreDwgConverter {
     this.orphanEntitiesByBlock = null;
     this.ownerlessOrphanIndices = null;
     this.orphanIndexDataPtr = data;
+    this.layerPlotFlagSupported = true;
     const db = {
       tables: {
         APPID: {
@@ -3492,6 +3558,7 @@ class LibreDwgConverter {
       },
       objects: {
         DICTIONARY: [],
+        GROUP: [],
         IMAGEDEF: [],
         LAYER_FILTER: [],
         LAYER_INDEX: [],
@@ -3506,6 +3573,7 @@ class LibreDwgConverter {
     };
     const libredwg = this.libredwg;
     this.convertHeader(data, db.header);
+    this.layerPlotFlagSupported = libredwg.dwg_get_version_type(data).version >= 22;
     this.convertClasses(data, db.classes);
     this.entityConverter.setClasses(db.classes);
     const num_objects = libredwg.dwg_get_num_objects(data);
@@ -3571,6 +3639,9 @@ class LibreDwgConverter {
               break;
             case Dwg_Object_Type.DWG_TYPE_DICTIONARY:
               db.objects.DICTIONARY.push(this.convertDictionary(tio, obj));
+              break;
+            case Dwg_Object_Type.DWG_TYPE_GROUP:
+              db.objects.GROUP.push(this.convertGroup(tio, obj));
               break;
             case Dwg_Object_Type.DWG_TYPE_IMAGEDEF:
               db.objects.IMAGEDEF.push(this.convertImageDef(tio, obj));
@@ -3798,6 +3869,31 @@ class LibreDwgConverter {
     }
     return entities;
   }
+  /**
+   * True when the entity is block-owned (`entmode` 0) but its owner handle
+   * names an object that does not exist in the drawing.
+   *
+   * These are leftovers of erased blocks (typically stale anonymous `*D`
+   * dimension pictures). AutoCAD never draws them, so they must not be
+   * adopted into *Model_Space as ownerless orphans. Entities without an owner
+   * handle are still adopted because some writers omit it for genuine
+   * model-space entities.
+   */
+  isOwnedByMissingBlock(data, etio) {
+    if (!etio) return false;
+    const libredwg = this.libredwg;
+    try {
+      const entmode = libredwg.dwg_dynapi_common_value(etio, "entmode");
+      if (!entmode.success || Number(entmode.data) !== 0) return false;
+      const ref = libredwg.dwg_dynapi_common_value(etio, "ownerhandle");
+      if (!ref.success || !ref.data) return false;
+      const absref = libredwg.dwg_ref_get_absref(ref.data);
+      if (absref == null) return false;
+      return !libredwg.dwg_resolve_handle_silent(data, BigInt(absref));
+    } catch {
+      return false;
+    }
+  }
   ensureOrphanEntityIndex(data) {
     if (this.orphanEntitiesByBlock) {
       return;
@@ -3843,7 +3939,7 @@ class LibreDwgConverter {
         const owned = orphansByBlock.get(owner);
         if (owned) owned.push(index);
         else orphansByBlock.set(owner, [index]);
-      } else {
+      } else if (!this.isOwnedByMissingBlock(data, etio)) {
         ownerless.push(index);
       }
     }
@@ -4026,8 +4122,11 @@ class LibreDwgConverter {
     const frozen = libredwg.dwg_dynapi_entity_data(item, "frozen");
     const off = libredwg.dwg_dynapi_entity_data(item, "off");
     const frozenInNew = libredwg.dwg_dynapi_entity_data(item, "frozen_in_new");
-    const locked = libredwg.dwg_dynapi_entity_data(item, "plotflockedlag");
-    const plotFlag = libredwg.dwg_dynapi_entity_data(item, "plotflag");
+    const locked = libredwg.dwg_dynapi_entity_data(item, "locked");
+    let plotFlag = libredwg.dwg_dynapi_entity_data(item, "plotflag");
+    if (!this.layerPlotFlagSupported) {
+      plotFlag = 1;
+    }
     const linewt = libredwg.dwg_dynapi_entity_data(item, "linewt");
     const color = libredwg.dwg_dynapi_entity_data(item, "color");
     const ltypeRef = libredwg.dwg_dynapi_entity_data(item, "ltype");
@@ -4451,6 +4550,25 @@ class LibreDwgConverter {
       backClippingPlaneDistance,
       matrix,
       invertBlockMatrix
+    };
+  }
+  convertGroup(item, obj) {
+    const libredwg = this.libredwg;
+    const commonAttrs = this.getCommonObjectAttrs(obj);
+    const description = libredwg.dwg_dynapi_entity_data(item, "name") ?? "";
+    const unnamed = !!libredwg.dwg_dynapi_entity_data(item, "unnamed");
+    const selectableRaw = libredwg.dwg_dynapi_entity_data(item, "selectable");
+    const selectable = selectableRaw != null ? !!selectableRaw : true;
+    const numGroups = libredwg.dwg_dynapi_entity_data(item, "num_groups") ?? 0;
+    const groupsPtr = libredwg.dwg_dynapi_entity_data(item, "groups") ?? 0;
+    const refs = numGroups > 0 && groupsPtr ? libredwg.dwg_ptr_to_object_ref_array(groupsPtr, numGroups) : [];
+    const objectHandles = refs.map((ref) => idToString(ref.absolute_ref));
+    return {
+      ...commonAttrs,
+      description,
+      unnamed,
+      selectable,
+      objectHandles
     };
   }
   convertXRecord(item, obj) {
@@ -5883,14 +6001,19 @@ const _LibreDwg = class _LibreDwg {
       }
     });
   }
+  /**
+   * Reads a DWG or DXF file into a native `Dwg_Data` pointer.
+   *
+   * DXF support requires a WASM build with write/DXF-import enabled
+   * (`build:prepare` without `--disable-write`). ASCII DXF may be passed as a
+   * UTF-8 string or as encoded bytes; binary DXF must be an `ArrayBuffer`.
+   */
   dwg_read_data(fileContent, fileType) {
+    const bytes = typeof fileContent === "string" ? new TextEncoder().encode(fileContent) : new Uint8Array(fileContent);
     if (fileType == Dwg_File_Type.DWG) {
       const fileName = "tmp.dwg";
       try {
-        this.wasmInstance.FS.writeFile(
-          fileName,
-          new Uint8Array(fileContent)
-        );
+        this.wasmInstance.FS.writeFile(fileName, bytes);
         const result = this.wasmInstance.dwg_read_file(fileName);
         if (result.error & Dwg_Error.OUTOFMEM) {
           this.wasmInstance.dwg_abandon(result.data);
@@ -5900,6 +6023,29 @@ const _LibreDwg = class _LibreDwg {
         }
         if (result.error != 0) {
           console.warn("Open dwg file with error code:", result.error);
+        }
+        return result.data;
+      } finally {
+        if (this.wasmInstance.FS.analyzePath(fileName, false).exists) {
+          this.wasmInstance.FS.unlink(fileName);
+        }
+      }
+    } else if (fileType == Dwg_File_Type.DXF) {
+      const fileName = "tmp.dxf";
+      try {
+        this.wasmInstance.FS.writeFile(fileName, bytes);
+        const result = this.wasmInstance.dxf_read_file(fileName);
+        if (result.error & Dwg_Error.OUTOFMEM) {
+          this.wasmInstance.dwg_abandon(result.data);
+          throw new Error(
+            "Failed to decode DXF: out of WASM memory. Rebuild with pnpm build:wasm (INITIAL_MEMORY=1GB) or use a smaller file."
+          );
+        }
+        if (result.error != 0) {
+          console.warn("Open dxf file with error code:", result.error);
+        }
+        if (!result.data) {
+          return void 0;
         }
         return result.data;
       } finally {
